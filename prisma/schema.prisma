@@ -5,9 +5,126 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "./generated/client"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
+}
+
+model Tag {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  color       String   @default("#6366f1")
+  description String?
+  createdAt   DateTime @default(now())
+
+  articleTags ArticleTag[]
+  digestTags  DigestTag[]
+}
+
+model Source {
+  id        String     @id @default(cuid())
+  name      String
+  url       String     @unique
+  type      SourceType
+  active    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  lastFetch DateTime?
+
+  articles Article[]
+}
+
+enum SourceType {
+  RSS
+  API
+  SCRAPING
+  VIDEO
+}
+
+model Article {
+  id          String    @id @default(cuid())
+  title       String
+  url         String    @unique
+  content     String?
+  sourceId    String
+  publishedAt DateTime?
+  fetchedAt   DateTime  @default(now())
+  relevant    Boolean   @default(false)
+  score       Float?
+  processed   Boolean   @default(false)
+
+  source   Source           @relation(fields: [sourceId], references: [id])
+  tags     ArticleTag[]
+  subjects SubjectArticle[]
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+}
+
+model Digest {
+  id        String       @id @default(cuid())
+  date      DateTime     @default(now())
+  status    DigestStatus @default(PENDING)
+  sentAt    DateTime?
+  createdAt DateTime     @default(now())
+
+  subjects Subject[]
+  tags     DigestTag[]
+  notes    Note[]
+}
+
+enum DigestStatus {
+  PENDING
+  SENT
+  SELECTED
+  DONE
+}
+
+model DigestTag {
+  digestId String
+  tagId    String
+  digest   Digest @relation(fields: [digestId], references: [id], onDelete: Cascade)
+  tag      Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([digestId, tagId])
+}
+
+model Subject {
+  id       String  @id @default(cuid())
+  digestId String
+  title    String
+  summary  String
+  selected Boolean @default(false)
+  order    Int     @default(0)
+
+  digest   Digest           @relation(fields: [digestId], references: [id], onDelete: Cascade)
+  articles SubjectArticle[]
+}
+
+model SubjectArticle {
+  subjectId String
+  articleId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([subjectId, articleId])
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  digestId   String?
+  filename   String
+  exportedTo String   @default("[]")
+  createdAt  DateTime @default(now())
+
+  digest Digest? @relation(fields: [digestId], references: [id])
 }

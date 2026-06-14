@@ -9,9 +9,8 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const body = await req.json()
   const { name, url, type } = body
-  if (!name || !url || !type) {
+  if (!name || !url || !type)
     return NextResponse.json({ error: 'name, url, type required' }, { status: 400 })
-  }
   const source = await prisma.source.create({ data: { name, url, type } })
   return NextResponse.json(source, { status: 201 })
 }

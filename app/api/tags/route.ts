@@ -10,6 +10,6 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const { name, color, description } = body
   if (!name) return NextResponse.json({ error: 'name required' }, { status: 400 })
-  const tag = await prisma.tag.create({ data: { name, color, description } })
+  const tag = await prisma.tag.create({ data: { name, color: color ?? '#6366f1', description } })
   return NextResponse.json(tag, { status: 201 })
 }
