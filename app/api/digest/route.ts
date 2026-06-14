@@ -1,25 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// N8N WF3 — create digest with condensed subjects
+// n8n WF3 — create digest with condensed subjects
 export async function POST(req: NextRequest) {
   const { subjects, tagIds } = await req.json()
 
   const digest = await prisma.digest.create({
     data: {
-      tags:
-        tagIds?.length
-          ? { createMany: { data: tagIds.map((id: string) => ({ tagId: id })) } }
-          : undefined,
+      tags: tagIds?.length
+        ? { createMany: { data: tagIds.map((id: string) => ({ tagId: id })) } }
+        : undefined,
       subjects: {
         create: subjects.map(
           (s: { title: string; summary: string; articles: string[] }, i: number) => ({
             title: s.title,
             summary: s.summary,
             order: i,
-            articles: {
+            feedItems: {
               create: s.articles.map((url: string) => ({
-                article: { connect: { url } },
+                feedItem: { connect: { url } },
               })),
             },
           })
@@ -34,7 +33,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(digest, { status: 201 })
 }
 
-// WF4 + Web UI — read digests
+// WF4 (Next.js) + Web UI — read digests
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const status = searchParams.get('status')
@@ -44,7 +43,7 @@ export async function GET(req: NextRequest) {
     include: {
       subjects: {
         include: {
-          articles: { include: { article: { include: { source: true } } } },
+          feedItems: { include: { feedItem: { include: { source: true } } } },
         },
         orderBy: { order: 'asc' },
       },

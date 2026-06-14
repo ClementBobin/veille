@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// N8N WF1 — store raw articles
+// n8n WF1 — store raw feed items
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const articles = Array.isArray(body) ? body : [body]
+  const items = Array.isArray(body) ? body : [body]
 
   const results = await Promise.allSettled(
-    articles.map(({ title, url, content, sourceId, publishedAt }) =>
-      prisma.article.upsert({
+    items.map(({ title, url, content, sourceId, publishedAt }) =>
+      prisma.feedItem.upsert({
         where: { url },
-        update: {},
+        update: {},  // on ne réécrit pas si déjà présent (idempotent)
         create: {
           title,
           url,
@@ -22,20 +22,31 @@ export async function POST(req: NextRequest) {
     )
   )
 
+  // Mise à jour du lastFetch sur les sources concernées
+  const sourceIds = [...new Set(items.map((i) => i.sourceId).filter(Boolean))]
+  if (sourceIds.length) {
+    await prisma.source.updateMany({
+      where: { id: { in: sourceIds } },
+      data: { lastFetch: new Date() },
+    })
+  }
+
   const created = results.filter((r) => r.status === 'fulfilled').length
-  return NextResponse.json({ created, total: articles.length }, { status: 201 })
+  return NextResponse.json({ created, total: items.length }, { status: 201 })
 }
 
-// N8N WF2 — read unprocessed articles
+// n8n WF2 — read unprocessed feed items
+// ?unprocessed=true  → items pas encore traités par le LLM
+// (pas de query)     → tous les items
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const unprocessed = searchParams.get('unprocessed') === 'true'
 
-  const articles = await prisma.article.findMany({
+  const items = await prisma.feedItem.findMany({
     where: unprocessed ? { processed: false } : undefined,
     include: { source: true, tags: { include: { tag: true } } },
     orderBy: { fetchedAt: 'desc' },
     take: 200,
   })
-  return NextResponse.json(articles)
+  return NextResponse.json(items)
 }

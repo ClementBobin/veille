@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "./generated/client"
@@ -19,7 +14,7 @@ model Tag {
   description String?
   createdAt   DateTime @default(now())
 
-  articleTags ArticleTag[]
+  feedItems   FeedItemTag[]
   digestTags  DigestTag[]
 }
 
@@ -29,10 +24,12 @@ model Source {
   url       String     @unique
   type      SourceType
   active    Boolean    @default(true)
+  /// Si true : on vérifie si un FeedItem existe déjà pour cette source avant de la renvoyer à n8n
+  cache     Boolean    @default(false)
   createdAt DateTime   @default(now())
   lastFetch DateTime?
 
-  articles Article[]
+  feedItems FeedItem[]
 }
 
 enum SourceType {
@@ -42,7 +39,7 @@ enum SourceType {
   VIDEO
 }
 
-model Article {
+model FeedItem {
   id          String    @id @default(cuid())
   title       String
   url         String    @unique
@@ -53,19 +50,21 @@ model Article {
   relevant    Boolean   @default(false)
   score       Float?
   processed   Boolean   @default(false)
+  /// Hash des tags assignés — permet de détecter si la catégorisation a changé
+  tagsHash    String?
 
-  source   Source           @relation(fields: [sourceId], references: [id])
-  tags     ArticleTag[]
-  subjects SubjectArticle[]
+  source   Source          @relation(fields: [sourceId], references: [id])
+  tags     FeedItemTag[]
+  subjects SubjectFeedItem[]
 }
 
-model ArticleTag {
-  articleId String
-  tagId     String
-  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+model FeedItemTag {
+  feedItemId String
+  tagId      String
+  feedItem   FeedItem @relation(fields: [feedItemId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
-  @@id([articleId, tagId])
+  @@id([feedItemId, tagId])
 }
 
 model Digest {
@@ -104,17 +103,17 @@ model Subject {
   selected Boolean @default(false)
   order    Int     @default(0)
 
-  digest   Digest           @relation(fields: [digestId], references: [id], onDelete: Cascade)
-  articles SubjectArticle[]
+  digest   Digest            @relation(fields: [digestId], references: [id], onDelete: Cascade)
+  feedItems SubjectFeedItem[]
 }
 
-model SubjectArticle {
-  subjectId String
-  articleId String
-  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+model SubjectFeedItem {
+  subjectId  String
+  feedItemId String
+  subject    Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  feedItem   FeedItem @relation(fields: [feedItemId], references: [id], onDelete: Cascade)
 
-  @@id([subjectId, articleId])
+  @@id([subjectId, feedItemId])
 }
 
 model Note {
@@ -127,4 +126,13 @@ model Note {
   createdAt  DateTime @default(now())
 
   digest Digest? @relation(fields: [digestId], references: [id])
+}
+
+/// Suivi des événements de pipeline n8n — un enregistrement par étape WF1→WF5
+model PipelineEvent {
+  id        String   @id @default(cuid())
+  workflow  String   /// "WF1", "WF2", "WF3", "WF4", "WF5"
+  status    String   /// "started" | "done" | "error"
+  message   String?
+  createdAt DateTime @default(now())
 }
