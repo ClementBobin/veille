@@ -1,31 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// POST — n8n ou Next.js enregistre un événement de pipeline
-export async function POST(req: NextRequest) {
-  const { workflow, status, message } = await req.json()
-  if (!workflow || !status)
-    return NextResponse.json({ error: 'workflow + status required' }, { status: 400 })
+const WF1_BRANCHES = ['rss', 'api', 'scraping', 'video']
 
-  const event = await prisma.pipelineEvent.create({
-    data: { workflow, status, message },
+export async function GET() {
+  const events = await prisma.pipelineEvent.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: 50,
   })
-  return NextResponse.json(event, { status: 201 })
+  return NextResponse.json(events)
 }
 
-// GET — renvoie le dernier événement de chaque WF pour le dashboard
-export async function GET() {
-  const workflows = ['WF1', 'WF2', 'WF3', 'WF4', 'WF5']
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+  const { workflow, status, message, runId, branch } = body
 
-  const latest = await Promise.all(
-    workflows.map(async (wf) => {
-      const event = await prisma.pipelineEvent.findFirst({
-        where: { workflow: wf },
-        orderBy: { createdAt: 'desc' },
-      })
-      return { workflow: wf, event }
+  const event = await prisma.pipelineEvent.create({
+    data: { workflow, status, message, runId, branch },
+  })
+
+  if (workflow === 'WF1' && status === 'branch-done' && runId) {
+    const done = await prisma.pipelineEvent.findMany({
+      where: { workflow: 'WF1', status: 'branch-done', runId },
+      select: { branch: true },
+      distinct: ['branch'],
     })
-  )
+    const doneBranches = done.map(e => e.branch).filter(Boolean) as string[]
 
-  return NextResponse.json(latest)
+    // Premier signal → enregistre le timestamp de départ
+    // Déclenche WF2 si aucun nouveau signal depuis 60s
+    const lastSignal = await prisma.pipelineEvent.findFirst({
+      where: { workflow: 'WF1', status: 'branch-done', runId },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    const alreadyTriggered = await prisma.pipelineEvent.findFirst({
+      where: { workflow: 'WF1', status: 'done', runId },
+    })
+
+    if (!alreadyTriggered) {
+      // Schedula le trigger après 60s d'inactivité
+      setTimeout(async () => {
+        const stillPending = await prisma.pipelineEvent.findFirst({
+          where: { workflow: 'WF1', status: 'done', runId },
+        })
+        if (!stillPending) {
+          await prisma.pipelineEvent.create({
+            data: { workflow: 'WF1', status: 'done', message: 'Collecte terminée', runId },
+          })
+          await fetch('https://n8n.tail025bf6.ts.net/webhook/start-wf2', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ trigger: 'wf1-done' }),
+          })
+        }
+      }, 60_000)
+    }
+  }
+
+  return NextResponse.json(event, { status: 201 })
 }

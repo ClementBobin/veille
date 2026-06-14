@@ -134,5 +134,7 @@ model PipelineEvent {
   workflow  String   /// "WF1", "WF2", "WF3", "WF4", "WF5"
   status    String   /// "started" | "done" | "error"
   message   String?
+  runId     String?
+  branch    String?
   createdAt DateTime @default(now())
 }

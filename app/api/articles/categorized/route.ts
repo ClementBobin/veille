@@ -51,7 +51,6 @@ export async function POST(req: NextRequest) {
           ? {
               createMany: {
                 data: tagIds.map((tagId) => ({ tagId })),
-                skipDuplicates: true,
               },
             }
           : {}),
