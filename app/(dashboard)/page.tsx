@@ -16,8 +16,7 @@ const WF_LABELS: Record<string, string> = {
   WF1: 'Collecte',
   WF2: 'Catégorisation',
   WF3: 'Condensation',
-  WF4: 'Sélection',
-  WF5: 'Génération note',
+  WF4: 'Génération note',
 }
 
 const statusColor: Record<string, string> = {
@@ -48,7 +47,7 @@ export default async function DashboardPage() {
   const recentSources = await prisma.source.findMany({ orderBy: { lastFetch: 'desc' }, take: 4 })
 
   // Pipeline monitoring — dernier event par WF
-  const workflows = ['WF1', 'WF2', 'WF3', 'WF4', 'WF5']
+  const workflows = ['WF1', 'WF2', 'WF3', 'WF4']
   const pipelineEvents: PipelineEntry[] = await Promise.all(
     workflows.map(async (wf) => ({
       workflow: wf,
@@ -93,7 +92,7 @@ export default async function DashboardPage() {
         <div className="text-xs font-medium text-amber-400 tracking-widest uppercase mb-4">
           Pipeline n8n — dernier événement
         </div>
-        <div className="grid grid-cols-5 gap-3">
+        <div className="grid grid-cols-4 gap-3">
           {pipelineEvents.map(({ workflow, event }) => (
             <div key={workflow} className="bg-zinc-950 rounded-lg p-3 text-center">
               <div className="text-xs text-zinc-500 mb-1">{workflow}</div>

@@ -131,7 +131,7 @@ model Note {
 /// Suivi des événements de pipeline n8n — un enregistrement par étape WF1→WF5
 model PipelineEvent {
   id        String   @id @default(cuid())
-  workflow  String   /// "WF1", "WF2", "WF3", "WF4", "WF5"
+  workflow  String   /// "WF1", "WF2", "WF3", "WF5"
   status    String   /// "started" | "done" | "error"
   message   String?
   runId     String?
