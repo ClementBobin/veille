@@ -6,16 +6,18 @@ export async function POST(req: NextRequest) {
   const { title, content, digestId, filename, exportedTo } = await req.json()
 
   const note = await prisma.note.create({
-    data: { title, content, digestId, filename, exportedTo: exportedTo ?? [] },
+    data: {
+      title,
+      content,
+      digestId,
+      filename,
+      exportedTo: Array.isArray(exportedTo) ? exportedTo.join(',') : (exportedTo ?? '') 
+    },
   })
 
   if (digestId) {
     await prisma.digest.update({ where: { id: digestId }, data: { status: 'DONE' } })
   }
-
-  await prisma.pipelineEvent.create({
-    data: { workflow: 'WF5', status: 'done', message: `Note générée : ${filename}` },
-  })
 
   return NextResponse.json(note, { status: 201 })
 }

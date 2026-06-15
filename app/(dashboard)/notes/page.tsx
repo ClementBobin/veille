@@ -9,6 +9,8 @@ export default function NotesPage() {
   const [selected, setSelected] = useState<Note | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const toArray = (v: string | string[]) => Array.isArray(v) ? v : (v ? v.split(',') : [])
+
   useEffect(() => { fetch('/api/notes').then(r => r.json()).then(setNotes).finally(() => setLoading(false)) }, [])
 
   if (selected) return (
@@ -24,7 +26,7 @@ export default function NotesPage() {
             <div className="text-xs text-zinc-600 font-mono mt-1">{selected.filename}</div>
           </div>
           <div className="flex gap-2">
-            {selected.exportedTo.map(e => (
+            {toArray(selected.exportedTo).map(e => (
               <span key={e} className="text-xs bg-zinc-800 text-zinc-500 px-2 py-1 rounded">{e}</span>
             ))}
           </div>
@@ -53,7 +55,7 @@ export default function NotesPage() {
               <div className="text-xs text-zinc-600 font-mono mt-0.5">{n.filename}</div>
             </div>
             <div className="flex gap-1.5">
-              {n.exportedTo.map(e => (
+              {toArray(n.exportedTo).map(e => (
                 <span key={e} className="text-xs bg-zinc-800 text-zinc-500 px-2 py-0.5 rounded">{e}</span>
               ))}
             </div>

@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   // Déclenche WF5 directement depuis Next.js
   const n8nUrl = process.env.N8N_BASE_URL ?? 'http://localhost:5678'
   try {
-    await fetch(`${n8nUrl}/webhook/start-wf5`, {
+    await fetch(`${n8nUrl}/webhook-test/start-wf4`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ digestId }),
