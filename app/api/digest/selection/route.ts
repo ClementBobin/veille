@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { verifyApiKey } from '@/lib/verifyApiKey'
 
 export async function POST(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+  
+  if (authError) {
+    return authError
+  }
+
   const { digestId, selectedSubjectIds } = await req.json()
 
   await prisma.subject.updateMany({ where: { digestId }, data: { selected: false } })
@@ -31,6 +38,12 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+
   const { searchParams } = new URL(req.url)
   const digestId = searchParams.get('digestId')
 

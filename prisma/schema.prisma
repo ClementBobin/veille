@@ -162,3 +162,11 @@ model PipelineEvent {
   branch    String?
   createdAt DateTime @default(now())
 }
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  name      String
+  keyHash   String    @unique
+  lastUsed  DateTime?
+  createdAt DateTime  @default(now())
+}

@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { verifyApiKey } from '@/lib/verifyApiKey'
 
 // Web UI + n8n WF1
 export async function GET(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+  
   const { searchParams } = new URL(req.url)
   const forN8n = searchParams.get('for_n8n') === 'true'
 
@@ -25,6 +32,12 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+
   const body = await req.json()
   const { name, url, type, cache } = body
   if (!name || !url || !type)

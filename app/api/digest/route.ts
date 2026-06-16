@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { verifyApiKey } from '@/lib/verifyApiKey'
 
 // n8n WF3 — create digest with condensed subjects
 export async function POST(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+
   const { title, summary, toc } = await req.json()
 
   // Collect all unique articleIds across all toc entries
@@ -69,6 +76,12 @@ export async function POST(req: NextRequest) {
 
 // WF4 (Next.js) + Web UI — read digests
 export async function GET(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+
   const { searchParams } = new URL(req.url)
   const status = searchParams.get('status')
 
