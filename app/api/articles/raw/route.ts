@@ -8,6 +8,8 @@ export async function POST(req: NextRequest) {
 
   const results = await Promise.allSettled(
     items.map(({ title, url, content, sourceId, publishedAt }) =>
+      
+
       prisma.feedItem.upsert({
         where: { url },
         update: {},  // on ne réécrit pas si déjà présent (idempotent)

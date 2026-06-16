@@ -14,8 +14,8 @@ model Tag {
   description String?
   createdAt   DateTime @default(now())
 
-  feedItems   FeedItemTag[]
-  digestTags  DigestTag[]
+  feedItems  FeedItemTag[]
+  digestTags DigestTag[]
 }
 
 model Source {
@@ -53,9 +53,10 @@ model FeedItem {
   /// Hash des tags assignés — permet de détecter si la catégorisation a changé
   tagsHash    String?
 
-  source   Source          @relation(fields: [sourceId], references: [id])
-  tags     FeedItemTag[]
-  subjects SubjectFeedItem[]
+  source           Source            @relation(fields: [sourceId], references: [id])
+  tags             FeedItemTag[]
+  subjects         SubjectFeedItem[]
+  tocEntryArticles TocEntryArticle[]
 }
 
 model FeedItemTag {
@@ -69,6 +70,8 @@ model FeedItemTag {
 
 model Digest {
   id        String       @id @default(cuid())
+  title     String?
+  summary   String?
   date      DateTime     @default(now())
   status    DigestStatus @default(PENDING)
   sentAt    DateTime?
@@ -77,6 +80,27 @@ model Digest {
   subjects Subject[]
   tags     DigestTag[]
   notes    Note[]
+  toc      TocEntry[] // ← replaces the JSON string
+}
+
+model TocEntry {
+  id       String @id @default(cuid())
+  digestId String
+  order    Int    @default(0)
+  title    String
+  summary  String
+
+  digest   Digest            @relation(fields: [digestId], references: [id], onDelete: Cascade)
+  articles TocEntryArticle[]
+}
+
+model TocEntryArticle {
+  tocEntryId String
+  feedItemId String
+  tocEntry   TocEntry @relation(fields: [tocEntryId], references: [id], onDelete: Cascade)
+  feedItem   FeedItem @relation(fields: [feedItemId], references: [id], onDelete: Cascade)
+
+  @@id([tocEntryId, feedItemId])
 }
 
 enum DigestStatus {
@@ -103,7 +127,7 @@ model Subject {
   selected Boolean @default(false)
   order    Int     @default(0)
 
-  digest   Digest            @relation(fields: [digestId], references: [id], onDelete: Cascade)
+  digest    Digest            @relation(fields: [digestId], references: [id], onDelete: Cascade)
   feedItems SubjectFeedItem[]
 }
 
@@ -131,8 +155,8 @@ model Note {
 /// Suivi des événements de pipeline n8n — un enregistrement par étape WF1→WF5
 model PipelineEvent {
   id        String   @id @default(cuid())
-  workflow  String   /// "WF1", "WF2", "WF3", "WF5"
-  status    String   /// "started" | "done" | "error"
+  workflow  String /// "WF1", "WF2", "WF3", "WF5"
+  status    String /// "started" | "done" | "error"
   message   String?
   runId     String?
   branch    String?
