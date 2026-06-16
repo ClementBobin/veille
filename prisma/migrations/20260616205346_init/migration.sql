@@ -57,12 +57,33 @@ CREATE TABLE "FeedItemTag" (
 -- CreateTable
 CREATE TABLE "Digest" (
     "id" TEXT NOT NULL,
+    "title" TEXT,
+    "summary" TEXT,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "status" "DigestStatus" NOT NULL DEFAULT 'PENDING',
     "sentAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Digest_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "TocEntry" (
+    "id" TEXT NOT NULL,
+    "digestId" TEXT NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "title" TEXT NOT NULL,
+    "summary" TEXT NOT NULL,
+
+    CONSTRAINT "TocEntry_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "TocEntryArticle" (
+    "tocEntryId" TEXT NOT NULL,
+    "feedItemId" TEXT NOT NULL,
+
+    CONSTRAINT "TocEntryArticle_pkey" PRIMARY KEY ("tocEntryId","feedItemId")
 );
 
 -- CreateTable
@@ -119,6 +140,17 @@ CREATE TABLE "PipelineEvent" (
     CONSTRAINT "PipelineEvent_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "ApiKey" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "keyHash" TEXT NOT NULL,
+    "lastUsed" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ApiKey_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
 
@@ -128,6 +160,9 @@ CREATE UNIQUE INDEX "Source_url_key" ON "Source"("url");
 -- CreateIndex
 CREATE UNIQUE INDEX "FeedItem_url_key" ON "FeedItem"("url");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "ApiKey_keyHash_key" ON "ApiKey"("keyHash");
+
 -- AddForeignKey
 ALTER TABLE "FeedItem" ADD CONSTRAINT "FeedItem_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "Source"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -136,6 +171,15 @@ ALTER TABLE "FeedItemTag" ADD CONSTRAINT "FeedItemTag_feedItemId_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "FeedItemTag" ADD CONSTRAINT "FeedItemTag_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "Tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TocEntry" ADD CONSTRAINT "TocEntry_digestId_fkey" FOREIGN KEY ("digestId") REFERENCES "Digest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TocEntryArticle" ADD CONSTRAINT "TocEntryArticle_tocEntryId_fkey" FOREIGN KEY ("tocEntryId") REFERENCES "TocEntry"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TocEntryArticle" ADD CONSTRAINT "TocEntryArticle_feedItemId_fkey" FOREIGN KEY ("feedItemId") REFERENCES "FeedItem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DigestTag" ADD CONSTRAINT "DigestTag_digestId_fkey" FOREIGN KEY ("digestId") REFERENCES "Digest"("id") ON DELETE CASCADE ON UPDATE CASCADE;

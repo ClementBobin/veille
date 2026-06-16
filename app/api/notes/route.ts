@@ -5,10 +5,7 @@ import { verifyApiKey } from '@/lib/verifyApiKey'
 // WF5 stores the generated markdown note
 export async function POST(req: NextRequest) {
   const authError = await verifyApiKey(req)
-
-  if (authError) {
-    return authError
-  }
+  if (authError) return authError
 
   const { title, content, digestId, filename, exportedTo } = await req.json()
 
@@ -18,7 +15,7 @@ export async function POST(req: NextRequest) {
       content,
       digestId,
       filename,
-      exportedTo: Array.isArray(exportedTo) ? exportedTo.join(',') : (exportedTo ?? '') 
+      exportedTo: Array.isArray(exportedTo) ? exportedTo.join(',') : (exportedTo ?? ''),
     },
   })
 
@@ -31,19 +28,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const authError = await verifyApiKey(req)
-
-  if (authError) {
-    return authError
-  }
-
-  const { searchParams } = new URL(req.url)
-  const id = searchParams.get('id')
-
-  if (id) {
-    const note = await prisma.note.findUnique({ where: { id } })
-    if (!note) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json(note)
-  }
+  if (authError) return authError
 
   const notes = await prisma.note.findMany({ orderBy: { createdAt: 'desc' } })
   return NextResponse.json(notes)
