@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { verifyApiKey } from '@/lib/verifyApiKey'
 
-const WF1_BRANCHES = ['rss', 'api', 'scraping', 'video']
+export async function GET(req: NextRequest) {
+  const authError = await verifyApiKey(req)
 
-export async function GET() {
+  if (authError) {
+    return authError
+  }
+
   const events = await prisma.pipelineEvent.findMany({
     orderBy: { createdAt: 'desc' },
     take: 50,
@@ -12,6 +17,12 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+
   const body = await req.json()
   const { workflow, status, message, runId, branch } = body
 
@@ -20,20 +31,6 @@ export async function POST(req: NextRequest) {
   })
 
   if (workflow === 'WF1' && status === 'branch-done' && runId) {
-    const done = await prisma.pipelineEvent.findMany({
-      where: { workflow: 'WF1', status: 'branch-done', runId },
-      select: { branch: true },
-      distinct: ['branch'],
-    })
-    const doneBranches = done.map(e => e.branch).filter(Boolean) as string[]
-
-    // Premier signal → enregistre le timestamp de départ
-    // Déclenche WF2 si aucun nouveau signal depuis 60s
-    const lastSignal = await prisma.pipelineEvent.findFirst({
-      where: { workflow: 'WF1', status: 'branch-done', runId },
-      orderBy: { createdAt: 'desc' },
-    })
-
     const alreadyTriggered = await prisma.pipelineEvent.findFirst({
       where: { workflow: 'WF1', status: 'done', runId },
     })

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { createHash } from 'crypto'
+import { verifyApiKey } from '@/lib/verifyApiKey'
 
 function hashTags(tags: string[]): string {
   return createHash('md5').update([...tags].sort().join('|')).digest('hex')
@@ -9,6 +10,12 @@ function hashTags(tags: string[]): string {
 // n8n WF2 — store / update categorization result
 // Si les tags n'ont pas changé (même hash), on ne re-poste pas → 304-like JSON
 export async function POST(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+
   const body = await req.json()
   const feedItemId = body.feedItemId ?? body.articleId ?? body.id
   const { tags = [], score = 0, relevant = false } = body
@@ -64,6 +71,12 @@ export async function POST(req: NextRequest) {
 // n8n WF3 — read categorized relevant feedItems not yet in a digest
 // Supporte ?resumeFrom=<feedItemId> pour reprendre après crash LLM
 export async function GET(req: NextRequest) {
+  const authError = await verifyApiKey(req)
+
+  if (authError) {
+    return authError
+  }
+
   const { searchParams } = new URL(req.url)
   const resumeFrom = searchParams.get('resumeFrom')
 
