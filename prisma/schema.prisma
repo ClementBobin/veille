@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 model Tag {
@@ -169,4 +169,26 @@ model ApiKey {
   keyHash   String    @unique
   lastUsed  DateTime?
   createdAt DateTime  @default(now())
+}
+
+model Config {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+/// Un log par requête API — alimenté par le middleware
+model RequestLog {
+  id         String   @id @default(cuid())
+  method     String
+  path       String
+  status     Int
+  durationMs Int
+  authType   String? /// "session" | "apikey" | "none"
+  apiKeyName String?
+  error      String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path])
 }

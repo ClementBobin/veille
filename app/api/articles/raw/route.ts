@@ -58,8 +58,23 @@ export async function GET(req: NextRequest) {
   const unprocessed = searchParams.get('unprocessed') === 'true'
 
   const items = await prisma.feedItem.findMany({
-    where: unprocessed ? { processed: false } : undefined,
-    include: { source: true, tags: { include: { tag: true } } },
+    where: unprocessed
+      ? {
+          OR: [
+            { processed: false },
+            {
+              source: {
+                active: false,
+                cache: true,
+              },
+            },
+          ],
+        }
+      : undefined,
+    include: {
+      source: true,
+      tags: { include: { tag: true } },
+    },
     orderBy: { fetchedAt: 'desc' },
     take: 200,
   })
