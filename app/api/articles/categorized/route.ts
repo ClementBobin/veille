@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { createHash } from 'crypto'
 import { getAuth } from '@/lib/auth-context'
+import { withLog } from '@/lib/with-log'
 
 function hashTags(tags: string[]): string {
   return createHash('md5').update([...tags].sort().join('|')).digest('hex')
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -48,9 +49,9 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json(updated)
-}
+})
 
-export async function GET(req: NextRequest) {
+export const GET = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -70,4 +71,4 @@ export async function GET(req: NextRequest) {
     orderBy: { fetchedAt: 'desc' },
   })
   return NextResponse.json(items)
-}
+})

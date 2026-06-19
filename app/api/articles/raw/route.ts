@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
+import { withLog } from '@/lib/with-log'
 
-export async function POST(req: NextRequest) {
+export const POST = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -34,9 +35,9 @@ export async function POST(req: NextRequest) {
 
   const created = results.filter((r) => r.status === 'fulfilled').length
   return NextResponse.json({ created, total: items.length }, { status: 201 })
-}
+})
 
-export async function GET(req: NextRequest) {
+export const GET = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -56,4 +57,4 @@ export async function GET(req: NextRequest) {
     take: 200,
   })
   return NextResponse.json(items)
-}
+})

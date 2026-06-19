@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Gestionnaire de veille informatique',
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full`}>
       <body className="min-h-full bg-zinc-950 text-zinc-100 flex flex-col">

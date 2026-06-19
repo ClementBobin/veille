@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
+import { withLog } from '@/lib/with-log'
 
-export async function POST(req: NextRequest) {
+export const POST = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -28,13 +29,13 @@ export async function POST(req: NextRequest) {
   if (digestId) await prisma.digest.update({ where: { id: digestId }, data: { status: 'DONE' } })
 
   return NextResponse.json(note, { status: 201 })
-}
+})
 
-export async function GET(req: NextRequest) {
+export const GET = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
 
   const notes = await prisma.note.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } })
   return NextResponse.json(notes)
-}
+})

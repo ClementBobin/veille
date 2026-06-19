@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
+import { getUserConfig } from '@/lib/user-config'
+import { withLog } from '@/lib/with-log'
 
-const RETENTION_DAYS = process.env.RETENTION_DAYS ? parseInt(process.env.RETENTION_DAYS, 10) : 7
-
-export async function DELETE(req: NextRequest) {
+export const DELETE = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
 
+  const { retentionDays } = await getUserConfig(userId)
   const { searchParams } = new URL(req.url)
   const dryRun = searchParams.get('dryRun') === 'true'
 
   const cutoff = new Date()
-  cutoff.setDate(cutoff.getDate() - RETENTION_DAYS)
+  cutoff.setDate(cutoff.getDate() - retentionDays)
 
   const cleanupWhere = {
     userId,
@@ -34,27 +35,23 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ dryRun: false, cutoff: cutoff.toISOString(), deleted: 0 })
   }
 
-  const result = await prisma.feedItem.deleteMany({ where: { id: { in: toDelete.map((item) => item.id) } } })
+  const result = await prisma.feedItem.deleteMany({ where: { id: { in: toDelete.map(i => i.id) } } })
 
   await prisma.pipelineEvent.create({
-    data: {
-      workflow: 'cleanup',
-      status: 'done',
-      message: `${result.count} FeedItem(s) supprimé(s) (cutoff ${cutoff.toISOString()})`,
-      userId,
-    },
+    data: { workflow: 'cleanup', status: 'done', message: `${result.count} FeedItem(s) supprimé(s) (cutoff ${cutoff.toISOString()})`, userId },
   })
 
   return NextResponse.json({ dryRun: false, cutoff: cutoff.toISOString(), deleted: result.count })
-}
+})
 
-export async function GET(req: NextRequest) {
+export const GET = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
 
+  const { retentionDays } = await getUserConfig(userId)
   const cutoff = new Date()
-  cutoff.setDate(cutoff.getDate() - RETENTION_DAYS)
+  cutoff.setDate(cutoff.getDate() - retentionDays)
 
   const count = await prisma.feedItem.count({
     where: {
@@ -64,5 +61,5 @@ export async function GET(req: NextRequest) {
     },
   })
 
-  return NextResponse.json({ cutoff: cutoff.toISOString(), eligibleForCleanup: count })
-}
+  return NextResponse.json({ cutoff: cutoff.toISOString(), eligibleForCleanup: count, retentionDays })
+})

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
+import { withLog } from '@/lib/with-log'
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const PATCH = withLog(async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -14,9 +15,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const body = await req.json()
   const tag = await prisma.tag.update({ where: { id }, data: body })
   return NextResponse.json(tag)
-}
+})
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const DELETE = withLog(async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -27,4 +28,4 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
   await prisma.tag.delete({ where: { id } })
   return NextResponse.json({ ok: true })
-}
+})

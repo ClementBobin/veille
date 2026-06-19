@@ -7,7 +7,7 @@ export async function getAuth(req: NextRequest): Promise<{ userId: string } | Ne
   // 1. Session cookie (web UI)
   const session = req.cookies.get('session')?.value
   if (session) {
-    const payload = verifySessionToken(session)
+    const payload = await verifySessionToken(session)
     if (payload) return { userId: payload.userId }
   }
 

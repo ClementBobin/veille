@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import ObsidianRenderer from '@/components/ObsidianRenderer'
+import ObsidianRenderer from '@/components/ui/ObsidianRenderer'
 
 type Note = { id: string; title: string; content: string; filename: string; exportedTo: string }
 

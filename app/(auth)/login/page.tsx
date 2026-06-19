@@ -1,8 +1,10 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
@@ -11,10 +13,13 @@ export default function LoginPage() {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ email, password }),
     })
     if (res.ok) router.push('/')
-    else setError('Mot de passe incorrect')
+    else {
+      const data = await res.json().catch(() => ({}))
+      setError(data.error ?? 'Identifiants incorrects')
+    }
   }
 
   return (
@@ -25,6 +30,13 @@ export default function LoginPage() {
           <span className="font-bold text-sm tracking-tight text-white">veille<span className="text-indigo-400">.io</span></span>
         </div>
         <h1 className="text-lg font-bold text-white mb-6">Connexion</h1>
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Email"
+          className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder-zinc-600 outline-none focus:border-indigo-500 mb-3"
+        />
         <input
           type="password"
           value={password}
@@ -38,6 +50,9 @@ export default function LoginPage() {
           className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium py-2 rounded-lg transition-colors">
           Se connecter
         </button>
+        <p className="text-xs text-zinc-500 text-center mt-4">
+          Pas encore de compte ? <Link href="/register" className="text-indigo-400 underline">Créer un compte</Link>
+        </p>
       </div>
     </div>
   )

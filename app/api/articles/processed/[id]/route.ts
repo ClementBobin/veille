@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
+import { withLog } from '@/lib/with-log'
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export const POST = withLog(async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -13,4 +14,4 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   await prisma.feedItem.update({ where: { id }, data: { processed: true } })
   return NextResponse.json({ ok: true })
-}
+})

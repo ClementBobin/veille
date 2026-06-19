@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
+import { withLog } from '@/lib/with-log'
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const GET = withLog(async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -11,9 +12,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const source = await prisma.source.findFirst({ where: { id, userId } })
   if (!source) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(source)
-}
+})
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const PATCH = withLog(async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -33,9 +34,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const source = await prisma.source.update({ where: { id }, data })
   return NextResponse.json(source)
-}
+})
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const DELETE = withLog(async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const auth = await getAuth(req)
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
@@ -46,4 +47,4 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
   await prisma.source.delete({ where: { id } })
   return NextResponse.json({ ok: true })
-}
+})
