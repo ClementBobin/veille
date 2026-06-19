@@ -18,6 +18,11 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
  * Model Tag
  * 
  */
@@ -74,7 +79,7 @@ export type SubjectFeedItem = Prisma.SubjectFeedItemModel
 export type Note = Prisma.NoteModel
 /**
  * Model PipelineEvent
- * Suivi des événements de pipeline n8n — un enregistrement par étape WF1→WF5
+ * 
  */
 export type PipelineEvent = Prisma.PipelineEventModel
 /**
@@ -82,3 +87,13 @@ export type PipelineEvent = Prisma.PipelineEventModel
  * 
  */
 export type ApiKey = Prisma.ApiKeyModel
+/**
+ * Model Config
+ * 
+ */
+export type Config = Prisma.ConfigModel
+/**
+ * Model RequestLog
+ * 
+ */
+export type RequestLog = Prisma.RequestLogModel

@@ -7,34 +7,57 @@ datasource db {
   provider = "sqlite"
 }
 
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  tags           Tag[]
+  sources        Source[]
+  feedItems      FeedItem[]
+  digests        Digest[]
+  notes          Note[]
+  pipelineEvents PipelineEvent[]
+  apiKeys        ApiKey[]
+  configs        Config[]
+  requestLogs    RequestLog[]
+}
+
 model Tag {
   id          String   @id @default(cuid())
-  name        String   @unique
+  userId      String
+  name        String
   color       String   @default("#6366f1")
   description String?
   createdAt   DateTime @default(now())
 
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   feedItems  FeedItemTag[]
   digestTags DigestTag[]
+
+  @@unique([userId, name])
 }
 
 model Source {
   id        String     @id @default(cuid())
+  userId    String
   name      String
-  url       String     @unique
+  url       String
   type      SourceType
   active    Boolean    @default(true)
-  /// Si true : on vérifie si un FeedItem existe déjà pour cette source avant de la renvoyer à n8n
   cache     Boolean    @default(false)
   createdAt DateTime   @default(now())
   lastFetch DateTime?
 
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   feedItems FeedItem[]
+
+  @@unique([userId, url])
 }
 
 enum SourceType {
   RSS
-  API
   SCRAPING
   VIDEO
   AUDIO
@@ -46,8 +69,9 @@ enum SourceType {
 
 model FeedItem {
   id          String    @id @default(cuid())
+  userId      String
   title       String
-  url         String    @unique
+  url         String
   content     String?
   sourceId    String
   publishedAt DateTime?
@@ -55,13 +79,15 @@ model FeedItem {
   relevant    Boolean   @default(false)
   score       Float?
   processed   Boolean   @default(false)
-  /// Hash des tags assignés — permet de détecter si la catégorisation a changé
   tagsHash    String?
 
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   source           Source            @relation(fields: [sourceId], references: [id])
   tags             FeedItemTag[]
   subjects         SubjectFeedItem[]
   tocEntryArticles TocEntryArticle[]
+
+  @@unique([userId, url])
 }
 
 model FeedItemTag {
@@ -75,6 +101,7 @@ model FeedItemTag {
 
 model Digest {
   id        String       @id @default(cuid())
+  userId    String
   title     String?
   summary   String?
   date      DateTime     @default(now())
@@ -82,10 +109,11 @@ model Digest {
   sentAt    DateTime?
   createdAt DateTime     @default(now())
 
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   subjects Subject[]
   tags     DigestTag[]
   notes    Note[]
-  toc      TocEntry[] // ← replaces the JSON string
+  toc      TocEntry[]
 }
 
 model TocEntry {
@@ -147,6 +175,7 @@ model SubjectFeedItem {
 
 model Note {
   id         String   @id @default(cuid())
+  userId     String
   title      String
   content    String
   digestId   String?
@@ -154,45 +183,59 @@ model Note {
   exportedTo String   @default("[]")
   createdAt  DateTime @default(now())
 
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   digest Digest? @relation(fields: [digestId], references: [id])
 }
 
-/// Suivi des événements de pipeline n8n — un enregistrement par étape WF1→WF5
 model PipelineEvent {
   id        String   @id @default(cuid())
-  workflow  String /// "WF1", "WF2", "WF3", "WF5"
-  status    String /// "started" | "done" | "error"
+  userId    String
+  workflow  String
+  status    String
   message   String?
   runId     String?
   branch    String?
   createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ApiKey {
   id        String    @id @default(cuid())
+  userId    String
   name      String
   keyHash   String    @unique
   lastUsed  DateTime?
   createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Config {
-  key       String   @id
+  id        String   @id @default(cuid())
+  userId    String
+  key       String
   value     String
   updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
 }
 
-/// Un log par requête API — alimenté par le middleware
 model RequestLog {
   id         String   @id @default(cuid())
+  userId     String?
   method     String
   path       String
   status     Int
   durationMs Int
-  authType   String? /// "session" | "apikey" | "none"
+  authType   String?
   apiKeyName String?
   error      String?
   createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([createdAt])
   @@index([path])

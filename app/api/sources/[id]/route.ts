@@ -1,30 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyApiKey } from '@/lib/verifyApiKey'
+import { getAuth } from '@/lib/auth-context'
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const authError = await verifyApiKey(req)
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
-  if (authError) {
-    return authError
-  }
-  
   const { id } = await params
-  const source = await prisma.source.findUnique({ where: { id } })
+  const source = await prisma.source.findFirst({ where: { id, userId } })
   if (!source) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(source)
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const authError = await verifyApiKey(req)
-
-  if (authError) {
-    return authError
-  }
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
   const { id } = await params
+  const existing = await prisma.source.findFirst({ where: { id, userId } })
+  if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
   const body = await req.json()
-  // Autorise : name, url, type, active, cache
   const { name, url, type, active, cache } = body
   const data: Record<string, unknown> = {}
   if (name !== undefined) data.name = name
@@ -37,8 +35,15 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   return NextResponse.json(source)
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
+
   const { id } = await params
+  const existing = await prisma.source.findFirst({ where: { id, userId } })
+  if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
   await prisma.source.delete({ where: { id } })
   return NextResponse.json({ ok: true })
 }

@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model PipelineEvent
- * Suivi des événements de pipeline n8n — un enregistrement par étape WF1→WF5
+ * 
  */
 export type PipelineEventModel = runtime.Types.Result.DefaultSelection<Prisma.$PipelineEventPayload>
 
@@ -26,6 +26,7 @@ export type AggregatePipelineEvent = {
 
 export type PipelineEventMinAggregateOutputType = {
   id: string | null
+  userId: string | null
   workflow: string | null
   status: string | null
   message: string | null
@@ -36,6 +37,7 @@ export type PipelineEventMinAggregateOutputType = {
 
 export type PipelineEventMaxAggregateOutputType = {
   id: string | null
+  userId: string | null
   workflow: string | null
   status: string | null
   message: string | null
@@ -46,6 +48,7 @@ export type PipelineEventMaxAggregateOutputType = {
 
 export type PipelineEventCountAggregateOutputType = {
   id: number
+  userId: number
   workflow: number
   status: number
   message: number
@@ -58,6 +61,7 @@ export type PipelineEventCountAggregateOutputType = {
 
 export type PipelineEventMinAggregateInputType = {
   id?: true
+  userId?: true
   workflow?: true
   status?: true
   message?: true
@@ -68,6 +72,7 @@ export type PipelineEventMinAggregateInputType = {
 
 export type PipelineEventMaxAggregateInputType = {
   id?: true
+  userId?: true
   workflow?: true
   status?: true
   message?: true
@@ -78,6 +83,7 @@ export type PipelineEventMaxAggregateInputType = {
 
 export type PipelineEventCountAggregateInputType = {
   id?: true
+  userId?: true
   workflow?: true
   status?: true
   message?: true
@@ -161,6 +167,7 @@ export type PipelineEventGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 
 export type PipelineEventGroupByOutputType = {
   id: string
+  userId: string
   workflow: string
   status: string
   message: string | null
@@ -192,22 +199,26 @@ export type PipelineEventWhereInput = {
   OR?: Prisma.PipelineEventWhereInput[]
   NOT?: Prisma.PipelineEventWhereInput | Prisma.PipelineEventWhereInput[]
   id?: Prisma.StringFilter<"PipelineEvent"> | string
+  userId?: Prisma.StringFilter<"PipelineEvent"> | string
   workflow?: Prisma.StringFilter<"PipelineEvent"> | string
   status?: Prisma.StringFilter<"PipelineEvent"> | string
   message?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
   runId?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
   branch?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PipelineEvent"> | Date | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type PipelineEventOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   workflow?: Prisma.SortOrder
   status?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
   runId?: Prisma.SortOrderInput | Prisma.SortOrder
   branch?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type PipelineEventWhereUniqueInput = Prisma.AtLeast<{
@@ -215,16 +226,19 @@ export type PipelineEventWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PipelineEventWhereInput | Prisma.PipelineEventWhereInput[]
   OR?: Prisma.PipelineEventWhereInput[]
   NOT?: Prisma.PipelineEventWhereInput | Prisma.PipelineEventWhereInput[]
+  userId?: Prisma.StringFilter<"PipelineEvent"> | string
   workflow?: Prisma.StringFilter<"PipelineEvent"> | string
   status?: Prisma.StringFilter<"PipelineEvent"> | string
   message?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
   runId?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
   branch?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PipelineEvent"> | Date | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type PipelineEventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   workflow?: Prisma.SortOrder
   status?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -241,6 +255,7 @@ export type PipelineEventScalarWhereWithAggregatesInput = {
   OR?: Prisma.PipelineEventScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PipelineEventScalarWhereWithAggregatesInput | Prisma.PipelineEventScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"PipelineEvent"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"PipelineEvent"> | string
   workflow?: Prisma.StringWithAggregatesFilter<"PipelineEvent"> | string
   status?: Prisma.StringWithAggregatesFilter<"PipelineEvent"> | string
   message?: Prisma.StringNullableWithAggregatesFilter<"PipelineEvent"> | string | null
@@ -257,10 +272,12 @@ export type PipelineEventCreateInput = {
   runId?: string | null
   branch?: string | null
   createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutPipelineEventsInput
 }
 
 export type PipelineEventUncheckedCreateInput = {
   id?: string
+  userId: string
   workflow: string
   status: string
   message?: string | null
@@ -277,10 +294,12 @@ export type PipelineEventUpdateInput = {
   runId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutPipelineEventsNestedInput
 }
 
 export type PipelineEventUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   workflow?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -291,6 +310,7 @@ export type PipelineEventUncheckedUpdateInput = {
 
 export type PipelineEventCreateManyInput = {
   id?: string
+  userId: string
   workflow: string
   status: string
   message?: string | null
@@ -311,6 +331,7 @@ export type PipelineEventUpdateManyMutationInput = {
 
 export type PipelineEventUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   workflow?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -319,8 +340,19 @@ export type PipelineEventUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type PipelineEventListRelationFilter = {
+  every?: Prisma.PipelineEventWhereInput
+  some?: Prisma.PipelineEventWhereInput
+  none?: Prisma.PipelineEventWhereInput
+}
+
+export type PipelineEventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type PipelineEventCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   workflow?: Prisma.SortOrder
   status?: Prisma.SortOrder
   message?: Prisma.SortOrder
@@ -331,6 +363,7 @@ export type PipelineEventCountOrderByAggregateInput = {
 
 export type PipelineEventMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   workflow?: Prisma.SortOrder
   status?: Prisma.SortOrder
   message?: Prisma.SortOrder
@@ -341,6 +374,7 @@ export type PipelineEventMaxOrderByAggregateInput = {
 
 export type PipelineEventMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   workflow?: Prisma.SortOrder
   status?: Prisma.SortOrder
   message?: Prisma.SortOrder
@@ -349,40 +383,188 @@ export type PipelineEventMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type PipelineEventCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.PipelineEventCreateWithoutUserInput, Prisma.PipelineEventUncheckedCreateWithoutUserInput> | Prisma.PipelineEventCreateWithoutUserInput[] | Prisma.PipelineEventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PipelineEventCreateOrConnectWithoutUserInput | Prisma.PipelineEventCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.PipelineEventCreateManyUserInputEnvelope
+  connect?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+}
+
+export type PipelineEventUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.PipelineEventCreateWithoutUserInput, Prisma.PipelineEventUncheckedCreateWithoutUserInput> | Prisma.PipelineEventCreateWithoutUserInput[] | Prisma.PipelineEventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PipelineEventCreateOrConnectWithoutUserInput | Prisma.PipelineEventCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.PipelineEventCreateManyUserInputEnvelope
+  connect?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+}
+
+export type PipelineEventUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.PipelineEventCreateWithoutUserInput, Prisma.PipelineEventUncheckedCreateWithoutUserInput> | Prisma.PipelineEventCreateWithoutUserInput[] | Prisma.PipelineEventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PipelineEventCreateOrConnectWithoutUserInput | Prisma.PipelineEventCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.PipelineEventUpsertWithWhereUniqueWithoutUserInput | Prisma.PipelineEventUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.PipelineEventCreateManyUserInputEnvelope
+  set?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  disconnect?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  delete?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  connect?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  update?: Prisma.PipelineEventUpdateWithWhereUniqueWithoutUserInput | Prisma.PipelineEventUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.PipelineEventUpdateManyWithWhereWithoutUserInput | Prisma.PipelineEventUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.PipelineEventScalarWhereInput | Prisma.PipelineEventScalarWhereInput[]
+}
+
+export type PipelineEventUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.PipelineEventCreateWithoutUserInput, Prisma.PipelineEventUncheckedCreateWithoutUserInput> | Prisma.PipelineEventCreateWithoutUserInput[] | Prisma.PipelineEventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PipelineEventCreateOrConnectWithoutUserInput | Prisma.PipelineEventCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.PipelineEventUpsertWithWhereUniqueWithoutUserInput | Prisma.PipelineEventUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.PipelineEventCreateManyUserInputEnvelope
+  set?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  disconnect?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  delete?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  connect?: Prisma.PipelineEventWhereUniqueInput | Prisma.PipelineEventWhereUniqueInput[]
+  update?: Prisma.PipelineEventUpdateWithWhereUniqueWithoutUserInput | Prisma.PipelineEventUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.PipelineEventUpdateManyWithWhereWithoutUserInput | Prisma.PipelineEventUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.PipelineEventScalarWhereInput | Prisma.PipelineEventScalarWhereInput[]
+}
+
+export type PipelineEventCreateWithoutUserInput = {
+  id?: string
+  workflow: string
+  status: string
+  message?: string | null
+  runId?: string | null
+  branch?: string | null
+  createdAt?: Date | string
+}
+
+export type PipelineEventUncheckedCreateWithoutUserInput = {
+  id?: string
+  workflow: string
+  status: string
+  message?: string | null
+  runId?: string | null
+  branch?: string | null
+  createdAt?: Date | string
+}
+
+export type PipelineEventCreateOrConnectWithoutUserInput = {
+  where: Prisma.PipelineEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.PipelineEventCreateWithoutUserInput, Prisma.PipelineEventUncheckedCreateWithoutUserInput>
+}
+
+export type PipelineEventCreateManyUserInputEnvelope = {
+  data: Prisma.PipelineEventCreateManyUserInput | Prisma.PipelineEventCreateManyUserInput[]
+}
+
+export type PipelineEventUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.PipelineEventWhereUniqueInput
+  update: Prisma.XOR<Prisma.PipelineEventUpdateWithoutUserInput, Prisma.PipelineEventUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.PipelineEventCreateWithoutUserInput, Prisma.PipelineEventUncheckedCreateWithoutUserInput>
+}
+
+export type PipelineEventUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.PipelineEventWhereUniqueInput
+  data: Prisma.XOR<Prisma.PipelineEventUpdateWithoutUserInput, Prisma.PipelineEventUncheckedUpdateWithoutUserInput>
+}
+
+export type PipelineEventUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.PipelineEventScalarWhereInput
+  data: Prisma.XOR<Prisma.PipelineEventUpdateManyMutationInput, Prisma.PipelineEventUncheckedUpdateManyWithoutUserInput>
+}
+
+export type PipelineEventScalarWhereInput = {
+  AND?: Prisma.PipelineEventScalarWhereInput | Prisma.PipelineEventScalarWhereInput[]
+  OR?: Prisma.PipelineEventScalarWhereInput[]
+  NOT?: Prisma.PipelineEventScalarWhereInput | Prisma.PipelineEventScalarWhereInput[]
+  id?: Prisma.StringFilter<"PipelineEvent"> | string
+  userId?: Prisma.StringFilter<"PipelineEvent"> | string
+  workflow?: Prisma.StringFilter<"PipelineEvent"> | string
+  status?: Prisma.StringFilter<"PipelineEvent"> | string
+  message?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
+  runId?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
+  branch?: Prisma.StringNullableFilter<"PipelineEvent"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"PipelineEvent"> | Date | string
+}
+
+export type PipelineEventCreateManyUserInput = {
+  id?: string
+  workflow: string
+  status: string
+  message?: string | null
+  runId?: string | null
+  branch?: string | null
+  createdAt?: Date | string
+}
+
+export type PipelineEventUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workflow?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  runId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PipelineEventUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workflow?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  runId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PipelineEventUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workflow?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  runId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type PipelineEventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   workflow?: boolean
   status?: boolean
   message?: boolean
   runId?: boolean
   branch?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pipelineEvent"]>
 
 export type PipelineEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   workflow?: boolean
   status?: boolean
   message?: boolean
   runId?: boolean
   branch?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pipelineEvent"]>
 
 export type PipelineEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   workflow?: boolean
   status?: boolean
   message?: boolean
   runId?: boolean
   branch?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pipelineEvent"]>
 
 export type PipelineEventSelectScalar = {
   id?: boolean
+  userId?: boolean
   workflow?: boolean
   status?: boolean
   message?: boolean
@@ -391,20 +573,26 @@ export type PipelineEventSelectScalar = {
   createdAt?: boolean
 }
 
-export type PipelineEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workflow" | "status" | "message" | "runId" | "branch" | "createdAt", ExtArgs["result"]["pipelineEvent"]>
+export type PipelineEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "workflow" | "status" | "message" | "runId" | "branch" | "createdAt", ExtArgs["result"]["pipelineEvent"]>
+export type PipelineEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type PipelineEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type PipelineEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $PipelineEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PipelineEvent"
-  objects: {}
+  objects: {
+    user: Prisma.$UserPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    /**
-     * "WF1", "WF2", "WF3", "WF5"
-     */
+    userId: string
     workflow: string
-    /**
-     * "started" | "done" | "error"
-     */
     status: string
     message: string | null
     runId: string | null
@@ -804,6 +992,7 @@ readonly fields: PipelineEventFieldRefs;
  */
 export interface Prisma__PipelineEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -834,6 +1023,7 @@ export interface Prisma__PipelineEventClient<T, Null = never, ExtArgs extends ru
  */
 export interface PipelineEventFieldRefs {
   readonly id: Prisma.FieldRef<"PipelineEvent", 'String'>
+  readonly userId: Prisma.FieldRef<"PipelineEvent", 'String'>
   readonly workflow: Prisma.FieldRef<"PipelineEvent", 'String'>
   readonly status: Prisma.FieldRef<"PipelineEvent", 'String'>
   readonly message: Prisma.FieldRef<"PipelineEvent", 'String'>
@@ -857,6 +1047,10 @@ export type PipelineEventFindUniqueArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
+  /**
    * Filter, which PipelineEvent to fetch.
    */
   where: Prisma.PipelineEventWhereUniqueInput
@@ -875,6 +1069,10 @@ export type PipelineEventFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
+  /**
    * Filter, which PipelineEvent to fetch.
    */
   where: Prisma.PipelineEventWhereUniqueInput
@@ -892,6 +1090,10 @@ export type PipelineEventFindFirstArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the PipelineEvent
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
   /**
    * Filter, which PipelineEvent to fetch.
    */
@@ -941,6 +1143,10 @@ export type PipelineEventFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
+  /**
    * Filter, which PipelineEvent to fetch.
    */
   where?: Prisma.PipelineEventWhereInput
@@ -988,6 +1194,10 @@ export type PipelineEventFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the PipelineEvent
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
   /**
    * Filter, which PipelineEvents to fetch.
    */
@@ -1037,6 +1247,10 @@ export type PipelineEventCreateArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
+  /**
    * The data needed to create a PipelineEvent.
    */
   data: Prisma.XOR<Prisma.PipelineEventCreateInput, Prisma.PipelineEventUncheckedCreateInput>
@@ -1050,7 +1264,6 @@ export type PipelineEventCreateManyArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many PipelineEvents.
    */
   data: Prisma.PipelineEventCreateManyInput | Prisma.PipelineEventCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1069,7 +1282,10 @@ export type PipelineEventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    * The data used to create many PipelineEvents.
    */
   data: Prisma.PipelineEventCreateManyInput | Prisma.PipelineEventCreateManyInput[]
-  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1084,6 +1300,10 @@ export type PipelineEventUpdateArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the PipelineEvent
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
   /**
    * The data needed to update a PipelineEvent.
    */
@@ -1136,6 +1356,10 @@ export type PipelineEventUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    * Limit how many PipelineEvents to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1150,6 +1374,10 @@ export type PipelineEventUpsertArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the PipelineEvent
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
   /**
    * The filter to search for the PipelineEvent to update in case it exists.
    */
@@ -1176,6 +1404,10 @@ export type PipelineEventDeleteArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the PipelineEvent
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
   /**
    * Filter which PipelineEvent to delete.
    */
@@ -1208,4 +1440,8 @@ export type PipelineEventDefaultArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the PipelineEvent
    */
   omit?: Prisma.PipelineEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineEventInclude<ExtArgs> | null
 }

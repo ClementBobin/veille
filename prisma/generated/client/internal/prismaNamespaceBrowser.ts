@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  User: 'User',
   Tag: 'Tag',
   Source: 'Source',
   FeedItem: 'FeedItem',
@@ -63,7 +64,9 @@ export const ModelName = {
   SubjectFeedItem: 'SubjectFeedItem',
   Note: 'Note',
   PipelineEvent: 'PipelineEvent',
-  ApiKey: 'ApiKey'
+  ApiKey: 'ApiKey',
+  Config: 'Config',
+  RequestLog: 'RequestLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -73,17 +76,25 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName]
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  createdAt: 'createdAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
 export const TagScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   name: 'name',
   color: 'color',
   description: 'description',
@@ -95,6 +106,7 @@ export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagSca
 
 export const SourceScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   name: 'name',
   url: 'url',
   type: 'type',
@@ -109,6 +121,7 @@ export type SourceScalarFieldEnum = (typeof SourceScalarFieldEnum)[keyof typeof 
 
 export const FeedItemScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   title: 'title',
   url: 'url',
   content: 'content',
@@ -134,6 +147,7 @@ export type FeedItemTagScalarFieldEnum = (typeof FeedItemTagScalarFieldEnum)[key
 
 export const DigestScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   title: 'title',
   summary: 'summary',
   date: 'date',
@@ -194,6 +208,7 @@ export type SubjectFeedItemScalarFieldEnum = (typeof SubjectFeedItemScalarFieldE
 
 export const NoteScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   title: 'title',
   content: 'content',
   digestId: 'digestId',
@@ -207,6 +222,7 @@ export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof Note
 
 export const PipelineEventScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   workflow: 'workflow',
   status: 'status',
   message: 'message',
@@ -220,6 +236,7 @@ export type PipelineEventScalarFieldEnum = (typeof PipelineEventScalarFieldEnum)
 
 export const ApiKeyScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   name: 'name',
   keyHash: 'keyHash',
   lastUsed: 'lastUsed',
@@ -229,20 +246,39 @@ export const ApiKeyScalarFieldEnum = {
 export type ApiKeyScalarFieldEnum = (typeof ApiKeyScalarFieldEnum)[keyof typeof ApiKeyScalarFieldEnum]
 
 
+export const ConfigScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ConfigScalarFieldEnum = (typeof ConfigScalarFieldEnum)[keyof typeof ConfigScalarFieldEnum]
+
+
+export const RequestLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  method: 'method',
+  path: 'path',
+  status: 'status',
+  durationMs: 'durationMs',
+  authType: 'authType',
+  apiKeyName: 'apiKeyName',
+  error: 'error',
+  createdAt: 'createdAt'
+} as const
+
+export type RequestLogScalarFieldEnum = (typeof RequestLogScalarFieldEnum)[keyof typeof RequestLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
 export const NullsOrder = {

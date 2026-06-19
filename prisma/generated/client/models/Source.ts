@@ -26,6 +26,7 @@ export type AggregateSource = {
 
 export type SourceMinAggregateOutputType = {
   id: string | null
+  userId: string | null
   name: string | null
   url: string | null
   type: $Enums.SourceType | null
@@ -37,6 +38,7 @@ export type SourceMinAggregateOutputType = {
 
 export type SourceMaxAggregateOutputType = {
   id: string | null
+  userId: string | null
   name: string | null
   url: string | null
   type: $Enums.SourceType | null
@@ -48,6 +50,7 @@ export type SourceMaxAggregateOutputType = {
 
 export type SourceCountAggregateOutputType = {
   id: number
+  userId: number
   name: number
   url: number
   type: number
@@ -61,6 +64,7 @@ export type SourceCountAggregateOutputType = {
 
 export type SourceMinAggregateInputType = {
   id?: true
+  userId?: true
   name?: true
   url?: true
   type?: true
@@ -72,6 +76,7 @@ export type SourceMinAggregateInputType = {
 
 export type SourceMaxAggregateInputType = {
   id?: true
+  userId?: true
   name?: true
   url?: true
   type?: true
@@ -83,6 +88,7 @@ export type SourceMaxAggregateInputType = {
 
 export type SourceCountAggregateInputType = {
   id?: true
+  userId?: true
   name?: true
   url?: true
   type?: true
@@ -167,6 +173,7 @@ export type SourceGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type SourceGroupByOutputType = {
   id: string
+  userId: string
   name: string
   url: string
   type: $Enums.SourceType
@@ -199,6 +206,7 @@ export type SourceWhereInput = {
   OR?: Prisma.SourceWhereInput[]
   NOT?: Prisma.SourceWhereInput | Prisma.SourceWhereInput[]
   id?: Prisma.StringFilter<"Source"> | string
+  userId?: Prisma.StringFilter<"Source"> | string
   name?: Prisma.StringFilter<"Source"> | string
   url?: Prisma.StringFilter<"Source"> | string
   type?: Prisma.EnumSourceTypeFilter<"Source"> | $Enums.SourceType
@@ -206,11 +214,13 @@ export type SourceWhereInput = {
   cache?: Prisma.BoolFilter<"Source"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Source"> | Date | string
   lastFetch?: Prisma.DateTimeNullableFilter<"Source"> | Date | string | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   feedItems?: Prisma.FeedItemListRelationFilter
 }
 
 export type SourceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -218,26 +228,31 @@ export type SourceOrderByWithRelationInput = {
   cache?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastFetch?: Prisma.SortOrderInput | Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   feedItems?: Prisma.FeedItemOrderByRelationAggregateInput
 }
 
 export type SourceWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  url?: string
+  userId_url?: Prisma.SourceUserIdUrlCompoundUniqueInput
   AND?: Prisma.SourceWhereInput | Prisma.SourceWhereInput[]
   OR?: Prisma.SourceWhereInput[]
   NOT?: Prisma.SourceWhereInput | Prisma.SourceWhereInput[]
+  userId?: Prisma.StringFilter<"Source"> | string
   name?: Prisma.StringFilter<"Source"> | string
+  url?: Prisma.StringFilter<"Source"> | string
   type?: Prisma.EnumSourceTypeFilter<"Source"> | $Enums.SourceType
   active?: Prisma.BoolFilter<"Source"> | boolean
   cache?: Prisma.BoolFilter<"Source"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Source"> | Date | string
   lastFetch?: Prisma.DateTimeNullableFilter<"Source"> | Date | string | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   feedItems?: Prisma.FeedItemListRelationFilter
-}, "id" | "url">
+}, "id" | "userId_url">
 
 export type SourceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -255,6 +270,7 @@ export type SourceScalarWhereWithAggregatesInput = {
   OR?: Prisma.SourceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SourceScalarWhereWithAggregatesInput | Prisma.SourceScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Source"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"Source"> | string
   name?: Prisma.StringWithAggregatesFilter<"Source"> | string
   url?: Prisma.StringWithAggregatesFilter<"Source"> | string
   type?: Prisma.EnumSourceTypeWithAggregatesFilter<"Source"> | $Enums.SourceType
@@ -273,11 +289,13 @@ export type SourceCreateInput = {
   cache?: boolean
   createdAt?: Date | string
   lastFetch?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutSourcesInput
   feedItems?: Prisma.FeedItemCreateNestedManyWithoutSourceInput
 }
 
 export type SourceUncheckedCreateInput = {
   id?: string
+  userId: string
   name: string
   url: string
   type: $Enums.SourceType
@@ -297,11 +315,13 @@ export type SourceUpdateInput = {
   cache?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastFetch?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutSourcesNestedInput
   feedItems?: Prisma.FeedItemUpdateManyWithoutSourceNestedInput
 }
 
 export type SourceUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
@@ -314,6 +334,7 @@ export type SourceUncheckedUpdateInput = {
 
 export type SourceCreateManyInput = {
   id?: string
+  userId: string
   name: string
   url: string
   type: $Enums.SourceType
@@ -336,6 +357,7 @@ export type SourceUpdateManyMutationInput = {
 
 export type SourceUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
@@ -345,8 +367,24 @@ export type SourceUncheckedUpdateManyInput = {
   lastFetch?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+export type SourceListRelationFilter = {
+  every?: Prisma.SourceWhereInput
+  some?: Prisma.SourceWhereInput
+  none?: Prisma.SourceWhereInput
+}
+
+export type SourceOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type SourceUserIdUrlCompoundUniqueInput = {
+  userId: string
+  url: string
+}
+
 export type SourceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -358,6 +396,7 @@ export type SourceCountOrderByAggregateInput = {
 
 export type SourceMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -369,6 +408,7 @@ export type SourceMaxOrderByAggregateInput = {
 
 export type SourceMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -381,6 +421,48 @@ export type SourceMinOrderByAggregateInput = {
 export type SourceScalarRelationFilter = {
   is?: Prisma.SourceWhereInput
   isNot?: Prisma.SourceWhereInput
+}
+
+export type SourceCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.SourceCreateWithoutUserInput, Prisma.SourceUncheckedCreateWithoutUserInput> | Prisma.SourceCreateWithoutUserInput[] | Prisma.SourceUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.SourceCreateOrConnectWithoutUserInput | Prisma.SourceCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.SourceCreateManyUserInputEnvelope
+  connect?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+}
+
+export type SourceUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.SourceCreateWithoutUserInput, Prisma.SourceUncheckedCreateWithoutUserInput> | Prisma.SourceCreateWithoutUserInput[] | Prisma.SourceUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.SourceCreateOrConnectWithoutUserInput | Prisma.SourceCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.SourceCreateManyUserInputEnvelope
+  connect?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+}
+
+export type SourceUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SourceCreateWithoutUserInput, Prisma.SourceUncheckedCreateWithoutUserInput> | Prisma.SourceCreateWithoutUserInput[] | Prisma.SourceUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.SourceCreateOrConnectWithoutUserInput | Prisma.SourceCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.SourceUpsertWithWhereUniqueWithoutUserInput | Prisma.SourceUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.SourceCreateManyUserInputEnvelope
+  set?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  disconnect?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  delete?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  connect?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  update?: Prisma.SourceUpdateWithWhereUniqueWithoutUserInput | Prisma.SourceUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.SourceUpdateManyWithWhereWithoutUserInput | Prisma.SourceUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.SourceScalarWhereInput | Prisma.SourceScalarWhereInput[]
+}
+
+export type SourceUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SourceCreateWithoutUserInput, Prisma.SourceUncheckedCreateWithoutUserInput> | Prisma.SourceCreateWithoutUserInput[] | Prisma.SourceUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.SourceCreateOrConnectWithoutUserInput | Prisma.SourceCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.SourceUpsertWithWhereUniqueWithoutUserInput | Prisma.SourceUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.SourceCreateManyUserInputEnvelope
+  set?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  disconnect?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  delete?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  connect?: Prisma.SourceWhereUniqueInput | Prisma.SourceWhereUniqueInput[]
+  update?: Prisma.SourceUpdateWithWhereUniqueWithoutUserInput | Prisma.SourceUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.SourceUpdateManyWithWhereWithoutUserInput | Prisma.SourceUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.SourceScalarWhereInput | Prisma.SourceScalarWhereInput[]
 }
 
 export type EnumSourceTypeFieldUpdateOperationsInput = {
@@ -409,6 +491,70 @@ export type SourceUpdateOneRequiredWithoutFeedItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SourceUpdateToOneWithWhereWithoutFeedItemsInput, Prisma.SourceUpdateWithoutFeedItemsInput>, Prisma.SourceUncheckedUpdateWithoutFeedItemsInput>
 }
 
+export type SourceCreateWithoutUserInput = {
+  id?: string
+  name: string
+  url: string
+  type: $Enums.SourceType
+  active?: boolean
+  cache?: boolean
+  createdAt?: Date | string
+  lastFetch?: Date | string | null
+  feedItems?: Prisma.FeedItemCreateNestedManyWithoutSourceInput
+}
+
+export type SourceUncheckedCreateWithoutUserInput = {
+  id?: string
+  name: string
+  url: string
+  type: $Enums.SourceType
+  active?: boolean
+  cache?: boolean
+  createdAt?: Date | string
+  lastFetch?: Date | string | null
+  feedItems?: Prisma.FeedItemUncheckedCreateNestedManyWithoutSourceInput
+}
+
+export type SourceCreateOrConnectWithoutUserInput = {
+  where: Prisma.SourceWhereUniqueInput
+  create: Prisma.XOR<Prisma.SourceCreateWithoutUserInput, Prisma.SourceUncheckedCreateWithoutUserInput>
+}
+
+export type SourceCreateManyUserInputEnvelope = {
+  data: Prisma.SourceCreateManyUserInput | Prisma.SourceCreateManyUserInput[]
+}
+
+export type SourceUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.SourceWhereUniqueInput
+  update: Prisma.XOR<Prisma.SourceUpdateWithoutUserInput, Prisma.SourceUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.SourceCreateWithoutUserInput, Prisma.SourceUncheckedCreateWithoutUserInput>
+}
+
+export type SourceUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.SourceWhereUniqueInput
+  data: Prisma.XOR<Prisma.SourceUpdateWithoutUserInput, Prisma.SourceUncheckedUpdateWithoutUserInput>
+}
+
+export type SourceUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.SourceScalarWhereInput
+  data: Prisma.XOR<Prisma.SourceUpdateManyMutationInput, Prisma.SourceUncheckedUpdateManyWithoutUserInput>
+}
+
+export type SourceScalarWhereInput = {
+  AND?: Prisma.SourceScalarWhereInput | Prisma.SourceScalarWhereInput[]
+  OR?: Prisma.SourceScalarWhereInput[]
+  NOT?: Prisma.SourceScalarWhereInput | Prisma.SourceScalarWhereInput[]
+  id?: Prisma.StringFilter<"Source"> | string
+  userId?: Prisma.StringFilter<"Source"> | string
+  name?: Prisma.StringFilter<"Source"> | string
+  url?: Prisma.StringFilter<"Source"> | string
+  type?: Prisma.EnumSourceTypeFilter<"Source"> | $Enums.SourceType
+  active?: Prisma.BoolFilter<"Source"> | boolean
+  cache?: Prisma.BoolFilter<"Source"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Source"> | Date | string
+  lastFetch?: Prisma.DateTimeNullableFilter<"Source"> | Date | string | null
+}
+
 export type SourceCreateWithoutFeedItemsInput = {
   id?: string
   name: string
@@ -418,10 +564,12 @@ export type SourceCreateWithoutFeedItemsInput = {
   cache?: boolean
   createdAt?: Date | string
   lastFetch?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutSourcesInput
 }
 
 export type SourceUncheckedCreateWithoutFeedItemsInput = {
   id?: string
+  userId: string
   name: string
   url: string
   type: $Enums.SourceType
@@ -456,9 +604,57 @@ export type SourceUpdateWithoutFeedItemsInput = {
   cache?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastFetch?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutSourcesNestedInput
 }
 
 export type SourceUncheckedUpdateWithoutFeedItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cache?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastFetch?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type SourceCreateManyUserInput = {
+  id?: string
+  name: string
+  url: string
+  type: $Enums.SourceType
+  active?: boolean
+  cache?: boolean
+  createdAt?: Date | string
+  lastFetch?: Date | string | null
+}
+
+export type SourceUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cache?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastFetch?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  feedItems?: Prisma.FeedItemUpdateManyWithoutSourceNestedInput
+}
+
+export type SourceUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cache?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastFetch?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  feedItems?: Prisma.FeedItemUncheckedUpdateManyWithoutSourceNestedInput
+}
+
+export type SourceUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -502,6 +698,7 @@ export type SourceCountOutputTypeCountFeedItemsArgs<ExtArgs extends runtime.Type
 
 export type SourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   name?: boolean
   url?: boolean
   type?: boolean
@@ -509,12 +706,14 @@ export type SourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   cache?: boolean
   createdAt?: boolean
   lastFetch?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   feedItems?: boolean | Prisma.Source$feedItemsArgs<ExtArgs>
   _count?: boolean | Prisma.SourceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["source"]>
 
 export type SourceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   name?: boolean
   url?: boolean
   type?: boolean
@@ -522,10 +721,12 @@ export type SourceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   cache?: boolean
   createdAt?: boolean
   lastFetch?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["source"]>
 
 export type SourceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   name?: boolean
   url?: boolean
   type?: boolean
@@ -533,10 +734,12 @@ export type SourceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   cache?: boolean
   createdAt?: boolean
   lastFetch?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["source"]>
 
 export type SourceSelectScalar = {
   id?: boolean
+  userId?: boolean
   name?: boolean
   url?: boolean
   type?: boolean
@@ -546,28 +749,32 @@ export type SourceSelectScalar = {
   lastFetch?: boolean
 }
 
-export type SourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "url" | "type" | "active" | "cache" | "createdAt" | "lastFetch", ExtArgs["result"]["source"]>
+export type SourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "url" | "type" | "active" | "cache" | "createdAt" | "lastFetch", ExtArgs["result"]["source"]>
 export type SourceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   feedItems?: boolean | Prisma.Source$feedItemsArgs<ExtArgs>
   _count?: boolean | Prisma.SourceCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type SourceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type SourceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type SourceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type SourceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $SourcePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Source"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs>
     feedItems: Prisma.$FeedItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    userId: string
     name: string
     url: string
     type: $Enums.SourceType
     active: boolean
-    /**
-     * Si true : on vérifie si un FeedItem existe déjà pour cette source avant de la renvoyer à n8n
-     */
     cache: boolean
     createdAt: Date
     lastFetch: Date | null
@@ -965,6 +1172,7 @@ readonly fields: SourceFieldRefs;
  */
 export interface Prisma__SourceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   feedItems<T extends Prisma.Source$feedItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Source$feedItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeedItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -996,6 +1204,7 @@ export interface Prisma__SourceClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface SourceFieldRefs {
   readonly id: Prisma.FieldRef<"Source", 'String'>
+  readonly userId: Prisma.FieldRef<"Source", 'String'>
   readonly name: Prisma.FieldRef<"Source", 'String'>
   readonly url: Prisma.FieldRef<"Source", 'String'>
   readonly type: Prisma.FieldRef<"Source", 'SourceType'>
@@ -1237,7 +1446,6 @@ export type SourceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Sources.
    */
   data: Prisma.SourceCreateManyInput | Prisma.SourceCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1256,7 +1464,10 @@ export type SourceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Sources.
    */
   data: Prisma.SourceCreateManyInput | Prisma.SourceCreateManyInput[]
-  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SourceIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1327,6 +1538,10 @@ export type SourceUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Sources to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SourceIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

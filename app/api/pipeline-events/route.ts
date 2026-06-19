@@ -1,54 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyApiKey } from '@/lib/verifyApiKey'
+import { getAuth } from '@/lib/auth-context'
 
 export async function GET(req: NextRequest) {
-  const authError = await verifyApiKey(req)
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
-  if (authError) {
-    return authError
-  }
-
-  const events = await prisma.pipelineEvent.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 50,
-  })
+  const events = await prisma.pipelineEvent.findMany({ where: { userId }, orderBy: { createdAt: 'desc' }, take: 50 })
   return NextResponse.json(events)
 }
 
 export async function POST(req: NextRequest) {
-  const authError = await verifyApiKey(req)
-
-  if (authError) {
-    return authError
-  }
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
   const body = await req.json()
   const { workflow, status, message, runId, branch } = body
 
-  const event = await prisma.pipelineEvent.create({
-    data: { workflow, status, message, runId, branch },
-  })
+  const event = await prisma.pipelineEvent.create({ data: { workflow, status, message, runId, branch, userId } })
 
   if (workflow === 'WF1' && status === 'branch-done' && runId) {
-    const alreadyTriggered = await prisma.pipelineEvent.findFirst({
-      where: { workflow: 'WF1', status: 'done', runId },
-    })
+    const alreadyTriggered = await prisma.pipelineEvent.findFirst({ where: { workflow: 'WF1', status: 'done', runId, userId } })
 
     if (!alreadyTriggered) {
-      // Schedula le trigger après 60s d'inactivité
       setTimeout(async () => {
-        const stillPending = await prisma.pipelineEvent.findFirst({
-          where: { workflow: 'WF1', status: 'done', runId },
-        })
+        const stillPending = await prisma.pipelineEvent.findFirst({ where: { workflow: 'WF1', status: 'done', runId, userId } })
         if (!stillPending) {
-          await prisma.pipelineEvent.create({
-            data: { workflow: 'WF1', status: 'done', message: 'Collecte terminée', runId },
-          })
+          await prisma.pipelineEvent.create({ data: { workflow: 'WF1', status: 'done', message: 'Collecte terminée', runId, userId } })
           await fetch('https://n8n.tail025bf6.ts.net/webhook/start-wf2', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ trigger: 'wf1-done' }),
+            body: JSON.stringify({ trigger: 'wf1-done', userId }),
           })
         }
       }, 60_000)

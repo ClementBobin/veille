@@ -31,8 +31,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Tags
- * const tags = await prisma.tag.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -41,6 +41,11 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
 /**
  * Model Tag
  * 
@@ -98,7 +103,7 @@ export type SubjectFeedItem = Prisma.SubjectFeedItemModel
 export type Note = Prisma.NoteModel
 /**
  * Model PipelineEvent
- * Suivi des événements de pipeline n8n — un enregistrement par étape WF1→WF5
+ * 
  */
 export type PipelineEvent = Prisma.PipelineEventModel
 /**
@@ -106,3 +111,13 @@ export type PipelineEvent = Prisma.PipelineEventModel
  * 
  */
 export type ApiKey = Prisma.ApiKeyModel
+/**
+ * Model Config
+ * 
+ */
+export type Config = Prisma.ConfigModel
+/**
+ * Model RequestLog
+ * 
+ */
+export type RequestLog = Prisma.RequestLogModel

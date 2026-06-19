@@ -36,6 +36,7 @@ export type FeedItemSumAggregateOutputType = {
 
 export type FeedItemMinAggregateOutputType = {
   id: string | null
+  userId: string | null
   title: string | null
   url: string | null
   content: string | null
@@ -50,6 +51,7 @@ export type FeedItemMinAggregateOutputType = {
 
 export type FeedItemMaxAggregateOutputType = {
   id: string | null
+  userId: string | null
   title: string | null
   url: string | null
   content: string | null
@@ -64,6 +66,7 @@ export type FeedItemMaxAggregateOutputType = {
 
 export type FeedItemCountAggregateOutputType = {
   id: number
+  userId: number
   title: number
   url: number
   content: number
@@ -88,6 +91,7 @@ export type FeedItemSumAggregateInputType = {
 
 export type FeedItemMinAggregateInputType = {
   id?: true
+  userId?: true
   title?: true
   url?: true
   content?: true
@@ -102,6 +106,7 @@ export type FeedItemMinAggregateInputType = {
 
 export type FeedItemMaxAggregateInputType = {
   id?: true
+  userId?: true
   title?: true
   url?: true
   content?: true
@@ -116,6 +121,7 @@ export type FeedItemMaxAggregateInputType = {
 
 export type FeedItemCountAggregateInputType = {
   id?: true
+  userId?: true
   title?: true
   url?: true
   content?: true
@@ -217,6 +223,7 @@ export type FeedItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type FeedItemGroupByOutputType = {
   id: string
+  userId: string
   title: string
   url: string
   content: string | null
@@ -254,6 +261,7 @@ export type FeedItemWhereInput = {
   OR?: Prisma.FeedItemWhereInput[]
   NOT?: Prisma.FeedItemWhereInput | Prisma.FeedItemWhereInput[]
   id?: Prisma.StringFilter<"FeedItem"> | string
+  userId?: Prisma.StringFilter<"FeedItem"> | string
   title?: Prisma.StringFilter<"FeedItem"> | string
   url?: Prisma.StringFilter<"FeedItem"> | string
   content?: Prisma.StringNullableFilter<"FeedItem"> | string | null
@@ -264,6 +272,7 @@ export type FeedItemWhereInput = {
   score?: Prisma.FloatNullableFilter<"FeedItem"> | number | null
   processed?: Prisma.BoolFilter<"FeedItem"> | boolean
   tagsHash?: Prisma.StringNullableFilter<"FeedItem"> | string | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   source?: Prisma.XOR<Prisma.SourceScalarRelationFilter, Prisma.SourceWhereInput>
   tags?: Prisma.FeedItemTagListRelationFilter
   subjects?: Prisma.SubjectFeedItemListRelationFilter
@@ -272,6 +281,7 @@ export type FeedItemWhereInput = {
 
 export type FeedItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
   content?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -282,6 +292,7 @@ export type FeedItemOrderByWithRelationInput = {
   score?: Prisma.SortOrderInput | Prisma.SortOrder
   processed?: Prisma.SortOrder
   tagsHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   source?: Prisma.SourceOrderByWithRelationInput
   tags?: Prisma.FeedItemTagOrderByRelationAggregateInput
   subjects?: Prisma.SubjectFeedItemOrderByRelationAggregateInput
@@ -290,11 +301,13 @@ export type FeedItemOrderByWithRelationInput = {
 
 export type FeedItemWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  url?: string
+  userId_url?: Prisma.FeedItemUserIdUrlCompoundUniqueInput
   AND?: Prisma.FeedItemWhereInput | Prisma.FeedItemWhereInput[]
   OR?: Prisma.FeedItemWhereInput[]
   NOT?: Prisma.FeedItemWhereInput | Prisma.FeedItemWhereInput[]
+  userId?: Prisma.StringFilter<"FeedItem"> | string
   title?: Prisma.StringFilter<"FeedItem"> | string
+  url?: Prisma.StringFilter<"FeedItem"> | string
   content?: Prisma.StringNullableFilter<"FeedItem"> | string | null
   sourceId?: Prisma.StringFilter<"FeedItem"> | string
   publishedAt?: Prisma.DateTimeNullableFilter<"FeedItem"> | Date | string | null
@@ -303,14 +316,16 @@ export type FeedItemWhereUniqueInput = Prisma.AtLeast<{
   score?: Prisma.FloatNullableFilter<"FeedItem"> | number | null
   processed?: Prisma.BoolFilter<"FeedItem"> | boolean
   tagsHash?: Prisma.StringNullableFilter<"FeedItem"> | string | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   source?: Prisma.XOR<Prisma.SourceScalarRelationFilter, Prisma.SourceWhereInput>
   tags?: Prisma.FeedItemTagListRelationFilter
   subjects?: Prisma.SubjectFeedItemListRelationFilter
   tocEntryArticles?: Prisma.TocEntryArticleListRelationFilter
-}, "id" | "url">
+}, "id" | "userId_url">
 
 export type FeedItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
   content?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -333,6 +348,7 @@ export type FeedItemScalarWhereWithAggregatesInput = {
   OR?: Prisma.FeedItemScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FeedItemScalarWhereWithAggregatesInput | Prisma.FeedItemScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"FeedItem"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"FeedItem"> | string
   title?: Prisma.StringWithAggregatesFilter<"FeedItem"> | string
   url?: Prisma.StringWithAggregatesFilter<"FeedItem"> | string
   content?: Prisma.StringNullableWithAggregatesFilter<"FeedItem"> | string | null
@@ -356,6 +372,7 @@ export type FeedItemCreateInput = {
   score?: number | null
   processed?: boolean
   tagsHash?: string | null
+  user: Prisma.UserCreateNestedOneWithoutFeedItemsInput
   source: Prisma.SourceCreateNestedOneWithoutFeedItemsInput
   tags?: Prisma.FeedItemTagCreateNestedManyWithoutFeedItemInput
   subjects?: Prisma.SubjectFeedItemCreateNestedManyWithoutFeedItemInput
@@ -364,6 +381,7 @@ export type FeedItemCreateInput = {
 
 export type FeedItemUncheckedCreateInput = {
   id?: string
+  userId: string
   title: string
   url: string
   content?: string | null
@@ -390,6 +408,7 @@ export type FeedItemUpdateInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutFeedItemsNestedInput
   source?: Prisma.SourceUpdateOneRequiredWithoutFeedItemsNestedInput
   tags?: Prisma.FeedItemTagUpdateManyWithoutFeedItemNestedInput
   subjects?: Prisma.SubjectFeedItemUpdateManyWithoutFeedItemNestedInput
@@ -398,6 +417,7 @@ export type FeedItemUpdateInput = {
 
 export type FeedItemUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -415,6 +435,7 @@ export type FeedItemUncheckedUpdateInput = {
 
 export type FeedItemCreateManyInput = {
   id?: string
+  userId: string
   title: string
   url: string
   content?: string | null
@@ -442,6 +463,7 @@ export type FeedItemUpdateManyMutationInput = {
 
 export type FeedItemUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -464,8 +486,14 @@ export type FeedItemOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type FeedItemUserIdUrlCompoundUniqueInput = {
+  userId: string
+  url: string
+}
+
 export type FeedItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -484,6 +512,7 @@ export type FeedItemAvgOrderByAggregateInput = {
 
 export type FeedItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -498,6 +527,7 @@ export type FeedItemMaxOrderByAggregateInput = {
 
 export type FeedItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -517,6 +547,48 @@ export type FeedItemSumOrderByAggregateInput = {
 export type FeedItemScalarRelationFilter = {
   is?: Prisma.FeedItemWhereInput
   isNot?: Prisma.FeedItemWhereInput
+}
+
+export type FeedItemCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.FeedItemCreateWithoutUserInput, Prisma.FeedItemUncheckedCreateWithoutUserInput> | Prisma.FeedItemCreateWithoutUserInput[] | Prisma.FeedItemUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.FeedItemCreateOrConnectWithoutUserInput | Prisma.FeedItemCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.FeedItemCreateManyUserInputEnvelope
+  connect?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+}
+
+export type FeedItemUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.FeedItemCreateWithoutUserInput, Prisma.FeedItemUncheckedCreateWithoutUserInput> | Prisma.FeedItemCreateWithoutUserInput[] | Prisma.FeedItemUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.FeedItemCreateOrConnectWithoutUserInput | Prisma.FeedItemCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.FeedItemCreateManyUserInputEnvelope
+  connect?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+}
+
+export type FeedItemUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.FeedItemCreateWithoutUserInput, Prisma.FeedItemUncheckedCreateWithoutUserInput> | Prisma.FeedItemCreateWithoutUserInput[] | Prisma.FeedItemUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.FeedItemCreateOrConnectWithoutUserInput | Prisma.FeedItemCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.FeedItemUpsertWithWhereUniqueWithoutUserInput | Prisma.FeedItemUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.FeedItemCreateManyUserInputEnvelope
+  set?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  disconnect?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  delete?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  connect?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  update?: Prisma.FeedItemUpdateWithWhereUniqueWithoutUserInput | Prisma.FeedItemUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.FeedItemUpdateManyWithWhereWithoutUserInput | Prisma.FeedItemUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.FeedItemScalarWhereInput | Prisma.FeedItemScalarWhereInput[]
+}
+
+export type FeedItemUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.FeedItemCreateWithoutUserInput, Prisma.FeedItemUncheckedCreateWithoutUserInput> | Prisma.FeedItemCreateWithoutUserInput[] | Prisma.FeedItemUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.FeedItemCreateOrConnectWithoutUserInput | Prisma.FeedItemCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.FeedItemUpsertWithWhereUniqueWithoutUserInput | Prisma.FeedItemUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.FeedItemCreateManyUserInputEnvelope
+  set?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  disconnect?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  delete?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  connect?: Prisma.FeedItemWhereUniqueInput | Prisma.FeedItemWhereUniqueInput[]
+  update?: Prisma.FeedItemUpdateWithWhereUniqueWithoutUserInput | Prisma.FeedItemUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.FeedItemUpdateManyWithWhereWithoutUserInput | Prisma.FeedItemUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.FeedItemScalarWhereInput | Prisma.FeedItemScalarWhereInput[]
 }
 
 export type FeedItemCreateNestedManyWithoutSourceInput = {
@@ -611,6 +683,83 @@ export type FeedItemUpdateOneRequiredWithoutSubjectsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FeedItemUpdateToOneWithWhereWithoutSubjectsInput, Prisma.FeedItemUpdateWithoutSubjectsInput>, Prisma.FeedItemUncheckedUpdateWithoutSubjectsInput>
 }
 
+export type FeedItemCreateWithoutUserInput = {
+  id?: string
+  title: string
+  url: string
+  content?: string | null
+  publishedAt?: Date | string | null
+  fetchedAt?: Date | string
+  relevant?: boolean
+  score?: number | null
+  processed?: boolean
+  tagsHash?: string | null
+  source: Prisma.SourceCreateNestedOneWithoutFeedItemsInput
+  tags?: Prisma.FeedItemTagCreateNestedManyWithoutFeedItemInput
+  subjects?: Prisma.SubjectFeedItemCreateNestedManyWithoutFeedItemInput
+  tocEntryArticles?: Prisma.TocEntryArticleCreateNestedManyWithoutFeedItemInput
+}
+
+export type FeedItemUncheckedCreateWithoutUserInput = {
+  id?: string
+  title: string
+  url: string
+  content?: string | null
+  sourceId: string
+  publishedAt?: Date | string | null
+  fetchedAt?: Date | string
+  relevant?: boolean
+  score?: number | null
+  processed?: boolean
+  tagsHash?: string | null
+  tags?: Prisma.FeedItemTagUncheckedCreateNestedManyWithoutFeedItemInput
+  subjects?: Prisma.SubjectFeedItemUncheckedCreateNestedManyWithoutFeedItemInput
+  tocEntryArticles?: Prisma.TocEntryArticleUncheckedCreateNestedManyWithoutFeedItemInput
+}
+
+export type FeedItemCreateOrConnectWithoutUserInput = {
+  where: Prisma.FeedItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.FeedItemCreateWithoutUserInput, Prisma.FeedItemUncheckedCreateWithoutUserInput>
+}
+
+export type FeedItemCreateManyUserInputEnvelope = {
+  data: Prisma.FeedItemCreateManyUserInput | Prisma.FeedItemCreateManyUserInput[]
+}
+
+export type FeedItemUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.FeedItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.FeedItemUpdateWithoutUserInput, Prisma.FeedItemUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.FeedItemCreateWithoutUserInput, Prisma.FeedItemUncheckedCreateWithoutUserInput>
+}
+
+export type FeedItemUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.FeedItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.FeedItemUpdateWithoutUserInput, Prisma.FeedItemUncheckedUpdateWithoutUserInput>
+}
+
+export type FeedItemUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.FeedItemScalarWhereInput
+  data: Prisma.XOR<Prisma.FeedItemUpdateManyMutationInput, Prisma.FeedItemUncheckedUpdateManyWithoutUserInput>
+}
+
+export type FeedItemScalarWhereInput = {
+  AND?: Prisma.FeedItemScalarWhereInput | Prisma.FeedItemScalarWhereInput[]
+  OR?: Prisma.FeedItemScalarWhereInput[]
+  NOT?: Prisma.FeedItemScalarWhereInput | Prisma.FeedItemScalarWhereInput[]
+  id?: Prisma.StringFilter<"FeedItem"> | string
+  userId?: Prisma.StringFilter<"FeedItem"> | string
+  title?: Prisma.StringFilter<"FeedItem"> | string
+  url?: Prisma.StringFilter<"FeedItem"> | string
+  content?: Prisma.StringNullableFilter<"FeedItem"> | string | null
+  sourceId?: Prisma.StringFilter<"FeedItem"> | string
+  publishedAt?: Prisma.DateTimeNullableFilter<"FeedItem"> | Date | string | null
+  fetchedAt?: Prisma.DateTimeFilter<"FeedItem"> | Date | string
+  relevant?: Prisma.BoolFilter<"FeedItem"> | boolean
+  score?: Prisma.FloatNullableFilter<"FeedItem"> | number | null
+  processed?: Prisma.BoolFilter<"FeedItem"> | boolean
+  tagsHash?: Prisma.StringNullableFilter<"FeedItem"> | string | null
+}
+
 export type FeedItemCreateWithoutSourceInput = {
   id?: string
   title: string
@@ -622,6 +771,7 @@ export type FeedItemCreateWithoutSourceInput = {
   score?: number | null
   processed?: boolean
   tagsHash?: string | null
+  user: Prisma.UserCreateNestedOneWithoutFeedItemsInput
   tags?: Prisma.FeedItemTagCreateNestedManyWithoutFeedItemInput
   subjects?: Prisma.SubjectFeedItemCreateNestedManyWithoutFeedItemInput
   tocEntryArticles?: Prisma.TocEntryArticleCreateNestedManyWithoutFeedItemInput
@@ -629,6 +779,7 @@ export type FeedItemCreateWithoutSourceInput = {
 
 export type FeedItemUncheckedCreateWithoutSourceInput = {
   id?: string
+  userId: string
   title: string
   url: string
   content?: string | null
@@ -650,7 +801,6 @@ export type FeedItemCreateOrConnectWithoutSourceInput = {
 
 export type FeedItemCreateManySourceInputEnvelope = {
   data: Prisma.FeedItemCreateManySourceInput | Prisma.FeedItemCreateManySourceInput[]
-  skipDuplicates?: boolean
 }
 
 export type FeedItemUpsertWithWhereUniqueWithoutSourceInput = {
@@ -669,23 +819,6 @@ export type FeedItemUpdateManyWithWhereWithoutSourceInput = {
   data: Prisma.XOR<Prisma.FeedItemUpdateManyMutationInput, Prisma.FeedItemUncheckedUpdateManyWithoutSourceInput>
 }
 
-export type FeedItemScalarWhereInput = {
-  AND?: Prisma.FeedItemScalarWhereInput | Prisma.FeedItemScalarWhereInput[]
-  OR?: Prisma.FeedItemScalarWhereInput[]
-  NOT?: Prisma.FeedItemScalarWhereInput | Prisma.FeedItemScalarWhereInput[]
-  id?: Prisma.StringFilter<"FeedItem"> | string
-  title?: Prisma.StringFilter<"FeedItem"> | string
-  url?: Prisma.StringFilter<"FeedItem"> | string
-  content?: Prisma.StringNullableFilter<"FeedItem"> | string | null
-  sourceId?: Prisma.StringFilter<"FeedItem"> | string
-  publishedAt?: Prisma.DateTimeNullableFilter<"FeedItem"> | Date | string | null
-  fetchedAt?: Prisma.DateTimeFilter<"FeedItem"> | Date | string
-  relevant?: Prisma.BoolFilter<"FeedItem"> | boolean
-  score?: Prisma.FloatNullableFilter<"FeedItem"> | number | null
-  processed?: Prisma.BoolFilter<"FeedItem"> | boolean
-  tagsHash?: Prisma.StringNullableFilter<"FeedItem"> | string | null
-}
-
 export type FeedItemCreateWithoutTagsInput = {
   id?: string
   title: string
@@ -697,6 +830,7 @@ export type FeedItemCreateWithoutTagsInput = {
   score?: number | null
   processed?: boolean
   tagsHash?: string | null
+  user: Prisma.UserCreateNestedOneWithoutFeedItemsInput
   source: Prisma.SourceCreateNestedOneWithoutFeedItemsInput
   subjects?: Prisma.SubjectFeedItemCreateNestedManyWithoutFeedItemInput
   tocEntryArticles?: Prisma.TocEntryArticleCreateNestedManyWithoutFeedItemInput
@@ -704,6 +838,7 @@ export type FeedItemCreateWithoutTagsInput = {
 
 export type FeedItemUncheckedCreateWithoutTagsInput = {
   id?: string
+  userId: string
   title: string
   url: string
   content?: string | null
@@ -745,6 +880,7 @@ export type FeedItemUpdateWithoutTagsInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutFeedItemsNestedInput
   source?: Prisma.SourceUpdateOneRequiredWithoutFeedItemsNestedInput
   subjects?: Prisma.SubjectFeedItemUpdateManyWithoutFeedItemNestedInput
   tocEntryArticles?: Prisma.TocEntryArticleUpdateManyWithoutFeedItemNestedInput
@@ -752,6 +888,7 @@ export type FeedItemUpdateWithoutTagsInput = {
 
 export type FeedItemUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -777,6 +914,7 @@ export type FeedItemCreateWithoutTocEntryArticlesInput = {
   score?: number | null
   processed?: boolean
   tagsHash?: string | null
+  user: Prisma.UserCreateNestedOneWithoutFeedItemsInput
   source: Prisma.SourceCreateNestedOneWithoutFeedItemsInput
   tags?: Prisma.FeedItemTagCreateNestedManyWithoutFeedItemInput
   subjects?: Prisma.SubjectFeedItemCreateNestedManyWithoutFeedItemInput
@@ -784,6 +922,7 @@ export type FeedItemCreateWithoutTocEntryArticlesInput = {
 
 export type FeedItemUncheckedCreateWithoutTocEntryArticlesInput = {
   id?: string
+  userId: string
   title: string
   url: string
   content?: string | null
@@ -825,6 +964,7 @@ export type FeedItemUpdateWithoutTocEntryArticlesInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutFeedItemsNestedInput
   source?: Prisma.SourceUpdateOneRequiredWithoutFeedItemsNestedInput
   tags?: Prisma.FeedItemTagUpdateManyWithoutFeedItemNestedInput
   subjects?: Prisma.SubjectFeedItemUpdateManyWithoutFeedItemNestedInput
@@ -832,6 +972,7 @@ export type FeedItemUpdateWithoutTocEntryArticlesInput = {
 
 export type FeedItemUncheckedUpdateWithoutTocEntryArticlesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -857,6 +998,7 @@ export type FeedItemCreateWithoutSubjectsInput = {
   score?: number | null
   processed?: boolean
   tagsHash?: string | null
+  user: Prisma.UserCreateNestedOneWithoutFeedItemsInput
   source: Prisma.SourceCreateNestedOneWithoutFeedItemsInput
   tags?: Prisma.FeedItemTagCreateNestedManyWithoutFeedItemInput
   tocEntryArticles?: Prisma.TocEntryArticleCreateNestedManyWithoutFeedItemInput
@@ -864,6 +1006,7 @@ export type FeedItemCreateWithoutSubjectsInput = {
 
 export type FeedItemUncheckedCreateWithoutSubjectsInput = {
   id?: string
+  userId: string
   title: string
   url: string
   content?: string | null
@@ -905,6 +1048,7 @@ export type FeedItemUpdateWithoutSubjectsInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutFeedItemsNestedInput
   source?: Prisma.SourceUpdateOneRequiredWithoutFeedItemsNestedInput
   tags?: Prisma.FeedItemTagUpdateManyWithoutFeedItemNestedInput
   tocEntryArticles?: Prisma.TocEntryArticleUpdateManyWithoutFeedItemNestedInput
@@ -912,6 +1056,7 @@ export type FeedItemUpdateWithoutSubjectsInput = {
 
 export type FeedItemUncheckedUpdateWithoutSubjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -926,8 +1071,71 @@ export type FeedItemUncheckedUpdateWithoutSubjectsInput = {
   tocEntryArticles?: Prisma.TocEntryArticleUncheckedUpdateManyWithoutFeedItemNestedInput
 }
 
+export type FeedItemCreateManyUserInput = {
+  id?: string
+  title: string
+  url: string
+  content?: string | null
+  sourceId: string
+  publishedAt?: Date | string | null
+  fetchedAt?: Date | string
+  relevant?: boolean
+  score?: number | null
+  processed?: boolean
+  tagsHash?: string | null
+}
+
+export type FeedItemUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fetchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  relevant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.SourceUpdateOneRequiredWithoutFeedItemsNestedInput
+  tags?: Prisma.FeedItemTagUpdateManyWithoutFeedItemNestedInput
+  subjects?: Prisma.SubjectFeedItemUpdateManyWithoutFeedItemNestedInput
+  tocEntryArticles?: Prisma.TocEntryArticleUpdateManyWithoutFeedItemNestedInput
+}
+
+export type FeedItemUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fetchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  relevant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.FeedItemTagUncheckedUpdateManyWithoutFeedItemNestedInput
+  subjects?: Prisma.SubjectFeedItemUncheckedUpdateManyWithoutFeedItemNestedInput
+  tocEntryArticles?: Prisma.TocEntryArticleUncheckedUpdateManyWithoutFeedItemNestedInput
+}
+
+export type FeedItemUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fetchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  relevant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type FeedItemCreateManySourceInput = {
   id?: string
+  userId: string
   title: string
   url: string
   content?: string | null
@@ -950,6 +1158,7 @@ export type FeedItemUpdateWithoutSourceInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   tagsHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutFeedItemsNestedInput
   tags?: Prisma.FeedItemTagUpdateManyWithoutFeedItemNestedInput
   subjects?: Prisma.SubjectFeedItemUpdateManyWithoutFeedItemNestedInput
   tocEntryArticles?: Prisma.TocEntryArticleUpdateManyWithoutFeedItemNestedInput
@@ -957,6 +1166,7 @@ export type FeedItemUpdateWithoutSourceInput = {
 
 export type FeedItemUncheckedUpdateWithoutSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -973,6 +1183,7 @@ export type FeedItemUncheckedUpdateWithoutSourceInput = {
 
 export type FeedItemUncheckedUpdateManyWithoutSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1035,6 +1246,7 @@ export type FeedItemCountOutputTypeCountTocEntryArticlesArgs<ExtArgs extends run
 
 export type FeedItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   title?: boolean
   url?: boolean
   content?: boolean
@@ -1045,6 +1257,7 @@ export type FeedItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   score?: boolean
   processed?: boolean
   tagsHash?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   source?: boolean | Prisma.SourceDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.FeedItem$tagsArgs<ExtArgs>
   subjects?: boolean | Prisma.FeedItem$subjectsArgs<ExtArgs>
@@ -1054,6 +1267,7 @@ export type FeedItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 
 export type FeedItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   title?: boolean
   url?: boolean
   content?: boolean
@@ -1064,11 +1278,13 @@ export type FeedItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   score?: boolean
   processed?: boolean
   tagsHash?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   source?: boolean | Prisma.SourceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feedItem"]>
 
 export type FeedItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   title?: boolean
   url?: boolean
   content?: boolean
@@ -1079,11 +1295,13 @@ export type FeedItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   score?: boolean
   processed?: boolean
   tagsHash?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   source?: boolean | Prisma.SourceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feedItem"]>
 
 export type FeedItemSelectScalar = {
   id?: boolean
+  userId?: boolean
   title?: boolean
   url?: boolean
   content?: boolean
@@ -1096,8 +1314,9 @@ export type FeedItemSelectScalar = {
   tagsHash?: boolean
 }
 
-export type FeedItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "url" | "content" | "sourceId" | "publishedAt" | "fetchedAt" | "relevant" | "score" | "processed" | "tagsHash", ExtArgs["result"]["feedItem"]>
+export type FeedItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "url" | "content" | "sourceId" | "publishedAt" | "fetchedAt" | "relevant" | "score" | "processed" | "tagsHash", ExtArgs["result"]["feedItem"]>
 export type FeedItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   source?: boolean | Prisma.SourceDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.FeedItem$tagsArgs<ExtArgs>
   subjects?: boolean | Prisma.FeedItem$subjectsArgs<ExtArgs>
@@ -1105,15 +1324,18 @@ export type FeedItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   _count?: boolean | Prisma.FeedItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FeedItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   source?: boolean | Prisma.SourceDefaultArgs<ExtArgs>
 }
 export type FeedItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   source?: boolean | Prisma.SourceDefaultArgs<ExtArgs>
 }
 
 export type $FeedItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FeedItem"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs>
     source: Prisma.$SourcePayload<ExtArgs>
     tags: Prisma.$FeedItemTagPayload<ExtArgs>[]
     subjects: Prisma.$SubjectFeedItemPayload<ExtArgs>[]
@@ -1121,6 +1343,7 @@ export type $FeedItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    userId: string
     title: string
     url: string
     content: string | null
@@ -1130,9 +1353,6 @@ export type $FeedItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     relevant: boolean
     score: number | null
     processed: boolean
-    /**
-     * Hash des tags assignés — permet de détecter si la catégorisation a changé
-     */
     tagsHash: string | null
   }, ExtArgs["result"]["feedItem"]>
   composites: {}
@@ -1528,6 +1748,7 @@ readonly fields: FeedItemFieldRefs;
  */
 export interface Prisma__FeedItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   source<T extends Prisma.SourceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SourceDefaultArgs<ExtArgs>>): Prisma.Prisma__SourceClient<runtime.Types.Result.GetResult<Prisma.$SourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tags<T extends Prisma.FeedItem$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FeedItem$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeedItemTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subjects<T extends Prisma.FeedItem$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FeedItem$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectFeedItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1562,6 +1783,7 @@ export interface Prisma__FeedItemClient<T, Null = never, ExtArgs extends runtime
  */
 export interface FeedItemFieldRefs {
   readonly id: Prisma.FieldRef<"FeedItem", 'String'>
+  readonly userId: Prisma.FieldRef<"FeedItem", 'String'>
   readonly title: Prisma.FieldRef<"FeedItem", 'String'>
   readonly url: Prisma.FieldRef<"FeedItem", 'String'>
   readonly content: Prisma.FieldRef<"FeedItem", 'String'>
@@ -1806,7 +2028,6 @@ export type FeedItemCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many FeedItems.
    */
   data: Prisma.FeedItemCreateManyInput | Prisma.FeedItemCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1825,7 +2046,6 @@ export type FeedItemCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many FeedItems.
    */
   data: Prisma.FeedItemCreateManyInput | Prisma.FeedItemCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

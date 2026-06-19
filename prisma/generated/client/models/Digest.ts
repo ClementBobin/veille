@@ -26,6 +26,7 @@ export type AggregateDigest = {
 
 export type DigestMinAggregateOutputType = {
   id: string | null
+  userId: string | null
   title: string | null
   summary: string | null
   date: Date | null
@@ -36,6 +37,7 @@ export type DigestMinAggregateOutputType = {
 
 export type DigestMaxAggregateOutputType = {
   id: string | null
+  userId: string | null
   title: string | null
   summary: string | null
   date: Date | null
@@ -46,6 +48,7 @@ export type DigestMaxAggregateOutputType = {
 
 export type DigestCountAggregateOutputType = {
   id: number
+  userId: number
   title: number
   summary: number
   date: number
@@ -58,6 +61,7 @@ export type DigestCountAggregateOutputType = {
 
 export type DigestMinAggregateInputType = {
   id?: true
+  userId?: true
   title?: true
   summary?: true
   date?: true
@@ -68,6 +72,7 @@ export type DigestMinAggregateInputType = {
 
 export type DigestMaxAggregateInputType = {
   id?: true
+  userId?: true
   title?: true
   summary?: true
   date?: true
@@ -78,6 +83,7 @@ export type DigestMaxAggregateInputType = {
 
 export type DigestCountAggregateInputType = {
   id?: true
+  userId?: true
   title?: true
   summary?: true
   date?: true
@@ -161,6 +167,7 @@ export type DigestGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type DigestGroupByOutputType = {
   id: string
+  userId: string
   title: string | null
   summary: string | null
   date: Date
@@ -192,12 +199,14 @@ export type DigestWhereInput = {
   OR?: Prisma.DigestWhereInput[]
   NOT?: Prisma.DigestWhereInput | Prisma.DigestWhereInput[]
   id?: Prisma.StringFilter<"Digest"> | string
+  userId?: Prisma.StringFilter<"Digest"> | string
   title?: Prisma.StringNullableFilter<"Digest"> | string | null
   summary?: Prisma.StringNullableFilter<"Digest"> | string | null
   date?: Prisma.DateTimeFilter<"Digest"> | Date | string
   status?: Prisma.EnumDigestStatusFilter<"Digest"> | $Enums.DigestStatus
   sentAt?: Prisma.DateTimeNullableFilter<"Digest"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Digest"> | Date | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   subjects?: Prisma.SubjectListRelationFilter
   tags?: Prisma.DigestTagListRelationFilter
   notes?: Prisma.NoteListRelationFilter
@@ -206,12 +215,14 @@ export type DigestWhereInput = {
 
 export type DigestOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   subjects?: Prisma.SubjectOrderByRelationAggregateInput
   tags?: Prisma.DigestTagOrderByRelationAggregateInput
   notes?: Prisma.NoteOrderByRelationAggregateInput
@@ -223,12 +234,14 @@ export type DigestWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.DigestWhereInput | Prisma.DigestWhereInput[]
   OR?: Prisma.DigestWhereInput[]
   NOT?: Prisma.DigestWhereInput | Prisma.DigestWhereInput[]
+  userId?: Prisma.StringFilter<"Digest"> | string
   title?: Prisma.StringNullableFilter<"Digest"> | string | null
   summary?: Prisma.StringNullableFilter<"Digest"> | string | null
   date?: Prisma.DateTimeFilter<"Digest"> | Date | string
   status?: Prisma.EnumDigestStatusFilter<"Digest"> | $Enums.DigestStatus
   sentAt?: Prisma.DateTimeNullableFilter<"Digest"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Digest"> | Date | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   subjects?: Prisma.SubjectListRelationFilter
   tags?: Prisma.DigestTagListRelationFilter
   notes?: Prisma.NoteListRelationFilter
@@ -237,6 +250,7 @@ export type DigestWhereUniqueInput = Prisma.AtLeast<{
 
 export type DigestOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -253,6 +267,7 @@ export type DigestScalarWhereWithAggregatesInput = {
   OR?: Prisma.DigestScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DigestScalarWhereWithAggregatesInput | Prisma.DigestScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Digest"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"Digest"> | string
   title?: Prisma.StringNullableWithAggregatesFilter<"Digest"> | string | null
   summary?: Prisma.StringNullableWithAggregatesFilter<"Digest"> | string | null
   date?: Prisma.DateTimeWithAggregatesFilter<"Digest"> | Date | string
@@ -269,6 +284,7 @@ export type DigestCreateInput = {
   status?: $Enums.DigestStatus
   sentAt?: Date | string | null
   createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutDigestsInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutDigestInput
   tags?: Prisma.DigestTagCreateNestedManyWithoutDigestInput
   notes?: Prisma.NoteCreateNestedManyWithoutDigestInput
@@ -277,6 +293,7 @@ export type DigestCreateInput = {
 
 export type DigestUncheckedCreateInput = {
   id?: string
+  userId: string
   title?: string | null
   summary?: string | null
   date?: Date | string
@@ -297,6 +314,7 @@ export type DigestUpdateInput = {
   status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutDigestsNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutDigestNestedInput
   tags?: Prisma.DigestTagUpdateManyWithoutDigestNestedInput
   notes?: Prisma.NoteUpdateManyWithoutDigestNestedInput
@@ -305,6 +323,7 @@ export type DigestUpdateInput = {
 
 export type DigestUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -319,6 +338,7 @@ export type DigestUncheckedUpdateInput = {
 
 export type DigestCreateManyInput = {
   id?: string
+  userId: string
   title?: string | null
   summary?: string | null
   date?: Date | string
@@ -339,6 +359,7 @@ export type DigestUpdateManyMutationInput = {
 
 export type DigestUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -347,8 +368,19 @@ export type DigestUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type DigestListRelationFilter = {
+  every?: Prisma.DigestWhereInput
+  some?: Prisma.DigestWhereInput
+  none?: Prisma.DigestWhereInput
+}
+
+export type DigestOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type DigestCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -359,6 +391,7 @@ export type DigestCountOrderByAggregateInput = {
 
 export type DigestMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -369,6 +402,7 @@ export type DigestMaxOrderByAggregateInput = {
 
 export type DigestMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -385,6 +419,48 @@ export type DigestScalarRelationFilter = {
 export type DigestNullableScalarRelationFilter = {
   is?: Prisma.DigestWhereInput | null
   isNot?: Prisma.DigestWhereInput | null
+}
+
+export type DigestCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.DigestCreateWithoutUserInput, Prisma.DigestUncheckedCreateWithoutUserInput> | Prisma.DigestCreateWithoutUserInput[] | Prisma.DigestUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.DigestCreateOrConnectWithoutUserInput | Prisma.DigestCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.DigestCreateManyUserInputEnvelope
+  connect?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+}
+
+export type DigestUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.DigestCreateWithoutUserInput, Prisma.DigestUncheckedCreateWithoutUserInput> | Prisma.DigestCreateWithoutUserInput[] | Prisma.DigestUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.DigestCreateOrConnectWithoutUserInput | Prisma.DigestCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.DigestCreateManyUserInputEnvelope
+  connect?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+}
+
+export type DigestUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.DigestCreateWithoutUserInput, Prisma.DigestUncheckedCreateWithoutUserInput> | Prisma.DigestCreateWithoutUserInput[] | Prisma.DigestUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.DigestCreateOrConnectWithoutUserInput | Prisma.DigestCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.DigestUpsertWithWhereUniqueWithoutUserInput | Prisma.DigestUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.DigestCreateManyUserInputEnvelope
+  set?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  disconnect?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  delete?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  connect?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  update?: Prisma.DigestUpdateWithWhereUniqueWithoutUserInput | Prisma.DigestUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.DigestUpdateManyWithWhereWithoutUserInput | Prisma.DigestUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.DigestScalarWhereInput | Prisma.DigestScalarWhereInput[]
+}
+
+export type DigestUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.DigestCreateWithoutUserInput, Prisma.DigestUncheckedCreateWithoutUserInput> | Prisma.DigestCreateWithoutUserInput[] | Prisma.DigestUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.DigestCreateOrConnectWithoutUserInput | Prisma.DigestCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.DigestUpsertWithWhereUniqueWithoutUserInput | Prisma.DigestUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.DigestCreateManyUserInputEnvelope
+  set?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  disconnect?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  delete?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  connect?: Prisma.DigestWhereUniqueInput | Prisma.DigestWhereUniqueInput[]
+  update?: Prisma.DigestUpdateWithWhereUniqueWithoutUserInput | Prisma.DigestUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.DigestUpdateManyWithWhereWithoutUserInput | Prisma.DigestUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.DigestScalarWhereInput | Prisma.DigestScalarWhereInput[]
 }
 
 export type EnumDigestStatusFieldUpdateOperationsInput = {
@@ -449,7 +525,7 @@ export type DigestUpdateOneWithoutNotesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DigestUpdateToOneWithWhereWithoutNotesInput, Prisma.DigestUpdateWithoutNotesInput>, Prisma.DigestUncheckedUpdateWithoutNotesInput>
 }
 
-export type DigestCreateWithoutTocInput = {
+export type DigestCreateWithoutUserInput = {
   id?: string
   title?: string | null
   summary?: string | null
@@ -460,10 +536,79 @@ export type DigestCreateWithoutTocInput = {
   subjects?: Prisma.SubjectCreateNestedManyWithoutDigestInput
   tags?: Prisma.DigestTagCreateNestedManyWithoutDigestInput
   notes?: Prisma.NoteCreateNestedManyWithoutDigestInput
+  toc?: Prisma.TocEntryCreateNestedManyWithoutDigestInput
+}
+
+export type DigestUncheckedCreateWithoutUserInput = {
+  id?: string
+  title?: string | null
+  summary?: string | null
+  date?: Date | string
+  status?: $Enums.DigestStatus
+  sentAt?: Date | string | null
+  createdAt?: Date | string
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutDigestInput
+  tags?: Prisma.DigestTagUncheckedCreateNestedManyWithoutDigestInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutDigestInput
+  toc?: Prisma.TocEntryUncheckedCreateNestedManyWithoutDigestInput
+}
+
+export type DigestCreateOrConnectWithoutUserInput = {
+  where: Prisma.DigestWhereUniqueInput
+  create: Prisma.XOR<Prisma.DigestCreateWithoutUserInput, Prisma.DigestUncheckedCreateWithoutUserInput>
+}
+
+export type DigestCreateManyUserInputEnvelope = {
+  data: Prisma.DigestCreateManyUserInput | Prisma.DigestCreateManyUserInput[]
+}
+
+export type DigestUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.DigestWhereUniqueInput
+  update: Prisma.XOR<Prisma.DigestUpdateWithoutUserInput, Prisma.DigestUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.DigestCreateWithoutUserInput, Prisma.DigestUncheckedCreateWithoutUserInput>
+}
+
+export type DigestUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.DigestWhereUniqueInput
+  data: Prisma.XOR<Prisma.DigestUpdateWithoutUserInput, Prisma.DigestUncheckedUpdateWithoutUserInput>
+}
+
+export type DigestUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.DigestScalarWhereInput
+  data: Prisma.XOR<Prisma.DigestUpdateManyMutationInput, Prisma.DigestUncheckedUpdateManyWithoutUserInput>
+}
+
+export type DigestScalarWhereInput = {
+  AND?: Prisma.DigestScalarWhereInput | Prisma.DigestScalarWhereInput[]
+  OR?: Prisma.DigestScalarWhereInput[]
+  NOT?: Prisma.DigestScalarWhereInput | Prisma.DigestScalarWhereInput[]
+  id?: Prisma.StringFilter<"Digest"> | string
+  userId?: Prisma.StringFilter<"Digest"> | string
+  title?: Prisma.StringNullableFilter<"Digest"> | string | null
+  summary?: Prisma.StringNullableFilter<"Digest"> | string | null
+  date?: Prisma.DateTimeFilter<"Digest"> | Date | string
+  status?: Prisma.EnumDigestStatusFilter<"Digest"> | $Enums.DigestStatus
+  sentAt?: Prisma.DateTimeNullableFilter<"Digest"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"Digest"> | Date | string
+}
+
+export type DigestCreateWithoutTocInput = {
+  id?: string
+  title?: string | null
+  summary?: string | null
+  date?: Date | string
+  status?: $Enums.DigestStatus
+  sentAt?: Date | string | null
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutDigestsInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutDigestInput
+  tags?: Prisma.DigestTagCreateNestedManyWithoutDigestInput
+  notes?: Prisma.NoteCreateNestedManyWithoutDigestInput
 }
 
 export type DigestUncheckedCreateWithoutTocInput = {
   id?: string
+  userId: string
   title?: string | null
   summary?: string | null
   date?: Date | string
@@ -499,6 +644,7 @@ export type DigestUpdateWithoutTocInput = {
   status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutDigestsNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutDigestNestedInput
   tags?: Prisma.DigestTagUpdateManyWithoutDigestNestedInput
   notes?: Prisma.NoteUpdateManyWithoutDigestNestedInput
@@ -506,6 +652,7 @@ export type DigestUpdateWithoutTocInput = {
 
 export type DigestUncheckedUpdateWithoutTocInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -525,6 +672,7 @@ export type DigestCreateWithoutTagsInput = {
   status?: $Enums.DigestStatus
   sentAt?: Date | string | null
   createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutDigestsInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutDigestInput
   notes?: Prisma.NoteCreateNestedManyWithoutDigestInput
   toc?: Prisma.TocEntryCreateNestedManyWithoutDigestInput
@@ -532,6 +680,7 @@ export type DigestCreateWithoutTagsInput = {
 
 export type DigestUncheckedCreateWithoutTagsInput = {
   id?: string
+  userId: string
   title?: string | null
   summary?: string | null
   date?: Date | string
@@ -567,6 +716,7 @@ export type DigestUpdateWithoutTagsInput = {
   status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutDigestsNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutDigestNestedInput
   notes?: Prisma.NoteUpdateManyWithoutDigestNestedInput
   toc?: Prisma.TocEntryUpdateManyWithoutDigestNestedInput
@@ -574,6 +724,7 @@ export type DigestUpdateWithoutTagsInput = {
 
 export type DigestUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -593,6 +744,7 @@ export type DigestCreateWithoutSubjectsInput = {
   status?: $Enums.DigestStatus
   sentAt?: Date | string | null
   createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutDigestsInput
   tags?: Prisma.DigestTagCreateNestedManyWithoutDigestInput
   notes?: Prisma.NoteCreateNestedManyWithoutDigestInput
   toc?: Prisma.TocEntryCreateNestedManyWithoutDigestInput
@@ -600,6 +752,7 @@ export type DigestCreateWithoutSubjectsInput = {
 
 export type DigestUncheckedCreateWithoutSubjectsInput = {
   id?: string
+  userId: string
   title?: string | null
   summary?: string | null
   date?: Date | string
@@ -635,6 +788,7 @@ export type DigestUpdateWithoutSubjectsInput = {
   status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutDigestsNestedInput
   tags?: Prisma.DigestTagUpdateManyWithoutDigestNestedInput
   notes?: Prisma.NoteUpdateManyWithoutDigestNestedInput
   toc?: Prisma.TocEntryUpdateManyWithoutDigestNestedInput
@@ -642,6 +796,7 @@ export type DigestUpdateWithoutSubjectsInput = {
 
 export type DigestUncheckedUpdateWithoutSubjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -661,6 +816,7 @@ export type DigestCreateWithoutNotesInput = {
   status?: $Enums.DigestStatus
   sentAt?: Date | string | null
   createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutDigestsInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutDigestInput
   tags?: Prisma.DigestTagCreateNestedManyWithoutDigestInput
   toc?: Prisma.TocEntryCreateNestedManyWithoutDigestInput
@@ -668,6 +824,7 @@ export type DigestCreateWithoutNotesInput = {
 
 export type DigestUncheckedCreateWithoutNotesInput = {
   id?: string
+  userId: string
   title?: string | null
   summary?: string | null
   date?: Date | string
@@ -703,6 +860,7 @@ export type DigestUpdateWithoutNotesInput = {
   status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutDigestsNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutDigestNestedInput
   tags?: Prisma.DigestTagUpdateManyWithoutDigestNestedInput
   toc?: Prisma.TocEntryUpdateManyWithoutDigestNestedInput
@@ -710,6 +868,7 @@ export type DigestUpdateWithoutNotesInput = {
 
 export type DigestUncheckedUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -719,6 +878,54 @@ export type DigestUncheckedUpdateWithoutNotesInput = {
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutDigestNestedInput
   tags?: Prisma.DigestTagUncheckedUpdateManyWithoutDigestNestedInput
   toc?: Prisma.TocEntryUncheckedUpdateManyWithoutDigestNestedInput
+}
+
+export type DigestCreateManyUserInput = {
+  id?: string
+  title?: string | null
+  summary?: string | null
+  date?: Date | string
+  status?: $Enums.DigestStatus
+  sentAt?: Date | string | null
+  createdAt?: Date | string
+}
+
+export type DigestUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.SubjectUpdateManyWithoutDigestNestedInput
+  tags?: Prisma.DigestTagUpdateManyWithoutDigestNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutDigestNestedInput
+  toc?: Prisma.TocEntryUpdateManyWithoutDigestNestedInput
+}
+
+export type DigestUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutDigestNestedInput
+  tags?: Prisma.DigestTagUncheckedUpdateManyWithoutDigestNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutDigestNestedInput
+  toc?: Prisma.TocEntryUncheckedUpdateManyWithoutDigestNestedInput
+}
+
+export type DigestUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumDigestStatusFieldUpdateOperationsInput | $Enums.DigestStatus
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -781,12 +988,14 @@ export type DigestCountOutputTypeCountTocArgs<ExtArgs extends runtime.Types.Exte
 
 export type DigestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   title?: boolean
   summary?: boolean
   date?: boolean
   status?: boolean
   sentAt?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   subjects?: boolean | Prisma.Digest$subjectsArgs<ExtArgs>
   tags?: boolean | Prisma.Digest$tagsArgs<ExtArgs>
   notes?: boolean | Prisma.Digest$notesArgs<ExtArgs>
@@ -796,26 +1005,31 @@ export type DigestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type DigestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   title?: boolean
   summary?: boolean
   date?: boolean
   status?: boolean
   sentAt?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["digest"]>
 
 export type DigestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   title?: boolean
   summary?: boolean
   date?: boolean
   status?: boolean
   sentAt?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["digest"]>
 
 export type DigestSelectScalar = {
   id?: boolean
+  userId?: boolean
   title?: boolean
   summary?: boolean
   date?: boolean
@@ -824,20 +1038,26 @@ export type DigestSelectScalar = {
   createdAt?: boolean
 }
 
-export type DigestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "summary" | "date" | "status" | "sentAt" | "createdAt", ExtArgs["result"]["digest"]>
+export type DigestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "summary" | "date" | "status" | "sentAt" | "createdAt", ExtArgs["result"]["digest"]>
 export type DigestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   subjects?: boolean | Prisma.Digest$subjectsArgs<ExtArgs>
   tags?: boolean | Prisma.Digest$tagsArgs<ExtArgs>
   notes?: boolean | Prisma.Digest$notesArgs<ExtArgs>
   toc?: boolean | Prisma.Digest$tocArgs<ExtArgs>
   _count?: boolean | Prisma.DigestCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type DigestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type DigestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type DigestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type DigestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $DigestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Digest"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs>
     subjects: Prisma.$SubjectPayload<ExtArgs>[]
     tags: Prisma.$DigestTagPayload<ExtArgs>[]
     notes: Prisma.$NotePayload<ExtArgs>[]
@@ -845,6 +1065,7 @@ export type $DigestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    userId: string
     title: string | null
     summary: string | null
     date: Date
@@ -1245,6 +1466,7 @@ readonly fields: DigestFieldRefs;
  */
 export interface Prisma__DigestClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subjects<T extends Prisma.Digest$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Digest$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Digest$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Digest$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DigestTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notes<T extends Prisma.Digest$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Digest$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1279,6 +1501,7 @@ export interface Prisma__DigestClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface DigestFieldRefs {
   readonly id: Prisma.FieldRef<"Digest", 'String'>
+  readonly userId: Prisma.FieldRef<"Digest", 'String'>
   readonly title: Prisma.FieldRef<"Digest", 'String'>
   readonly summary: Prisma.FieldRef<"Digest", 'String'>
   readonly date: Prisma.FieldRef<"Digest", 'DateTime'>
@@ -1508,7 +1731,7 @@ export type DigestCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   /**
    * The data needed to create a Digest.
    */
-  data?: Prisma.XOR<Prisma.DigestCreateInput, Prisma.DigestUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.DigestCreateInput, Prisma.DigestUncheckedCreateInput>
 }
 
 /**
@@ -1519,7 +1742,6 @@ export type DigestCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Digests.
    */
   data: Prisma.DigestCreateManyInput | Prisma.DigestCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1538,7 +1760,10 @@ export type DigestCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Digests.
    */
   data: Prisma.DigestCreateManyInput | Prisma.DigestCreateManyInput[]
-  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DigestIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1609,6 +1834,10 @@ export type DigestUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Digests to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DigestIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

@@ -359,7 +359,6 @@ export type TocEntryArticleCreateOrConnectWithoutFeedItemInput = {
 
 export type TocEntryArticleCreateManyFeedItemInputEnvelope = {
   data: Prisma.TocEntryArticleCreateManyFeedItemInput | Prisma.TocEntryArticleCreateManyFeedItemInput[]
-  skipDuplicates?: boolean
 }
 
 export type TocEntryArticleUpsertWithWhereUniqueWithoutFeedItemInput = {
@@ -401,7 +400,6 @@ export type TocEntryArticleCreateOrConnectWithoutTocEntryInput = {
 
 export type TocEntryArticleCreateManyTocEntryInputEnvelope = {
   data: Prisma.TocEntryArticleCreateManyTocEntryInput | Prisma.TocEntryArticleCreateManyTocEntryInput[]
-  skipDuplicates?: boolean
 }
 
 export type TocEntryArticleUpsertWithWhereUniqueWithoutTocEntryInput = {
@@ -1164,7 +1162,6 @@ export type TocEntryArticleCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many TocEntryArticles.
    */
   data: Prisma.TocEntryArticleCreateManyInput | Prisma.TocEntryArticleCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1183,7 +1180,6 @@ export type TocEntryArticleCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many TocEntryArticles.
    */
   data: Prisma.TocEntryArticleCreateManyInput | Prisma.TocEntryArticleCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

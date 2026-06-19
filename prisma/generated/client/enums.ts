@@ -11,9 +11,13 @@
 
 export const SourceType = {
   RSS: 'RSS',
-  API: 'API',
   SCRAPING: 'SCRAPING',
-  VIDEO: 'VIDEO'
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+  SOCIAL: 'SOCIAL',
+  NEWSLETTER: 'NEWSLETTER',
+  WEBHOOK: 'WEBHOOK',
+  FILE: 'FILE'
 } as const
 
 export type SourceType = (typeof SourceType)[keyof typeof SourceType]

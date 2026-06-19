@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyApiKey } from '@/lib/verifyApiKey'
+import { getAuth } from '@/lib/auth-context'
 
-// WF5 stores the generated markdown note
 export async function POST(req: NextRequest) {
-  const authError = await verifyApiKey(req)
-  if (authError) return authError
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
   const { title, content, digestId, filename, exportedTo } = await req.json()
+
+  if (digestId) {
+    const digest = await prisma.digest.findFirst({ where: { id: digestId, userId } })
+    if (!digest) return NextResponse.json({ error: 'Digest not found' }, { status: 404 })
+  }
 
   const note = await prisma.note.create({
     data: {
@@ -15,21 +20,21 @@ export async function POST(req: NextRequest) {
       content,
       digestId,
       filename,
+      userId,
       exportedTo: Array.isArray(exportedTo) ? exportedTo.join(',') : (exportedTo ?? ''),
     },
   })
 
-  if (digestId) {
-    await prisma.digest.update({ where: { id: digestId }, data: { status: 'DONE' } })
-  }
+  if (digestId) await prisma.digest.update({ where: { id: digestId }, data: { status: 'DONE' } })
 
   return NextResponse.json(note, { status: 201 })
 }
 
 export async function GET(req: NextRequest) {
-  const authError = await verifyApiKey(req)
-  if (authError) return authError
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
-  const notes = await prisma.note.findMany({ orderBy: { createdAt: 'desc' } })
+  const notes = await prisma.note.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } })
   return NextResponse.json(notes)
 }

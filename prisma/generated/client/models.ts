@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/User'
 export type * from './models/Tag'
 export type * from './models/Source'
 export type * from './models/FeedItem'
@@ -21,4 +22,6 @@ export type * from './models/SubjectFeedItem'
 export type * from './models/Note'
 export type * from './models/PipelineEvent'
 export type * from './models/ApiKey'
+export type * from './models/Config'
+export type * from './models/RequestLog'
 export type * from './commonInputTypes'

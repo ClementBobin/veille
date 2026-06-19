@@ -1,25 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyApiKey } from '@/lib/verifyApiKey'
+import { getAuth } from '@/lib/auth-context'
 
 export async function POST(req: NextRequest) {
-  const authError = await verifyApiKey(req)
-  
-  if (authError) {
-    return authError
-  }
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
   const { digestId, selectedSubjectIds } = await req.json()
 
+  const digest = await prisma.digest.findFirst({ where: { id: digestId, userId } })
+  if (!digest) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
   await prisma.subject.updateMany({ where: { digestId }, data: { selected: false } })
-  await prisma.subject.updateMany({
-    where: { id: { in: selectedSubjectIds }, digestId },
-    data: { selected: true },
-  })
+  await prisma.subject.updateMany({ where: { id: { in: selectedSubjectIds }, digestId }, data: { selected: true } })
   await prisma.digest.update({ where: { id: digestId }, data: { status: 'SELECTED' } })
 
   await prisma.pipelineEvent.create({
-    data: { workflow: 'WF4', status: 'done', message: `${selectedSubjectIds.length} sujets sélectionnés` },
+    data: { workflow: 'WF4', status: 'done', message: `${selectedSubjectIds.length} sujets sélectionnés`, userId },
   })
 
   const n8nUrl = process.env.N8N_BASE_URL ?? 'http://localhost:5678'
@@ -38,17 +36,16 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const authError = await verifyApiKey(req)
-
-  if (authError) {
-    return authError
-  }
+  const auth = await getAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const { userId } = auth
 
   const { searchParams } = new URL(req.url)
   const digestId = searchParams.get('digestId')
 
   const digest = await prisma.digest.findFirst({
     where: {
+      userId,
       ...(digestId ? { id: digestId } : {}),
       subjects: { some: { selected: true } },
     },
@@ -56,48 +53,24 @@ export async function GET(req: NextRequest) {
       tags: { include: { tag: true } },
       toc: {
         orderBy: { order: 'asc' },
-        include: {
-          articles: {
-            include: {
-              feedItem: {
-                include: {
-                  tags: { include: { tag: true } },
-                },
-              },
-            },
-          },
-        },
+        include: { articles: { include: { feedItem: { include: { tags: { include: { tag: true } } } } } } },
       },
       subjects: {
         where: { selected: true },
-        include: {
-          feedItems: {
-            include: {
-              feedItem: {
-                include: {
-                  tags: { include: { tag: true } },
-                },
-              },
-            },
-          },
-        },
+        include: { feedItems: { include: { feedItem: { include: { tags: { include: { tag: true } } } } } } },
       },
     },
   })
 
   if (!digest) return NextResponse.json(null)
 
-  // Collect all unique articles across selected subjects
   const articlesMap = new Map<string, any>()
   for (const subject of digest.subjects) {
     for (const { feedItem } of subject.feedItems) {
-      if (!articlesMap.has(feedItem.id)) {
-        articlesMap.set(feedItem.id, feedItem)
-      }
+      if (!articlesMap.has(feedItem.id)) articlesMap.set(feedItem.id, feedItem)
     }
   }
 
-  // Build tocIds per article
   const articleTocIds = new Map<string, string[]>()
   for (const tocEntry of digest.toc) {
     for (const { feedItemId } of tocEntry.articles) {
@@ -111,12 +84,7 @@ export async function GET(req: NextRequest) {
     title: digest.title,
     summary: digest.summary,
     tags: digest.tags.map((t) => t.tag.name),
-    toc: digest.toc.map((t) => ({
-      id: t.id,
-      order: t.order,
-      title: t.title,
-      summary: t.summary,
-    })),
+    toc: digest.toc.map((t) => ({ id: t.id, order: t.order, title: t.title, summary: t.summary })),
     articles: [...articlesMap.values()].map((a) => ({
       id: a.id,
       title: a.title,
