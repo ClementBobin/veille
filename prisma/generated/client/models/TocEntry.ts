@@ -460,6 +460,7 @@ export type TocEntryCreateOrConnectWithoutDigestInput = {
 
 export type TocEntryCreateManyDigestInputEnvelope = {
   data: Prisma.TocEntryCreateManyDigestInput | Prisma.TocEntryCreateManyDigestInput[]
+  skipDuplicates?: boolean
 }
 
 export type TocEntryUpsertWithWhereUniqueWithoutDigestInput = {
@@ -1324,6 +1325,7 @@ export type TocEntryCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many TocEntries.
    */
   data: Prisma.TocEntryCreateManyInput | Prisma.TocEntryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1342,6 +1344,7 @@ export type TocEntryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many TocEntries.
    */
   data: Prisma.TocEntryCreateManyInput | Prisma.TocEntryCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

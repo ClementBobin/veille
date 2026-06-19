@@ -359,6 +359,7 @@ export type DigestTagCreateOrConnectWithoutTagInput = {
 
 export type DigestTagCreateManyTagInputEnvelope = {
   data: Prisma.DigestTagCreateManyTagInput | Prisma.DigestTagCreateManyTagInput[]
+  skipDuplicates?: boolean
 }
 
 export type DigestTagUpsertWithWhereUniqueWithoutTagInput = {
@@ -400,6 +401,7 @@ export type DigestTagCreateOrConnectWithoutDigestInput = {
 
 export type DigestTagCreateManyDigestInputEnvelope = {
   data: Prisma.DigestTagCreateManyDigestInput | Prisma.DigestTagCreateManyDigestInput[]
+  skipDuplicates?: boolean
 }
 
 export type DigestTagUpsertWithWhereUniqueWithoutDigestInput = {
@@ -1162,6 +1164,7 @@ export type DigestTagCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many DigestTags.
    */
   data: Prisma.DigestTagCreateManyInput | Prisma.DigestTagCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1180,6 +1183,7 @@ export type DigestTagCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many DigestTags.
    */
   data: Prisma.DigestTagCreateManyInput | Prisma.DigestTagCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

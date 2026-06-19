@@ -476,6 +476,7 @@ export type SubjectCreateOrConnectWithoutDigestInput = {
 
 export type SubjectCreateManyDigestInputEnvelope = {
   data: Prisma.SubjectCreateManyDigestInput | Prisma.SubjectCreateManyDigestInput[]
+  skipDuplicates?: boolean
 }
 
 export type SubjectUpsertWithWhereUniqueWithoutDigestInput = {
@@ -1355,6 +1356,7 @@ export type SubjectCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many Subjects.
    */
   data: Prisma.SubjectCreateManyInput | Prisma.SubjectCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1373,6 +1375,7 @@ export type SubjectCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many Subjects.
    */
   data: Prisma.SubjectCreateManyInput | Prisma.SubjectCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

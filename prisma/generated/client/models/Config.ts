@@ -386,6 +386,7 @@ export type ConfigCreateOrConnectWithoutUserInput = {
 
 export type ConfigCreateManyUserInputEnvelope = {
   data: Prisma.ConfigCreateManyUserInput | Prisma.ConfigCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type ConfigUpsertWithWhereUniqueWithoutUserInput = {
@@ -1165,6 +1166,7 @@ export type ConfigCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Configs.
    */
   data: Prisma.ConfigCreateManyInput | Prisma.ConfigCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1183,6 +1185,7 @@ export type ConfigCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Configs.
    */
   data: Prisma.ConfigCreateManyInput | Prisma.ConfigCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

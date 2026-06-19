@@ -452,6 +452,7 @@ export type PipelineEventCreateOrConnectWithoutUserInput = {
 
 export type PipelineEventCreateManyUserInputEnvelope = {
   data: Prisma.PipelineEventCreateManyUserInput | Prisma.PipelineEventCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type PipelineEventUpsertWithWhereUniqueWithoutUserInput = {
@@ -1264,6 +1265,7 @@ export type PipelineEventCreateManyArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many PipelineEvents.
    */
   data: Prisma.PipelineEventCreateManyInput | Prisma.PipelineEventCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1282,6 +1284,7 @@ export type PipelineEventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    * The data used to create many PipelineEvents.
    */
   data: Prisma.PipelineEventCreateManyInput | Prisma.PipelineEventCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

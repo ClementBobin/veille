@@ -359,6 +359,7 @@ export type FeedItemTagCreateOrConnectWithoutTagInput = {
 
 export type FeedItemTagCreateManyTagInputEnvelope = {
   data: Prisma.FeedItemTagCreateManyTagInput | Prisma.FeedItemTagCreateManyTagInput[]
+  skipDuplicates?: boolean
 }
 
 export type FeedItemTagUpsertWithWhereUniqueWithoutTagInput = {
@@ -400,6 +401,7 @@ export type FeedItemTagCreateOrConnectWithoutFeedItemInput = {
 
 export type FeedItemTagCreateManyFeedItemInputEnvelope = {
   data: Prisma.FeedItemTagCreateManyFeedItemInput | Prisma.FeedItemTagCreateManyFeedItemInput[]
+  skipDuplicates?: boolean
 }
 
 export type FeedItemTagUpsertWithWhereUniqueWithoutFeedItemInput = {
@@ -1162,6 +1164,7 @@ export type FeedItemTagCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many FeedItemTags.
    */
   data: Prisma.FeedItemTagCreateManyInput | Prisma.FeedItemTagCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1180,6 +1183,7 @@ export type FeedItemTagCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many FeedItemTags.
    */
   data: Prisma.FeedItemTagCreateManyInput | Prisma.FeedItemTagCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

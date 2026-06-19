@@ -560,6 +560,7 @@ export type DigestCreateOrConnectWithoutUserInput = {
 
 export type DigestCreateManyUserInputEnvelope = {
   data: Prisma.DigestCreateManyUserInput | Prisma.DigestCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type DigestUpsertWithWhereUniqueWithoutUserInput = {
@@ -1742,6 +1743,7 @@ export type DigestCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Digests.
    */
   data: Prisma.DigestCreateManyInput | Prisma.DigestCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1760,6 +1762,7 @@ export type DigestCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Digests.
    */
   data: Prisma.DigestCreateManyInput | Prisma.DigestCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

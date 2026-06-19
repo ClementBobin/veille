@@ -359,6 +359,7 @@ export type SubjectFeedItemCreateOrConnectWithoutFeedItemInput = {
 
 export type SubjectFeedItemCreateManyFeedItemInputEnvelope = {
   data: Prisma.SubjectFeedItemCreateManyFeedItemInput | Prisma.SubjectFeedItemCreateManyFeedItemInput[]
+  skipDuplicates?: boolean
 }
 
 export type SubjectFeedItemUpsertWithWhereUniqueWithoutFeedItemInput = {
@@ -400,6 +401,7 @@ export type SubjectFeedItemCreateOrConnectWithoutSubjectInput = {
 
 export type SubjectFeedItemCreateManySubjectInputEnvelope = {
   data: Prisma.SubjectFeedItemCreateManySubjectInput | Prisma.SubjectFeedItemCreateManySubjectInput[]
+  skipDuplicates?: boolean
 }
 
 export type SubjectFeedItemUpsertWithWhereUniqueWithoutSubjectInput = {
@@ -1162,6 +1164,7 @@ export type SubjectFeedItemCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many SubjectFeedItems.
    */
   data: Prisma.SubjectFeedItemCreateManyInput | Prisma.SubjectFeedItemCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1180,6 +1183,7 @@ export type SubjectFeedItemCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many SubjectFeedItems.
    */
   data: Prisma.SubjectFeedItemCreateManyInput | Prisma.SubjectFeedItemCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

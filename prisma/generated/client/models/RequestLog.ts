@@ -550,6 +550,7 @@ export type RequestLogCreateOrConnectWithoutUserInput = {
 
 export type RequestLogCreateManyUserInputEnvelope = {
   data: Prisma.RequestLogCreateManyUserInput | Prisma.RequestLogCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type RequestLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -1384,6 +1385,7 @@ export type RequestLogCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many RequestLogs.
    */
   data: Prisma.RequestLogCreateManyInput | Prisma.RequestLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1402,6 +1404,7 @@ export type RequestLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many RequestLogs.
    */
   data: Prisma.RequestLogCreateManyInput | Prisma.RequestLogCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

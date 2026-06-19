@@ -724,6 +724,7 @@ export type FeedItemCreateOrConnectWithoutUserInput = {
 
 export type FeedItemCreateManyUserInputEnvelope = {
   data: Prisma.FeedItemCreateManyUserInput | Prisma.FeedItemCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type FeedItemUpsertWithWhereUniqueWithoutUserInput = {
@@ -801,6 +802,7 @@ export type FeedItemCreateOrConnectWithoutSourceInput = {
 
 export type FeedItemCreateManySourceInputEnvelope = {
   data: Prisma.FeedItemCreateManySourceInput | Prisma.FeedItemCreateManySourceInput[]
+  skipDuplicates?: boolean
 }
 
 export type FeedItemUpsertWithWhereUniqueWithoutSourceInput = {
@@ -2028,6 +2030,7 @@ export type FeedItemCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many FeedItems.
    */
   data: Prisma.FeedItemCreateManyInput | Prisma.FeedItemCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -2046,6 +2049,7 @@ export type FeedItemCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many FeedItems.
    */
   data: Prisma.FeedItemCreateManyInput | Prisma.FeedItemCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

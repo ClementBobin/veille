@@ -522,6 +522,7 @@ export type SourceCreateOrConnectWithoutUserInput = {
 
 export type SourceCreateManyUserInputEnvelope = {
   data: Prisma.SourceCreateManyUserInput | Prisma.SourceCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type SourceUpsertWithWhereUniqueWithoutUserInput = {
@@ -1446,6 +1447,7 @@ export type SourceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Sources.
    */
   data: Prisma.SourceCreateManyInput | Prisma.SourceCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1464,6 +1466,7 @@ export type SourceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Sources.
    */
   data: Prisma.SourceCreateManyInput | Prisma.SourceCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
