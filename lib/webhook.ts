@@ -1,13 +1,6 @@
 import crypto from 'crypto'
 import { prisma } from './prisma'
-
-export type WebhookDeliveryResult = {
-  webhookId: string
-  name: string
-  ok: boolean
-  status?: number
-  error?: string
-}
+import { WebhookDeliveryResult } from '@/types';
 
 function parseEvents(events: string): string[] {
   return events.split(',').map(e => e.trim()).filter(Boolean)
