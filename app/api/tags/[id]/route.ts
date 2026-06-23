@@ -13,7 +13,22 @@ export const PATCH = withLog(async (req: NextRequest, { params }: { params: Prom
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = await req.json()
-  const tag = await prisma.tag.update({ where: { id }, data: body })
+  const { name, color, description, active } = body
+
+  if (name !== undefined && name !== existing.name) {
+    const dup = await prisma.tag.findFirst({
+      where: { userId, name: { equals: name, mode: 'insensitive' }, id: { not: id } },
+    })
+    if (dup) return NextResponse.json({ error: 'A tag with this name already exists' }, { status: 409 })
+  }
+
+  const data: Record<string, unknown> = {}
+  if (name !== undefined) data.name = name
+  if (color !== undefined) data.color = color
+  if (description !== undefined) data.description = description
+  if (active !== undefined) data.active = active
+
+  const tag = await prisma.tag.update({ where: { id }, data })
   return NextResponse.json(tag)
 })
 

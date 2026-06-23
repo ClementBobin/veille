@@ -101,6 +101,7 @@ export const TagScalarFieldEnum = {
   name: 'name',
   color: 'color',
   description: 'description',
+  active: 'active',
   createdAt: 'createdAt'
 } as const
 

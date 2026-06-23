@@ -25,6 +25,12 @@ export const PATCH = withLog(async (req: NextRequest, { params }: { params: Prom
 
   const body = await req.json()
   const { name, url, type, active, cache } = body
+
+  if (url !== undefined && url !== existing.url) {
+    const dup = await prisma.source.findFirst({ where: { userId, url, id: { not: id } } })
+    if (dup) return NextResponse.json({ error: 'A source with this URL already exists' }, { status: 409 })
+  }
+
   const data: Record<string, unknown> = {}
   if (name !== undefined) data.name = name
   if (url !== undefined) data.url = url

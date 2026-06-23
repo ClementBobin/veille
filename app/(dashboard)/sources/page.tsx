@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
+import { BulkActionBar } from '@/components/ui/bulk-action-bar'
 import {
   Pagination,
   PaginationContent,
@@ -35,6 +36,8 @@ export default function SourcesPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [page, setPage] = useState(1)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [bulkBusy, setBulkBusy] = useState(false)
 
   useEffect(() => {
     if (types.length && !form.type) {
@@ -64,6 +67,10 @@ export default function SourcesPage() {
         body: JSON.stringify(payload),
       })
       const s = await res.json()
+      if (!res.ok) {
+        toast.error(s.error ?? 'Failed to add source')
+        return
+      }
       setSources(prev => [...prev, s])
       setForm({ ...EMPTY_FORM, type: types[0]?.value ?? '' })
       setShowForm(false)
@@ -90,6 +97,10 @@ export default function SourcesPage() {
       body: JSON.stringify(payload),
     })
     const updated = await res.json()
+    if (!res.ok) {
+      toast.error(updated.error ?? 'Failed to update source')
+      return
+    }
     setSources(prev => prev.map(x => x.id === editId ? updated : x))
     setEditId(null)
     toast.success('Source updated')
@@ -114,7 +125,43 @@ export default function SourcesPage() {
   const remove = async (id: string) => {
     await fetch(`/api/sources/${id}`, { method: 'DELETE' })
     setSources(prev => prev.filter(x => x.id !== id))
+    setSelected(prev => {
+      const next = new Set(prev)
+      next.delete(id)
+      return next
+    })
     toast.success('Source deleted')
+  }
+
+  const toggleSelect = (id: string) => {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const bulkSetActive = async (active: boolean) => {
+    if (selected.size === 0) return
+    setBulkBusy(true)
+    try {
+      const ids = Array.from(selected)
+      const res = await fetch('/api/sources/bulk', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids, active }),
+      })
+      if (!res.ok) {
+        toast.error('Bulk update failed')
+        return
+      }
+      setSources(prev => prev.map(s => (selected.has(s.id) ? { ...s, active } : s)))
+      toast.success(`${ids.length} source(s) ${active ? 'enabled' : 'disabled'}`)
+      setSelected(new Set())
+    } finally {
+      setBulkBusy(false)
+    }
   }
 
   return (
@@ -145,6 +192,14 @@ export default function SourcesPage() {
           <Spinner /> Saving source…
         </div>
       )}
+
+      <BulkActionBar
+        count={selected.size}
+        busy={bulkBusy}
+        onEnable={() => bulkSetActive(true)}
+        onDisable={() => bulkSetActive(false)}
+        onClear={() => setSelected(new Set())}
+      />
 
       {loading ? (
         <div className="flex flex-col gap-2">
@@ -181,6 +236,8 @@ export default function SourcesPage() {
                   key={s.id}
                   source={s}
                   meta={meta}
+                  selected={selected.has(s.id)}
+                  onToggleSelect={() => toggleSelect(s.id)}
                   onToggleActive={() => toggleActive(s)}
                   onToggleCache={() => toggleCache(s)}
                   onEdit={() => startEdit(s)}

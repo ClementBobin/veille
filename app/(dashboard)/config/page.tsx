@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { N8nPipelineCard } from '@/components/config/n8n-pipeline-card'
+import { WebhookCard } from '@/components/config/webhook-card'
 import { CleanupCard } from '@/components/config/cleanup-card'
 import { ExportImportCard } from '@/components/config/export-import-card'
 import { ApiKeysCard } from '@/components/config/api-keys-card'
@@ -169,6 +170,15 @@ export default function ConfigPage() {
 
       <div className="flex flex-col gap-5">
         <N8nPipelineCard
+          draft={configDraft}
+          onDraftChange={setConfigDraft}
+          changed={configChanged}
+          saving={configSaving}
+          saved={configSaved}
+          onSave={saveConfig}
+        />
+
+        <WebhookCard
           draft={configDraft}
           onDraftChange={setConfigDraft}
           changed={configChanged}

@@ -1,8 +1,22 @@
 export type ApiKey = { id: string; name: string; lastUsed: string | null; createdAt: string }
-export type Config = { N8N_BASE_URL?: string; N8N_WEBHOOK_PATH?: string; RETENTION_DAYS?: string }
+export type Config = {
+  N8N_BASE_URL?: string
+  N8N_WEBHOOK_PATH?: string
+  RETENTION_DAYS?: string
+}
+export type Webhook = {
+  id: string
+  name: string
+  url: string
+  events: string
+  active: boolean
+  lastTriggeredAt: string | null
+  lastStatus: string | null
+  createdAt: string
+}
 export type CleanupInfo = { cutoff: string; eligibleForCleanup: number; retentionDays: number }
 export type ImportResult = { ok: boolean; imported: Record<string, number> } | null
-export type Tag = { id: string; name: string; color: string; description?: string }
+export type Tag = { id: string; name: string; color: string; description?: string; active: boolean }
 export type Source = {
   id: string
   name: string
