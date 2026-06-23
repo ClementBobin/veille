@@ -4,7 +4,18 @@ import { verifyPassword } from '@/lib/auth'
 import { createSessionToken } from '@/lib/session'
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json()
+  let email: string, password: string
+  try {
+    const body = await req.json()
+    email = body.email
+    password = body.password
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
+  }
+
+  if (!email || !password) {
+    return NextResponse.json({ error: 'Email and password are required' }, { status: 400 })
+  }
 
   const user = await prisma.user.findUnique({ where: { email } })
   if (!user || !(await verifyPassword(password, user.passwordHash))) {

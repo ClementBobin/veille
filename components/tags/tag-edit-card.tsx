@@ -1,0 +1,87 @@
+'use client'
+import { useMemo } from 'react'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import {
+  KeyValue,
+  KeyValueList,
+  KeyValueItem,
+  KeyValueKeyInput,
+  KeyValueValueInput,
+} from '@/components/ui/key-value'
+import {
+  ColorPicker,
+  ColorPickerTrigger,
+  ColorPickerContent,
+  ColorPickerArea,
+  ColorPickerHueSlider,
+  ColorPickerSwatch,
+  ColorPickerInput,
+} from '@/components/ui/color-picker'
+import type { Tag } from '@/types'
+
+type TagEditCardProps = {
+  form: Partial<Tag>
+  onFormChange: (form: Partial<Tag>) => void
+  onSave: () => void
+  onCancel: () => void
+}
+
+export function TagEditCard({ form, onFormChange, onSave, onCancel }: TagEditCardProps) {
+  const color = form.color ?? '#6366f1'
+  const kvValue = useMemo(
+    () => [{ id: 'tag-fields', key: form.name ?? '', value: form.description ?? '' }],
+    [form.name, form.description],
+  )
+
+  return (
+    <div
+      style={{ borderColor: color + '55' }}
+      className="bg-zinc-900 border rounded-xl p-5 col-span-1"
+    >
+      <div className="flex items-start gap-3 mb-3">
+        <KeyValue
+          value={kvValue}
+          onValueChange={(items) => {
+            const item = items[0]
+            if (item) onFormChange({ ...form, name: item.key, description: item.value })
+          }}
+          keyPlaceholder="Name"
+          valuePlaceholder="Description"
+          minItems={1}
+          maxItems={1}
+          className="flex-1"
+        >
+          <KeyValueList>
+            <KeyValueItem>
+              <KeyValueKeyInput className="flex-1" />
+              <KeyValueValueInput className="flex-1" />
+            </KeyValueItem>
+          </KeyValueList>
+        </KeyValue>
+
+        <div className="flex flex-col items-center gap-1 flex-shrink-0">
+          <Label className="text-xs text-zinc-500">Color</Label>
+          <ColorPicker value={color} onValueChange={(c) => onFormChange({ ...form, color: c })}>
+            <ColorPickerTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-2 px-0">
+                <ColorPickerSwatch className="size-4" />
+                Pick Color
+              </Button>
+            </ColorPickerTrigger>
+            <ColorPickerContent>
+              <ColorPickerArea />
+              <ColorPickerHueSlider />
+              <ColorPickerInput withoutAlpha />
+            </ColorPickerContent>
+          </ColorPicker>
+        </div>
+      </div>
+
+      <div className="flex gap-2">
+        <Button onClick={onSave}>Save</Button>
+        <Button variant="outline" onClick={onCancel}>Cancel</Button>
+      </div>
+    </div>
+  )
+}

@@ -45,6 +45,9 @@ export const GET = withLog(async (req: NextRequest) => {
   const { searchParams } = new URL(req.url)
   const unprocessed = searchParams.get('unprocessed') === 'true'
 
+  const count = await prisma.feedItem.count({ where: { userId } })
+  console.log('count for userId:', userId, '→', count)
+
   const items = await prisma.feedItem.findMany({
     where: {
       userId,
