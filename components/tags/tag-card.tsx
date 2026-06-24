@@ -37,7 +37,6 @@ export function TagCard({ tag, selected, onToggleSelect, onToggleActive, onEdit,
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-zinc-200">{tag.name}</span>
-          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tag.active ? 'bg-emerald-500' : 'bg-zinc-600'}`} />
         </div>
         <div className="text-xs text-zinc-600 mt-0.5 truncate">
           {tag.description || 'No description'}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
 import { withLog } from '@/lib/with-log'
+import { dispatchWebhook } from '@/lib/webhook'
 
 export const POST = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
@@ -27,6 +28,9 @@ export const POST = withLog(async (req: NextRequest) => {
   })
 
   if (digestId) await prisma.digest.update({ where: { id: digestId }, data: { status: 'DONE' } })
+
+  // Notify the configured webhook every time a note is posted.
+  dispatchWebhook(userId, 'note.created', note).catch(() => {})
 
   return NextResponse.json(note, { status: 201 })
 })

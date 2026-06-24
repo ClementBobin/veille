@@ -65,6 +65,7 @@ export const ModelName = {
   Note: 'Note',
   PipelineEvent: 'PipelineEvent',
   ApiKey: 'ApiKey',
+  Webhook: 'Webhook',
   Config: 'Config',
   RequestLog: 'RequestLog'
 } as const
@@ -248,6 +249,22 @@ export const ApiKeyScalarFieldEnum = {
 } as const
 
 export type ApiKeyScalarFieldEnum = (typeof ApiKeyScalarFieldEnum)[keyof typeof ApiKeyScalarFieldEnum]
+
+
+export const WebhookScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  url: 'url',
+  secret: 'secret',
+  events: 'events',
+  active: 'active',
+  lastTriggeredAt: 'lastTriggeredAt',
+  lastStatus: 'lastStatus',
+  createdAt: 'createdAt'
+} as const
+
+export type WebhookScalarFieldEnum = (typeof WebhookScalarFieldEnum)[keyof typeof WebhookScalarFieldEnum]
 
 
 export const ConfigScalarFieldEnum = {

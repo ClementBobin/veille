@@ -183,6 +183,7 @@ export type UserWhereInput = {
   apiKeys?: Prisma.ApiKeyListRelationFilter
   configs?: Prisma.ConfigListRelationFilter
   requestLogs?: Prisma.RequestLogListRelationFilter
+  webhooks?: Prisma.WebhookListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -199,6 +200,7 @@ export type UserOrderByWithRelationInput = {
   apiKeys?: Prisma.ApiKeyOrderByRelationAggregateInput
   configs?: Prisma.ConfigOrderByRelationAggregateInput
   requestLogs?: Prisma.RequestLogOrderByRelationAggregateInput
+  webhooks?: Prisma.WebhookOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -218,6 +220,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   apiKeys?: Prisma.ApiKeyListRelationFilter
   configs?: Prisma.ConfigListRelationFilter
   requestLogs?: Prisma.RequestLogListRelationFilter
+  webhooks?: Prisma.WebhookListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -254,6 +257,7 @@ export type UserCreateInput = {
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -270,6 +274,7 @@ export type UserUncheckedCreateInput = {
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -286,6 +291,7 @@ export type UserUpdateInput = {
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -302,6 +308,7 @@ export type UserUncheckedUpdateInput = {
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -462,6 +469,20 @@ export type UserUpdateOneRequiredWithoutApiKeysNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApiKeysInput, Prisma.UserUpdateWithoutApiKeysInput>, Prisma.UserUncheckedUpdateWithoutApiKeysInput>
 }
 
+export type UserCreateNestedOneWithoutWebhooksInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWebhooksInput, Prisma.UserUncheckedCreateWithoutWebhooksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebhooksInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWebhooksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWebhooksInput, Prisma.UserUncheckedCreateWithoutWebhooksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebhooksInput
+  upsert?: Prisma.UserUpsertWithoutWebhooksInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWebhooksInput, Prisma.UserUpdateWithoutWebhooksInput>, Prisma.UserUncheckedUpdateWithoutWebhooksInput>
+}
+
 export type UserCreateNestedOneWithoutConfigsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutConfigsInput, Prisma.UserUncheckedCreateWithoutConfigsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutConfigsInput
@@ -505,6 +526,7 @@ export type UserCreateWithoutTagsInput = {
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTagsInput = {
@@ -520,6 +542,7 @@ export type UserUncheckedCreateWithoutTagsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTagsInput = {
@@ -551,6 +574,7 @@ export type UserUpdateWithoutTagsInput = {
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTagsInput = {
@@ -566,6 +590,7 @@ export type UserUncheckedUpdateWithoutTagsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSourcesInput = {
@@ -581,6 +606,7 @@ export type UserCreateWithoutSourcesInput = {
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSourcesInput = {
@@ -596,6 +622,7 @@ export type UserUncheckedCreateWithoutSourcesInput = {
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSourcesInput = {
@@ -627,6 +654,7 @@ export type UserUpdateWithoutSourcesInput = {
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSourcesInput = {
@@ -642,6 +670,7 @@ export type UserUncheckedUpdateWithoutSourcesInput = {
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFeedItemsInput = {
@@ -657,6 +686,7 @@ export type UserCreateWithoutFeedItemsInput = {
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFeedItemsInput = {
@@ -672,6 +702,7 @@ export type UserUncheckedCreateWithoutFeedItemsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFeedItemsInput = {
@@ -703,6 +734,7 @@ export type UserUpdateWithoutFeedItemsInput = {
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFeedItemsInput = {
@@ -718,6 +750,7 @@ export type UserUncheckedUpdateWithoutFeedItemsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDigestsInput = {
@@ -733,6 +766,7 @@ export type UserCreateWithoutDigestsInput = {
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDigestsInput = {
@@ -748,6 +782,7 @@ export type UserUncheckedCreateWithoutDigestsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDigestsInput = {
@@ -779,6 +814,7 @@ export type UserUpdateWithoutDigestsInput = {
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDigestsInput = {
@@ -794,6 +830,7 @@ export type UserUncheckedUpdateWithoutDigestsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotesInput = {
@@ -809,6 +846,7 @@ export type UserCreateWithoutNotesInput = {
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotesInput = {
@@ -824,6 +862,7 @@ export type UserUncheckedCreateWithoutNotesInput = {
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotesInput = {
@@ -855,6 +894,7 @@ export type UserUpdateWithoutNotesInput = {
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotesInput = {
@@ -870,6 +910,7 @@ export type UserUncheckedUpdateWithoutNotesInput = {
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPipelineEventsInput = {
@@ -885,6 +926,7 @@ export type UserCreateWithoutPipelineEventsInput = {
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPipelineEventsInput = {
@@ -900,6 +942,7 @@ export type UserUncheckedCreateWithoutPipelineEventsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPipelineEventsInput = {
@@ -931,6 +974,7 @@ export type UserUpdateWithoutPipelineEventsInput = {
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPipelineEventsInput = {
@@ -946,6 +990,7 @@ export type UserUncheckedUpdateWithoutPipelineEventsInput = {
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutApiKeysInput = {
@@ -961,6 +1006,7 @@ export type UserCreateWithoutApiKeysInput = {
   pipelineEvents?: Prisma.PipelineEventCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutApiKeysInput = {
@@ -976,6 +1022,7 @@ export type UserUncheckedCreateWithoutApiKeysInput = {
   pipelineEvents?: Prisma.PipelineEventUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -1007,6 +1054,7 @@ export type UserUpdateWithoutApiKeysInput = {
   pipelineEvents?: Prisma.PipelineEventUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApiKeysInput = {
@@ -1020,6 +1068,87 @@ export type UserUncheckedUpdateWithoutApiKeysInput = {
   digests?: Prisma.DigestUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   pipelineEvents?: Prisma.PipelineEventUncheckedUpdateManyWithoutUserNestedInput
+  configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
+  requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutWebhooksInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  createdAt?: Date | string
+  tags?: Prisma.TagCreateNestedManyWithoutUserInput
+  sources?: Prisma.SourceCreateNestedManyWithoutUserInput
+  feedItems?: Prisma.FeedItemCreateNestedManyWithoutUserInput
+  digests?: Prisma.DigestCreateNestedManyWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  pipelineEvents?: Prisma.PipelineEventCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
+  requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutWebhooksInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  createdAt?: Date | string
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutUserInput
+  sources?: Prisma.SourceUncheckedCreateNestedManyWithoutUserInput
+  feedItems?: Prisma.FeedItemUncheckedCreateNestedManyWithoutUserInput
+  digests?: Prisma.DigestUncheckedCreateNestedManyWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  pipelineEvents?: Prisma.PipelineEventUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
+  requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutWebhooksInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWebhooksInput, Prisma.UserUncheckedCreateWithoutWebhooksInput>
+}
+
+export type UserUpsertWithoutWebhooksInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWebhooksInput, Prisma.UserUncheckedUpdateWithoutWebhooksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWebhooksInput, Prisma.UserUncheckedCreateWithoutWebhooksInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWebhooksInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWebhooksInput, Prisma.UserUncheckedUpdateWithoutWebhooksInput>
+}
+
+export type UserUpdateWithoutWebhooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TagUpdateManyWithoutUserNestedInput
+  sources?: Prisma.SourceUpdateManyWithoutUserNestedInput
+  feedItems?: Prisma.FeedItemUpdateManyWithoutUserNestedInput
+  digests?: Prisma.DigestUpdateManyWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  pipelineEvents?: Prisma.PipelineEventUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
+  requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWebhooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TagUncheckedUpdateManyWithoutUserNestedInput
+  sources?: Prisma.SourceUncheckedUpdateManyWithoutUserNestedInput
+  feedItems?: Prisma.FeedItemUncheckedUpdateManyWithoutUserNestedInput
+  digests?: Prisma.DigestUncheckedUpdateManyWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  pipelineEvents?: Prisma.PipelineEventUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1037,6 +1166,7 @@ export type UserCreateWithoutConfigsInput = {
   pipelineEvents?: Prisma.PipelineEventCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConfigsInput = {
@@ -1052,6 +1182,7 @@ export type UserUncheckedCreateWithoutConfigsInput = {
   pipelineEvents?: Prisma.PipelineEventUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   requestLogs?: Prisma.RequestLogUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConfigsInput = {
@@ -1083,6 +1214,7 @@ export type UserUpdateWithoutConfigsInput = {
   pipelineEvents?: Prisma.PipelineEventUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConfigsInput = {
@@ -1098,6 +1230,7 @@ export type UserUncheckedUpdateWithoutConfigsInput = {
   pipelineEvents?: Prisma.PipelineEventUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   requestLogs?: Prisma.RequestLogUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRequestLogsInput = {
@@ -1113,6 +1246,7 @@ export type UserCreateWithoutRequestLogsInput = {
   pipelineEvents?: Prisma.PipelineEventCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRequestLogsInput = {
@@ -1128,6 +1262,7 @@ export type UserUncheckedCreateWithoutRequestLogsInput = {
   pipelineEvents?: Prisma.PipelineEventUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
   configs?: Prisma.ConfigUncheckedCreateNestedManyWithoutUserInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRequestLogsInput = {
@@ -1159,6 +1294,7 @@ export type UserUpdateWithoutRequestLogsInput = {
   pipelineEvents?: Prisma.PipelineEventUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRequestLogsInput = {
@@ -1174,6 +1310,7 @@ export type UserUncheckedUpdateWithoutRequestLogsInput = {
   pipelineEvents?: Prisma.PipelineEventUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
   configs?: Prisma.ConfigUncheckedUpdateManyWithoutUserNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1191,6 +1328,7 @@ export type UserCountOutputType = {
   apiKeys: number
   configs: number
   requestLogs: number
+  webhooks: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1203,6 +1341,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   apiKeys?: boolean | UserCountOutputTypeCountApiKeysArgs
   configs?: boolean | UserCountOutputTypeCountConfigsArgs
   requestLogs?: boolean | UserCountOutputTypeCountRequestLogsArgs
+  webhooks?: boolean | UserCountOutputTypeCountWebhooksArgs
 }
 
 /**
@@ -1278,6 +1417,13 @@ export type UserCountOutputTypeCountRequestLogsArgs<ExtArgs extends runtime.Type
   where?: Prisma.RequestLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWebhooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WebhookWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1293,6 +1439,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   apiKeys?: boolean | Prisma.User$apiKeysArgs<ExtArgs>
   configs?: boolean | Prisma.User$configsArgs<ExtArgs>
   requestLogs?: boolean | Prisma.User$requestLogsArgs<ExtArgs>
+  webhooks?: boolean | Prisma.User$webhooksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1328,6 +1475,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   apiKeys?: boolean | Prisma.User$apiKeysArgs<ExtArgs>
   configs?: boolean | Prisma.User$configsArgs<ExtArgs>
   requestLogs?: boolean | Prisma.User$requestLogsArgs<ExtArgs>
+  webhooks?: boolean | Prisma.User$webhooksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1345,6 +1493,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
     configs: Prisma.$ConfigPayload<ExtArgs>[]
     requestLogs: Prisma.$RequestLogPayload<ExtArgs>[]
+    webhooks: Prisma.$WebhookPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1754,6 +1903,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   apiKeys<T extends Prisma.User$apiKeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   configs<T extends Prisma.User$configsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$configsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requestLogs<T extends Prisma.User$requestLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  webhooks<T extends Prisma.User$webhooksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$webhooksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2393,6 +2543,30 @@ export type User$requestLogsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.RequestLogScalarFieldEnum | Prisma.RequestLogScalarFieldEnum[]
+}
+
+/**
+ * User.webhooks
+ */
+export type User$webhooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Webhook
+   */
+  select?: Prisma.WebhookSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Webhook
+   */
+  omit?: Prisma.WebhookOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookInclude<ExtArgs> | null
+  where?: Prisma.WebhookWhereInput
+  orderBy?: Prisma.WebhookOrderByWithRelationInput | Prisma.WebhookOrderByWithRelationInput[]
+  cursor?: Prisma.WebhookWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WebhookScalarFieldEnum | Prisma.WebhookScalarFieldEnum[]
 }
 
 /**

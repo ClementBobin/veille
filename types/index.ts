@@ -53,11 +53,3 @@ export type Log = {
 }
 
 export type LogsResponse = { logs: Log[]; total: number; page: number; pages: number; limit: number }
-
-export type WebhookDeliveryResult = {
-  webhookId: string
-  name: string
-  ok: boolean
-  status?: number
-  error?: string
-}
