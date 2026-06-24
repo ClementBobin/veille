@@ -4,12 +4,14 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { N8nPipelineCard } from '@/components/config/n8n-pipeline-card'
+import { WebhooksCard } from '@/components/config/webhooks-card'
 import { CleanupCard } from '@/components/config/cleanup-card'
 import { ExportImportCard } from '@/components/config/export-import-card'
 import { ApiKeysCard } from '@/components/config/api-keys-card'
 import { AccountCard } from '@/components/config/account-card'
 import { DeleteAccountDialog } from '@/components/config/delete-account-dialog'
-import type { ApiKey, Config, CleanupInfo, ImportResult } from '@/types'
+import { CleanupMode, type CleanupInfo, type CleanupResult } from '@/types/cleanup'
+import { type ApiKey, type Config, type ImportResult } from '@/types'
 
 export default function ConfigPage() {
   const router = useRouter()
@@ -29,7 +31,7 @@ export default function ConfigPage() {
   // Cleanup state
   const [cleanupInfo, setCleanupInfo] = useState<CleanupInfo | null>(null)
   const [cleanupLoading, setCleanupLoading] = useState(false)
-  const [cleanupResult, setCleanupResult] = useState<{ deleted: number; cutoff: string } | null>(null)
+  const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null)
 
   // Export / Import state
   const [importing, setImporting] = useState(false)
@@ -102,19 +104,45 @@ export default function ConfigPage() {
     toast.success('API key revoked')
   }
 
-  async function runCleanup(dryRun: boolean) {
+  // Updated cleanup function using enum
+  async function runCleanup(mode: CleanupMode) {
     setCleanupLoading(true)
     setCleanupResult(null)
-    const res = await fetch(`/api/system/cleanup${dryRun ? '?dryRun=true' : ''}`, { method: dryRun ? 'GET' : 'DELETE' })
+
+    const isDryRun = mode === CleanupMode.DRY_RUN || mode === CleanupMode.DRY_RUN_FORCED
+    const isForced = mode === CleanupMode.FORCED || mode === CleanupMode.DRY_RUN_FORCED
+    
+    const params = new URLSearchParams()
+    if (isDryRun) params.set('dryRun', 'true')
+    if (isForced) params.set('forced', 'true')
+    
+    const queryString = params.toString()
+    const url = `/api/system/cleanup${queryString ? `?${queryString}` : ''}`
+    
+    const res = await fetch(url, { method: isDryRun ? 'GET' : 'DELETE' })
     const data = await res.json()
-    if (!dryRun) {
-      setCleanupResult({ deleted: data.deleted, cutoff: data.cutoff })
-      toast.success(`${data.deleted} article(s) deleted`)
+
+    if (isDryRun) {
+      // Dry run result
+      setCleanupResult({
+        ...data,
+        dryRun: true,
+        mode,
+      })
+      toast.info(`Preview: ${data.count} articles would be deleted`)
+    } else {
+      // Actual cleanup result
+      setCleanupResult({
+        ...data,
+        dryRun: false,
+        mode,
+      })
+      toast.success(`${data.deleted} article(s) deleted (${mode})`)
+      // Refresh cleanup info
       const cl: CleanupInfo = await fetch('/api/system/cleanup').then(r => r.json())
       setCleanupInfo(cl)
-    } else {
-      setCleanupInfo(prev => (prev ? { ...prev, eligibleForCleanup: data.count } : prev))
     }
+    
     setCleanupLoading(false)
   }
 
@@ -176,6 +204,8 @@ export default function ConfigPage() {
           saved={configSaved}
           onSave={saveConfig}
         />
+
+        <WebhooksCard />
 
         <CleanupCard
           info={cleanupInfo}

@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
+import { BulkActionBar } from '@/components/ui/bulk-action-bar'
 import {
   Pagination,
   PaginationContent,
@@ -29,6 +30,8 @@ export default function TagsPage() {
   const [editForm, setEditForm] = useState<Partial<Tag>>({})
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [bulkBusy, setBulkBusy] = useState(false)
 
   useEffect(() => {
     fetch('/api/tags').then((r) => r.json()).then(setTags).finally(() => setLoading(false))
@@ -47,8 +50,12 @@ export default function TagsPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
     })
-    const t = await res.json()
-    setTags([...tags, t])
+    const data = await res.json()
+    if (!res.ok) {
+      toast.error(data.error ?? 'Failed to create tag')
+      return
+    }
+    setTags([...tags, data])
     setForm(EMPTY_FORM)
     setShowForm(false)
     toast.success('Tag created')
@@ -67,15 +74,67 @@ export default function TagsPage() {
       body: JSON.stringify(editForm),
     })
     const updated = await res.json()
+    if (!res.ok) {
+      toast.error(updated.error ?? 'Failed to update tag')
+      return
+    }
     setTags((prev) => prev.map((x) => (x.id === editId ? updated : x)))
     setEditId(null)
     toast.success('Tag updated')
   }
 
+  const toggleActive = async (t: Tag) => {
+    const res = await fetch(`/api/tags/${t.id}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ active: !t.active }),
+    })
+    if (!res.ok) {
+      toast.error('Failed to update tag')
+      return
+    }
+    setTags((prev) => prev.map((x) => (x.id === t.id ? { ...x, active: !x.active } : x)))
+  }
+
   const remove = async (id: string) => {
     await fetch(`/api/tags/${id}`, { method: 'DELETE' })
     setTags(tags.filter((t) => t.id !== id))
+    setSelected((prev) => {
+      const next = new Set(prev)
+      next.delete(id)
+      return next
+    })
     toast.success('Tag deleted')
+  }
+
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const bulkSetActive = async (active: boolean) => {
+    if (selected.size === 0) return
+    setBulkBusy(true)
+    try {
+      const ids = Array.from(selected)
+      const res = await fetch('/api/tags/bulk', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids, active }),
+      })
+      if (!res.ok) {
+        toast.error('Bulk update failed')
+        return
+      }
+      setTags((prev) => prev.map((t) => (selected.has(t.id) ? { ...t, active } : t)))
+      toast.success(`${ids.length} tag(s) ${active ? 'enabled' : 'disabled'}`)
+      setSelected(new Set())
+    } finally {
+      setBulkBusy(false)
+    }
   }
 
   return (
@@ -93,6 +152,14 @@ export default function TagsPage() {
       {showForm && (
         <TagForm form={form} onFormChange={setForm} onSave={add} onCancel={() => setShowForm(false)} />
       )}
+
+      <BulkActionBar
+        count={selected.size}
+        busy={bulkBusy}
+        onEnable={() => bulkSetActive(true)}
+        onDisable={() => bulkSetActive(false)}
+        onClear={() => setSelected(new Set())}
+      />
 
       {loading ? (
         <div className="grid grid-cols-2 gap-3">
@@ -121,7 +188,15 @@ export default function TagsPage() {
                   onCancel={() => setEditId(null)}
                 />
               ) : (
-                <TagCard key={tag.id} tag={tag} onEdit={() => startEdit(tag)} onRemove={() => remove(tag.id)} />
+                <TagCard
+                  key={tag.id}
+                  tag={tag}
+                  selected={selected.has(tag.id)}
+                  onToggleSelect={() => toggleSelect(tag.id)}
+                  onToggleActive={() => toggleActive(tag)}
+                  onEdit={() => startEdit(tag)}
+                  onRemove={() => remove(tag.id)}
+                />
               )
             )}
           </div>

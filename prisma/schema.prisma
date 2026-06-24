@@ -22,6 +22,7 @@ model User {
   apiKeys        ApiKey[]
   configs        Config[]
   requestLogs    RequestLog[]
+  webhooks       Webhook[]
 }
 
 model Tag {
@@ -30,6 +31,7 @@ model Tag {
   name        String
   color       String   @default("#6366f1")
   description String?
+  active      Boolean  @default(true)
   createdAt   DateTime @default(now())
 
   user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -207,6 +209,21 @@ model ApiKey {
   keyHash   String    @unique
   lastUsed  DateTime?
   createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Webhook {
+  id              String    @id @default(cuid())
+  userId          String
+  name            String
+  url             String
+  secret          String?
+  events          String    @default("pipeline-event,note.created")
+  active          Boolean   @default(true)
+  lastTriggeredAt DateTime?
+  lastStatus      String?
+  createdAt       DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -20,6 +20,12 @@ export const POST = withLog(async (req: NextRequest) => {
   const body = await req.json()
   const { name, color, description } = body
   if (!name) return NextResponse.json({ error: 'name required' }, { status: 400 })
+
+  const existing = await prisma.tag.findFirst({
+    where: { userId, name: { equals: name, mode: 'insensitive' } },
+  })
+  if (existing) return NextResponse.json({ error: 'A tag with this name already exists' }, { status: 409 })
+
   const tag = await prisma.tag.create({ data: { name, color: color ?? '#6366f1', description, userId } })
   return NextResponse.json(tag, { status: 201 })
 })

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
 import { withLog } from '@/lib/with-log'
 import { getUserConfig } from '@/lib/user-config'
+import { dispatchWebhook } from '@/lib/webhook'
 
 export const GET = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
@@ -23,6 +24,9 @@ export const POST = withLog(async (req: NextRequest) => {
 
   const event = await prisma.pipelineEvent.create({ data: { workflow, status, message, runId, branch, userId } })
 
+  // Fire the user's configured webhook for every pipeline-event (best-effort, never blocks the response).
+  dispatchWebhook(userId, 'pipeline-event', event).catch(() => {})
+
   if (workflow === 'WF1' && status === 'branch-done' && runId) {
     const alreadyTriggered = await prisma.pipelineEvent.findFirst({
       where: { workflow: 'WF1', status: 'done', runId, userId },
@@ -35,9 +39,10 @@ export const POST = withLog(async (req: NextRequest) => {
         })
         if (!stillPending) {
           const { n8nBaseUrl, n8nWebhookPath } = await getUserConfig(capturedUserId)
-          await prisma.pipelineEvent.create({
+          const doneEvent = await prisma.pipelineEvent.create({
             data: { workflow: 'WF1', status: 'done', message: 'Collecte terminée', runId, userId: capturedUserId },
           })
+          dispatchWebhook(capturedUserId, 'pipeline-event', doneEvent).catch(() => {})
           await fetch(`${n8nBaseUrl}/${n8nWebhookPath}/start-wf2`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

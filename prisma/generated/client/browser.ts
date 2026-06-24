@@ -88,6 +88,11 @@ export type PipelineEvent = Prisma.PipelineEventModel
  */
 export type ApiKey = Prisma.ApiKeyModel
 /**
+ * Model Webhook
+ * 
+ */
+export type Webhook = Prisma.WebhookModel
+/**
  * Model Config
  * 
  */

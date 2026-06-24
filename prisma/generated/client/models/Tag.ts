@@ -30,6 +30,7 @@ export type TagMinAggregateOutputType = {
   name: string | null
   color: string | null
   description: string | null
+  active: boolean | null
   createdAt: Date | null
 }
 
@@ -39,6 +40,7 @@ export type TagMaxAggregateOutputType = {
   name: string | null
   color: string | null
   description: string | null
+  active: boolean | null
   createdAt: Date | null
 }
 
@@ -48,6 +50,7 @@ export type TagCountAggregateOutputType = {
   name: number
   color: number
   description: number
+  active: number
   createdAt: number
   _all: number
 }
@@ -59,6 +62,7 @@ export type TagMinAggregateInputType = {
   name?: true
   color?: true
   description?: true
+  active?: true
   createdAt?: true
 }
 
@@ -68,6 +72,7 @@ export type TagMaxAggregateInputType = {
   name?: true
   color?: true
   description?: true
+  active?: true
   createdAt?: true
 }
 
@@ -77,6 +82,7 @@ export type TagCountAggregateInputType = {
   name?: true
   color?: true
   description?: true
+  active?: true
   createdAt?: true
   _all?: true
 }
@@ -159,6 +165,7 @@ export type TagGroupByOutputType = {
   name: string
   color: string
   description: string | null
+  active: boolean
   createdAt: Date
   _count: TagCountAggregateOutputType | null
   _min: TagMinAggregateOutputType | null
@@ -189,6 +196,7 @@ export type TagWhereInput = {
   name?: Prisma.StringFilter<"Tag"> | string
   color?: Prisma.StringFilter<"Tag"> | string
   description?: Prisma.StringNullableFilter<"Tag"> | string | null
+  active?: Prisma.BoolFilter<"Tag"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   feedItems?: Prisma.FeedItemTagListRelationFilter
@@ -201,6 +209,7 @@ export type TagOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   feedItems?: Prisma.FeedItemTagOrderByRelationAggregateInput
@@ -217,6 +226,7 @@ export type TagWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Tag"> | string
   color?: Prisma.StringFilter<"Tag"> | string
   description?: Prisma.StringNullableFilter<"Tag"> | string | null
+  active?: Prisma.BoolFilter<"Tag"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   feedItems?: Prisma.FeedItemTagListRelationFilter
@@ -229,6 +239,7 @@ export type TagOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TagCountOrderByAggregateInput
   _max?: Prisma.TagMaxOrderByAggregateInput
@@ -244,6 +255,7 @@ export type TagScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Tag"> | string
   color?: Prisma.StringWithAggregatesFilter<"Tag"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Tag"> | string | null
+  active?: Prisma.BoolWithAggregatesFilter<"Tag"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tag"> | Date | string
 }
 
@@ -252,6 +264,7 @@ export type TagCreateInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTagsInput
   feedItems?: Prisma.FeedItemTagCreateNestedManyWithoutTagInput
@@ -264,6 +277,7 @@ export type TagUncheckedCreateInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   feedItems?: Prisma.FeedItemTagUncheckedCreateNestedManyWithoutTagInput
   digestTags?: Prisma.DigestTagUncheckedCreateNestedManyWithoutTagInput
@@ -274,6 +288,7 @@ export type TagUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTagsNestedInput
   feedItems?: Prisma.FeedItemTagUpdateManyWithoutTagNestedInput
@@ -286,6 +301,7 @@ export type TagUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   feedItems?: Prisma.FeedItemTagUncheckedUpdateManyWithoutTagNestedInput
   digestTags?: Prisma.DigestTagUncheckedUpdateManyWithoutTagNestedInput
@@ -297,6 +313,7 @@ export type TagCreateManyInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
 }
 
@@ -305,6 +322,7 @@ export type TagUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -314,6 +332,7 @@ export type TagUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -338,6 +357,7 @@ export type TagCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -347,6 +367,7 @@ export type TagMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -356,6 +377,7 @@ export type TagMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -410,6 +432,10 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type TagCreateNestedOneWithoutFeedItemsInput = {
   create?: Prisma.XOR<Prisma.TagCreateWithoutFeedItemsInput, Prisma.TagUncheckedCreateWithoutFeedItemsInput>
   connectOrCreate?: Prisma.TagCreateOrConnectWithoutFeedItemsInput
@@ -443,6 +469,7 @@ export type TagCreateWithoutUserInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   feedItems?: Prisma.FeedItemTagCreateNestedManyWithoutTagInput
   digestTags?: Prisma.DigestTagCreateNestedManyWithoutTagInput
@@ -453,6 +480,7 @@ export type TagUncheckedCreateWithoutUserInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   feedItems?: Prisma.FeedItemTagUncheckedCreateNestedManyWithoutTagInput
   digestTags?: Prisma.DigestTagUncheckedCreateNestedManyWithoutTagInput
@@ -493,6 +521,7 @@ export type TagScalarWhereInput = {
   name?: Prisma.StringFilter<"Tag"> | string
   color?: Prisma.StringFilter<"Tag"> | string
   description?: Prisma.StringNullableFilter<"Tag"> | string | null
+  active?: Prisma.BoolFilter<"Tag"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
 }
 
@@ -501,6 +530,7 @@ export type TagCreateWithoutFeedItemsInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTagsInput
   digestTags?: Prisma.DigestTagCreateNestedManyWithoutTagInput
@@ -512,6 +542,7 @@ export type TagUncheckedCreateWithoutFeedItemsInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   digestTags?: Prisma.DigestTagUncheckedCreateNestedManyWithoutTagInput
 }
@@ -537,6 +568,7 @@ export type TagUpdateWithoutFeedItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTagsNestedInput
   digestTags?: Prisma.DigestTagUpdateManyWithoutTagNestedInput
@@ -548,6 +580,7 @@ export type TagUncheckedUpdateWithoutFeedItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   digestTags?: Prisma.DigestTagUncheckedUpdateManyWithoutTagNestedInput
 }
@@ -557,6 +590,7 @@ export type TagCreateWithoutDigestTagsInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTagsInput
   feedItems?: Prisma.FeedItemTagCreateNestedManyWithoutTagInput
@@ -568,6 +602,7 @@ export type TagUncheckedCreateWithoutDigestTagsInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
   feedItems?: Prisma.FeedItemTagUncheckedCreateNestedManyWithoutTagInput
 }
@@ -593,6 +628,7 @@ export type TagUpdateWithoutDigestTagsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTagsNestedInput
   feedItems?: Prisma.FeedItemTagUpdateManyWithoutTagNestedInput
@@ -604,6 +640,7 @@ export type TagUncheckedUpdateWithoutDigestTagsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   feedItems?: Prisma.FeedItemTagUncheckedUpdateManyWithoutTagNestedInput
 }
@@ -613,6 +650,7 @@ export type TagCreateManyUserInput = {
   name: string
   color?: string
   description?: string | null
+  active?: boolean
   createdAt?: Date | string
 }
 
@@ -621,6 +659,7 @@ export type TagUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   feedItems?: Prisma.FeedItemTagUpdateManyWithoutTagNestedInput
   digestTags?: Prisma.DigestTagUpdateManyWithoutTagNestedInput
@@ -631,6 +670,7 @@ export type TagUncheckedUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   feedItems?: Prisma.FeedItemTagUncheckedUpdateManyWithoutTagNestedInput
   digestTags?: Prisma.DigestTagUncheckedUpdateManyWithoutTagNestedInput
@@ -641,6 +681,7 @@ export type TagUncheckedUpdateManyWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -690,6 +731,7 @@ export type TagSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   name?: boolean
   color?: boolean
   description?: boolean
+  active?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   feedItems?: boolean | Prisma.Tag$feedItemsArgs<ExtArgs>
@@ -703,6 +745,7 @@ export type TagSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   name?: boolean
   color?: boolean
   description?: boolean
+  active?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
@@ -713,6 +756,7 @@ export type TagSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   name?: boolean
   color?: boolean
   description?: boolean
+  active?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
@@ -723,10 +767,11 @@ export type TagSelectScalar = {
   name?: boolean
   color?: boolean
   description?: boolean
+  active?: boolean
   createdAt?: boolean
 }
 
-export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "color" | "description" | "createdAt", ExtArgs["result"]["tag"]>
+export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "color" | "description" | "active" | "createdAt", ExtArgs["result"]["tag"]>
 export type TagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   feedItems?: boolean | Prisma.Tag$feedItemsArgs<ExtArgs>
@@ -753,6 +798,7 @@ export type $TagPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     name: string
     color: string
     description: string | null
+    active: boolean
     createdAt: Date
   }, ExtArgs["result"]["tag"]>
   composites: {}
@@ -1185,6 +1231,7 @@ export interface TagFieldRefs {
   readonly name: Prisma.FieldRef<"Tag", 'String'>
   readonly color: Prisma.FieldRef<"Tag", 'String'>
   readonly description: Prisma.FieldRef<"Tag", 'String'>
+  readonly active: Prisma.FieldRef<"Tag", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Tag", 'DateTime'>
 }
     

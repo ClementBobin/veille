@@ -12,7 +12,7 @@ export const GET = withLog(async (req: NextRequest) => {
   const forN8n = searchParams.get('for_n8n') === 'true'
 
   const sources = await prisma.source.findMany({
-    where: { userId, active: true },
+    where: forN8n ? { userId, active: true } : { userId },
     orderBy: { name: 'asc' },
     include: forN8n ? { feedItems: { take: 1, select: { id: true } } } : undefined,
   })
@@ -32,6 +32,9 @@ export const POST = withLog(async (req: NextRequest) => {
   const { name, url, type, cache } = body
   if (!name || !url || !type)
     return NextResponse.json({ error: 'name, url, type required' }, { status: 400 })
+
+  const existing = await prisma.source.findFirst({ where: { userId, url } })
+  if (existing) return NextResponse.json({ error: 'A source with this URL already exists' }, { status: 409 })
 
   const source = await prisma.source.create({ data: { name, url, type, cache: cache ?? false, userId } })
   return NextResponse.json(source, { status: 201 })
