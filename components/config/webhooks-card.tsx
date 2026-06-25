@@ -88,12 +88,19 @@ export function WebhooksCard() {
   const test = async (id: string) => {
     const res = await fetch(`/api/webhooks/${id}/test`, { method: 'POST' })
     const data = await res.json()
-    if (!res.ok) {
-      toast.error(data.error ?? 'Test failed')
+    if (res.status === 404) {
+      toast.error('Webhook not found')
       return false
     }
-    toast.success('Test event sent')
-    return true
+    if (data.ok) {
+      toast.success(`Test sent — remote responded ${data.status}`)
+    } else {
+      const detail = data.error ? data.error : data.status ? `HTTP ${data.status}` : 'unknown error'
+      toast.error(`Test delivered but remote returned: ${detail}`)
+    }
+    // Refresh the webhook row so lastStatus updates
+    fetch('/api/webhooks').then(r => r.json()).then(setWebhooks)
+    return data.ok
   }
 
   const toggleSelect = (id: string) => {
