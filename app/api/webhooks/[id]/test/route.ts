@@ -10,8 +10,13 @@ export const POST = withLog(async (req: NextRequest, { params }: { params: Promi
 
   const { id } = await params
   const result = await sendTestWebhook(userId, id)
+  console.log(result)
   if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  if (!result.ok) return NextResponse.json({ ok: false, error: result.error ?? `status ${result.status}` }, { status: 502 })
-  return NextResponse.json({ ok: true })
+  // Always 200 — the result carries ok/status/error from the remote end
+  return NextResponse.json({
+    ok: result.ok,
+    status: result.status ?? null,
+    error: result.error ?? null,
+  })
 })

@@ -96,7 +96,6 @@ export function WebhookRow({ webhook, selected, onToggleSelect, onToggleActive, 
   return (
     <div className={`flex items-center gap-3 px-3 py-2.5 bg-zinc-950 rounded-lg ${webhook.active ? '' : 'opacity-60'}`}>
       <Checkbox checked={selected} onCheckedChange={() => onToggleSelect()} />
-      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${webhook.active ? 'bg-amber-500' : 'bg-zinc-600'}`} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className="text-sm text-zinc-200 font-medium">{webhook.name}</span>

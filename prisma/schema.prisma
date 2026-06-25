@@ -183,7 +183,6 @@ model Note {
   content    String
   digestId   String?
   filename   String
-  exportedTo String   @default("[]")
   createdAt  DateTime @default(now())
 
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
