@@ -122,7 +122,12 @@ export type Webhook = Prisma.WebhookModel
  */
 export type Config = Prisma.ConfigModel
 /**
- * Model RequestLog
+ * Model Log
  * 
  */
-export type RequestLog = Prisma.RequestLogModel
+export type Log = Prisma.LogModel
+/**
+ * Model Theme
+ * 
+ */
+export type Theme = Prisma.ThemeModel

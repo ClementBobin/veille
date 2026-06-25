@@ -8,7 +8,10 @@ export const GET = withLog(async (req: NextRequest) => {
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
 
-  const tags = await prisma.tag.findMany({ where: { userId }, orderBy: { name: 'asc' } })
+  const { searchParams } = new URL(req.url)
+  const actif = searchParams.get('actif') === 'true'
+
+  const tags = await prisma.tag.findMany({ where: actif ? { userId, active: true } : { userId }, orderBy: { name: 'asc' } })
   return NextResponse.json(tags)
 })
 

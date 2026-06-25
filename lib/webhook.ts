@@ -14,6 +14,8 @@ function parseEvents(events: string): string[] {
 }
 
 async function deliver(webhook: { id: string; name: string; url: string; secret: string | null }, event: string, data: unknown): Promise<WebhookDeliveryResult> {
+  const start = Date.now()
+  let result: WebhookDeliveryResult
   try {
     const payload = JSON.stringify({
       event,
@@ -34,11 +36,26 @@ async function deliver(webhook: { id: string; name: string; url: string; secret:
       signal: AbortSignal.timeout(5000),
     })
 
-    return { webhookId: webhook.id, name: webhook.name, ok: res.ok, status: res.status }
+    result = { webhookId: webhook.id, name: webhook.name, ok: res.ok, status: res.status }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown webhook error'
-    return { webhookId: webhook.id, name: webhook.name, ok: false, error: message }
+    result = { webhookId: webhook.id, name: webhook.name, ok: false, error: message }
   }
+
+  // Log webhook delivery to the shared Logs table
+  prisma.log.create({
+    data: {
+      method: 'POST',
+      path: webhook.url,
+      status: result.status ?? 0,
+      durationMs: Date.now() - start,
+      type: `webhook:${event}`,
+      error: result.error ?? null,
+      apiKeyName: webhook.name,
+    },
+  }).catch(() => {})
+
+  return result
 }
 
 /**

@@ -104,16 +104,6 @@ const TYPES: SourceTypeMeta[] = [
     urlTemplate: 'https://drive.google.com/file/d/FILE_ID/view',
     urlTemplateLabel: '📁 Template Drive',
   },
-  {
-    value: 'WEBHOOK',
-    label: 'Webhook',
-    color: 'text-rose-400 bg-rose-400/10',
-    icon: '🔗',
-    cacheSupported: false,
-    urlPlaceholder: 'https://hooks.example.com/payload',
-    urlHint: 'Endpoint appelé par un système tiers pour pousser des données',
-    urlPattern: '^https?://.+',
-  },
 ]
 
 export async function GET() {

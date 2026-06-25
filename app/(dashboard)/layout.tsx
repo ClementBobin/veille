@@ -12,6 +12,7 @@ const NAV = [
   { href: '/', label: 'Dashboard', id: 'nav-dashboard' },
   { href: '/sources', label: 'Sources', id: 'nav-sources' },
   { href: '/tags', label: 'Tags', id: 'nav-tags' },
+  { href: '/themes', label: 'Themes', id: 'nav-themes' },
   { href: '/selection', label: 'Selection', id: 'nav-selection' },
   { href: '/notes', label: 'Notes', id: 'nav-notes' },
   { href: '/logs', label: 'Logs', id: 'nav-logs' },

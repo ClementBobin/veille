@@ -16,11 +16,16 @@ export function LogDetail({ log, onClose }: LogDetailProps) {
             <span className={`font-mono font-bold text-sm ${methodColor(log.method)}`}>{log.method}</span>
             <span className="font-mono text-sm text-zinc-200">{log.path}</span>
           </div>
-          <div className="text-xs text-zinc-500">
-            {new Date(log.createdAt).toLocaleString('en', {
+          <div className="flex items-center gap-2 text-xs text-zinc-500">
+            <span>{new Date(log.createdAt).toLocaleString('en', {
               day: '2-digit', month: 'long', year: 'numeric',
               hour: '2-digit', minute: '2-digit', second: '2-digit',
-            })}
+            })}</span>
+            {log.type && log.type !== 'request' && (
+              <span className="px-1.5 py-0.5 bg-amber-500/15 text-amber-400 border border-amber-500/25 rounded font-mono text-[10px]">
+                {log.type}
+              </span>
+            )}
           </div>
         </div>
         <Button

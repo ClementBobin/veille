@@ -40,7 +40,7 @@ export function withLog<T extends AnyHandler>(handler: T): T {
       res = NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 
-    prisma.requestLog.create({
+    prisma.log.create({
       data: {
         userId,
         method: req.method,
@@ -50,6 +50,7 @@ export function withLog<T extends AnyHandler>(handler: T): T {
         authType,
         apiKeyName,
         error,
+        type: 'request',
       },
     }).catch(() => {})
 

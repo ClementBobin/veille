@@ -18,6 +18,7 @@ export default function LogsPage() {
   const [filterMethod, setFilterMethod] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [filterAuth, setFilterAuth] = useState('')
+  const [filterType, setFilterType] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -26,23 +27,24 @@ export default function LogsPage() {
     if (filterMethod) params.set('method', filterMethod)
     if (filterStatus) params.set('status', filterStatus)
     if (filterAuth) params.set('authType', filterAuth)
+    if (filterType) params.set('type', filterType)
 
     const res = await fetch(`/api/system/logs?${params}`)
     const json: LogsResponse = await res.json()
     setData(json)
     setLoading(false)
-  }, [page, debouncedPath, filterMethod, filterStatus, filterAuth])
+  }, [page, debouncedPath, filterMethod, filterStatus, filterAuth, filterType])
 
   useEffect(() => { load() }, [load])
 
   // Reset page on filter change
-  useEffect(() => { setPage(1) }, [debouncedPath, filterMethod, filterStatus, filterAuth])
+  useEffect(() => { setPage(1) }, [debouncedPath, filterMethod, filterStatus, filterAuth, filterType])
 
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">API logs</h1>
-        <p className="text-zinc-500 text-sm mt-1">Request history — web session and API keys</p>
+        <h1 className="text-2xl font-bold text-white">Logs</h1>
+        <p className="text-zinc-500 text-sm mt-1">Request history and webhook deliveries</p>
       </div>
 
       <LogFilters
@@ -54,6 +56,8 @@ export default function LogsPage() {
         onStatusChange={setFilterStatus}
         authType={filterAuth}
         onAuthTypeChange={setFilterAuth}
+        type={filterType}
+        onTypeChange={setFilterType}
         onRefresh={load}
       />
 

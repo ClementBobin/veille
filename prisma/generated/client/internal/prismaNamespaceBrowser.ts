@@ -67,7 +67,8 @@ export const ModelName = {
   ApiKey: 'ApiKey',
   Webhook: 'Webhook',
   Config: 'Config',
-  RequestLog: 'RequestLog'
+  Log: 'Log',
+  Theme: 'Theme'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -278,7 +279,7 @@ export const ConfigScalarFieldEnum = {
 export type ConfigScalarFieldEnum = (typeof ConfigScalarFieldEnum)[keyof typeof ConfigScalarFieldEnum]
 
 
-export const RequestLogScalarFieldEnum = {
+export const LogScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   method: 'method',
@@ -288,10 +289,26 @@ export const RequestLogScalarFieldEnum = {
   authType: 'authType',
   apiKeyName: 'apiKeyName',
   error: 'error',
+  type: 'type',
   createdAt: 'createdAt'
 } as const
 
-export type RequestLogScalarFieldEnum = (typeof RequestLogScalarFieldEnum)[keyof typeof RequestLogScalarFieldEnum]
+export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
+
+
+export const ThemeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  tags: 'tags',
+  active: 'active',
+  validationCriteria: 'validationCriteria',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ThemeScalarFieldEnum = (typeof ThemeScalarFieldEnum)[keyof typeof ThemeScalarFieldEnum]
 
 
 export const SortOrder = {
