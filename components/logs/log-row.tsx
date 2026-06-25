@@ -19,6 +19,17 @@ export function LogRow({ log, active, onClick }: LogRowProps) {
         <div>{fmtDate(log.createdAt)}</div>
         <div>{fmtTime(log.createdAt)}</div>
       </TableCell>
+      <TableCell className="text-[11px]">
+        {log.type?.startsWith('webhook:') ? (
+          <span className="px-1.5 py-0.5 bg-amber-500/15 text-amber-400 border border-amber-500/25 rounded font-mono">
+            {log.type}
+          </span>
+        ) : (
+          <span className="px-1.5 py-0.5 bg-zinc-800 text-zinc-500 border border-zinc-700 rounded font-mono">
+            {log.type ?? 'request'}
+          </span>
+        )}
+      </TableCell>
       <TableCell className={`font-mono font-bold text-[11px] ${methodColor(log.method)}`}>{log.method}</TableCell>
       <TableCell className="font-mono text-zinc-300 max-w-xs truncate" title={log.path}>{log.path}</TableCell>
       <TableCell>

@@ -20,6 +20,7 @@ export function LogTable({ data, loading, selectedLogId, onSelect, onPageChange 
         <TableHeader>
           <TableRow className="border-zinc-700 hover:bg-transparent">
             <TableHead className="text-[10px] text-zinc-600 uppercase tracking-wider">Date</TableHead>
+            <TableHead className="text-[10px] text-zinc-600 uppercase tracking-wider">Type</TableHead>
             <TableHead className="text-[10px] text-zinc-600 uppercase tracking-wider">Method</TableHead>
             <TableHead className="text-[10px] text-zinc-600 uppercase tracking-wider">Path</TableHead>
             <TableHead className="text-[10px] text-zinc-600 uppercase tracking-wider">Status</TableHead>
@@ -31,14 +32,14 @@ export function LogTable({ data, loading, selectedLogId, onSelect, onPageChange 
           {loading ? (
             Array.from({ length: 8 }).map((_, i) => (
               <TableRow key={i}>
-                <TableCell colSpan={6}>
+                <TableCell colSpan={7}>
                   <Skeleton className="h-5 w-full bg-zinc-800" />
                 </TableCell>
               </TableRow>
             ))
           ) : !data || data.logs.length === 0 ? (
             <TableRow className="hover:bg-transparent">
-              <TableCell colSpan={6}>
+              <TableCell colSpan={7}>
                 <Empty>
                   <EmptyHeader>
                     <EmptyMedia variant="icon" className="bg-transparent text-3xl">📭</EmptyMedia>

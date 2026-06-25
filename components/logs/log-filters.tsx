@@ -13,6 +13,7 @@ import {
 const METHODS = ['GET', 'POST', 'PATCH', 'DELETE']
 const AUTH_TYPES = ['session', 'apikey']
 const STATUSES = ['200', '201', '400', '401', '403', '404', '500']
+const LOG_TYPES = ['request', 'webhook:test', 'webhook:pipeline-event', 'webhook:note.created']
 
 type LogFiltersProps = {
   path: string
@@ -23,6 +24,8 @@ type LogFiltersProps = {
   onStatusChange: (v: string) => void
   authType: string
   onAuthTypeChange: (v: string) => void
+  type: string
+  onTypeChange: (v: string) => void
   onRefresh: () => void
 }
 
@@ -54,11 +57,13 @@ export function LogFilters({
   onStatusChange,
   authType,
   onAuthTypeChange,
+  type,
+  onTypeChange,
   onRefresh,
 }: LogFiltersProps) {
   return (
-    <div className="flex gap-3 mb-4 items-center">
-      <InputGroup className="flex-1">
+    <div className="flex gap-3 mb-4 items-center flex-wrap">
+      <InputGroup className="flex-1 min-w-40">
         <InputGroupAddon>
           <SearchIcon />
         </InputGroupAddon>
@@ -69,6 +74,7 @@ export function LogFilters({
         />
       </InputGroup>
 
+      <StringCombobox label="Type" options={LOG_TYPES} value={type} onChange={onTypeChange} />
       <StringCombobox label="Method" options={METHODS} value={method} onChange={onMethodChange} />
       <StringCombobox label="Status" options={STATUSES} value={status} onChange={onStatusChange} />
       <StringCombobox label="Auth" options={AUTH_TYPES} value={authType} onChange={onAuthTypeChange} />

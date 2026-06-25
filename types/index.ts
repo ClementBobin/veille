@@ -49,7 +49,19 @@ export type Log = {
   authType: string | null
   apiKeyName: string | null
   error: string | null
+  type: string
   createdAt: string
 }
 
 export type LogsResponse = { logs: Log[]; total: number; page: number; pages: number; limit: number }
+
+export type Theme = {
+  id: string
+  title: string
+  description: string | null
+  tags: string[]
+  active: boolean
+  validationCriteria: string | null
+  createdAt: string
+  updatedAt: string
+}
