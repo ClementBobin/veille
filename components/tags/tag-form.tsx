@@ -3,23 +3,15 @@ import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
-  KeyValue,
-  KeyValueList,
-  KeyValueItem,
-  KeyValueKeyInput,
-  KeyValueValueInput,
+  KeyValue, KeyValueList, KeyValueItem, KeyValueKeyInput, KeyValueValueInput,
 } from '@/components/ui/key-value'
 import {
-  ColorPicker,
-  ColorPickerTrigger,
-  ColorPickerContent,
-  ColorPickerArea,
-  ColorPickerHueSlider,
-  ColorPickerSwatch,
-  ColorPickerInput,
+  ColorPicker, ColorPickerTrigger, ColorPickerContent,
+  ColorPickerArea, ColorPickerHueSlider, ColorPickerSwatch, ColorPickerInput,
 } from '@/components/ui/color-picker'
+import { CategoryPicker, type CategoryOption } from '@/components/categories/category-picker'
 
-export type TagFormState = { name: string; color: string; description: string }
+export type TagFormState = { name: string; color: string; description: string; categories: CategoryOption[] }
 
 type TagFormProps = {
   form: TagFormState
@@ -28,9 +20,6 @@ type TagFormProps = {
   onCancel: () => void
 }
 
-// The tag's name/description pair is modeled as a single fixed KeyValue item
-// (key = name, value = description) to reuse the KeyValue component's styled
-// inputs without exposing its add/remove-row affordances.
 export function TagForm({ form, onFormChange, onSave, onCancel }: TagFormProps) {
   const kvValue = useMemo(
     () => [{ id: 'tag-fields', key: form.name, value: form.description }],
@@ -77,7 +66,15 @@ export function TagForm({ form, onFormChange, onSave, onCancel }: TagFormProps) 
         </div>
       </div>
 
-      <div className="flex gap-2 mt-4">
+      <div className="mb-4">
+        <Label className="text-xs text-zinc-500 mb-1.5 block">Categories</Label>
+        <CategoryPicker
+          value={form.categories}
+          onChange={cats => onFormChange({ ...form, categories: cats })}
+        />
+      </div>
+
+      <div className="flex gap-2">
         <Button onClick={onSave}>Save</Button>
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
       </div>

@@ -1,15 +1,10 @@
 'use client'
-
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  TagsInput,
-  TagsInputInput,
-  TagsInputItem,
-  TagsInputList,
-} from '@/components/ui/tags-input'
-import type { Theme } from '@/types'
+import { Checkbox } from '@/components/ui/checkbox'
+import { CategoryPicker, type CategoryOption } from '@/components/categories/category-picker'
 
 export type ThemeFormState = {
   title: string
@@ -17,112 +12,89 @@ export type ThemeFormState = {
   tags: string[]
   validationCriteria: string
   active: boolean
-}
-
-export const EMPTY_THEME_FORM: ThemeFormState = {
-  title: '',
-  description: '',
-  tags: [],
-  validationCriteria: '',
-  active: true,
+  categories: CategoryOption[]
 }
 
 type ThemeFormProps = {
   form: ThemeFormState
-  onFormChange: (form: ThemeFormState) => void
+  onFormChange: (f: ThemeFormState) => void
   onSave: () => void
   onCancel: () => void
-  submitLabel?: string
 }
 
-export function ThemeForm({ form, onFormChange, onSave, onCancel, submitLabel = 'Save' }: ThemeFormProps) {
+export function ThemeForm({ form, onFormChange, onSave, onCancel }: ThemeFormProps) {
+  const [tagInput, setTagInput] = useState('')
+
+  const addTag = () => {
+    const t = tagInput.trim()
+    if (t && !form.tags.includes(t)) {
+      onFormChange({ ...form, tags: [...form.tags, t] })
+    }
+    setTagInput('')
+  }
+
+  const removeTag = (t: string) => onFormChange({ ...form, tags: form.tags.filter(x => x !== t) })
+
   return (
     <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-5 mb-5 space-y-4">
       <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-1.5">
-          <Label className="text-xs text-zinc-400">Title *</Label>
-          <Input
-            value={form.title}
-            onChange={e => onFormChange({ ...form, title: e.target.value })}
-            placeholder="e.g. Artificial Intelligence"
-          />
+        <div>
+          <Label className="text-xs text-zinc-500 mb-1.5 block">Title *</Label>
+          <Input value={form.title} onChange={e => onFormChange({ ...form, title: e.target.value })} placeholder="e.g. AI & Machine Learning" />
         </div>
-        <div className="space-y-1.5">
-          <Label className="text-xs text-zinc-400">Description</Label>
-          <Input
-            value={form.description}
-            onChange={e => onFormChange({ ...form, description: e.target.value })}
-            placeholder="Brief description of this theme"
-          />
+        <div>
+          <Label className="text-xs text-zinc-500 mb-1.5 block">Description</Label>
+          <Input value={form.description} onChange={e => onFormChange({ ...form, description: e.target.value })} placeholder="Short description" />
         </div>
       </div>
 
-      <div className="space-y-1.5">
-        <Label className="text-xs text-zinc-400">
-          Tags <span className="text-zinc-600">(press Enter to add)</span>
-        </Label>
-        <TagsInput
-          value={form.tags}
-          onValueChange={tags => onFormChange({ ...form, tags })}
-          className="w-full"
-        >
-          <TagsInputList className="min-h-9 rounded-md border border-zinc-700 bg-zinc-950 px-3 py-1.5 flex-wrap gap-1.5">
-            {form.tags.map(tag => (
-              <TagsInputItem
-                key={tag}
-                value={tag}
-                className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded px-1.5 py-0.5 text-xs"
-              >
-                {tag}
-              </TagsInputItem>
-            ))}
-            <TagsInputInput
-              placeholder="Add tag…"
-              className="text-sm flex-1 min-w-24 bg-transparent border-none outline-none text-zinc-200 placeholder:text-zinc-600"
-            />
-          </TagsInputList>
-        </TagsInput>
-      </div>
-
-      <div className="space-y-1.5">
-        <Label className="text-xs text-zinc-400">
-          Validation criteria <span className="text-zinc-600">(LLM prompt hint for article selection)</span>
-        </Label>
-        <textarea
+      <div>
+        <Label className="text-xs text-zinc-500 mb-1.5 block">Validation criteria</Label>
+        <Input
           value={form.validationCriteria}
           onChange={e => onFormChange({ ...form, validationCriteria: e.target.value })}
-          placeholder="e.g. Include articles about breakthroughs, research papers, or product launches in AI/ML. Exclude opinion pieces and tutorials."
-          rows={3}
-          className="w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+          placeholder="Criteria the LLM uses to judge relevance"
         />
       </div>
 
-      <div className="flex items-center gap-3">
-        <label className="flex items-center gap-2 cursor-pointer text-xs text-zinc-400">
-          <input
-            type="checkbox"
-            checked={form.active}
-            onChange={e => onFormChange({ ...form, active: e.target.checked })}
-            className="rounded border-zinc-600"
+      <div>
+        <Label className="text-xs text-zinc-500 mb-1.5 block">Keywords / tags</Label>
+        <div className="flex gap-2 mb-2">
+          <Input
+            value={tagInput}
+            onChange={e => setTagInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag() } }}
+            placeholder="Add keyword and press Enter"
+            className="flex-1 h-8 text-xs"
           />
-          Active
-        </label>
+          <Button size="sm" variant="outline" onClick={addTag} disabled={!tagInput.trim()}>Add</Button>
+        </div>
+        {form.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {form.tags.map(t => (
+              <span key={t} className="inline-flex items-center gap-1 text-[11px] bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 rounded-full px-2 py-0.5">
+                {t}
+                <button type="button" onClick={() => removeTag(t)} className="opacity-60 hover:opacity-100">×</button>
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
+      <div>
+        <Label className="text-xs text-zinc-500 mb-1.5 block">Categories</Label>
+        <CategoryPicker value={form.categories} onChange={cats => onFormChange({ ...form, categories: cats })} />
+      </div>
+
+      <Label className="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer select-none">
+        <Checkbox checked={form.active} onCheckedChange={v => onFormChange({ ...form, active: !!v })} />
+        Active — used by the categorization pipeline
+      </Label>
+
       <div className="flex gap-2 pt-1">
-        <Button onClick={onSave} disabled={!form.title}>{submitLabel}</Button>
+        <Button onClick={onSave} disabled={!form.title.trim()}>Save</Button>
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
       </div>
     </div>
   )
-}
-
-export function themeToForm(theme: Theme): ThemeFormState {
-  return {
-    title: theme.title,
-    description: theme.description ?? '',
-    tags: theme.tags,
-    validationCriteria: theme.validationCriteria ?? '',
-    active: theme.active,
-  }
 }

@@ -3,6 +3,7 @@ export type Config = {
   N8N_BASE_URL?: string
   N8N_WEBHOOK_PATH?: string
   RETENTION_DAYS?: string
+  THEME?: string
 }
 export type Webhook = {
   id: string
@@ -14,9 +15,41 @@ export type Webhook = {
   lastStatus: string | null
   createdAt: string
 }
+
+export type Theme = {
+  id: string
+  userId: string
+  title: string
+  description: string | null
+  tags: string // JSON array string
+  active: boolean
+  validationCriteria: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export type WebhookLog = {
+  id: string
+  event: string
+  ok: boolean
+  status: number | null
+  error: string | null
+  isTest: boolean
+  durationMs: number | null
+  createdAt: string
+}
 export type CleanupInfo = { cutoff: string; eligibleForCleanup: number; retentionDays: number }
-export type ImportResult = { ok: boolean; imported: Record<string, number> } | null
+export type EntityStats = { created: number; updated: number; skipped: number }
+export type ImportResult = { ok: boolean; imported: Record<string, EntityStats>; totals: Record<string, number> } | null
 export type Tag = { id: string; name: string; color: string; description?: string; active: boolean }
+export type Category = {
+  id: string
+  name: string
+  description: string | null
+  color: string
+  createdAt: string
+  updatedAt: string
+}
 export type Source = {
   id: string
   name: string
@@ -49,19 +82,7 @@ export type Log = {
   authType: string | null
   apiKeyName: string | null
   error: string | null
-  type: string
   createdAt: string
 }
 
 export type LogsResponse = { logs: Log[]; total: number; page: number; pages: number; limit: number }
-
-export type Theme = {
-  id: string
-  title: string
-  description: string | null
-  tags: string[]
-  active: boolean
-  validationCriteria: string | null
-  createdAt: string
-  updatedAt: string
-}

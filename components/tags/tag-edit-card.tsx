@@ -1,28 +1,20 @@
-'use client'
+use client'
 import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
-  KeyValue,
-  KeyValueList,
-  KeyValueItem,
-  KeyValueKeyInput,
-  KeyValueValueInput,
+  KeyValue, KeyValueList, KeyValueItem, KeyValueKeyInput, KeyValueValueInput,
 } from '@/components/ui/key-value'
 import {
-  ColorPicker,
-  ColorPickerTrigger,
-  ColorPickerContent,
-  ColorPickerArea,
-  ColorPickerHueSlider,
-  ColorPickerSwatch,
-  ColorPickerInput,
+  ColorPicker, ColorPickerTrigger, ColorPickerContent,
+  ColorPickerArea, ColorPickerHueSlider, ColorPickerSwatch, ColorPickerInput,
 } from '@/components/ui/color-picker'
+import { CategoryPicker, type CategoryOption } from '@/components/categories/category-picker'
 import type { Tag } from '@/types'
 
 type TagEditCardProps = {
-  form: Partial<Tag>
-  onFormChange: (form: Partial<Tag>) => void
+  form: Partial<Tag> & { categories?: CategoryOption[] }
+  onFormChange: (form: Partial<Tag> & { categories?: CategoryOption[] }) => void
   onSave: () => void
   onCancel: () => void
 }
@@ -35,10 +27,7 @@ export function TagEditCard({ form, onFormChange, onSave, onCancel }: TagEditCar
   )
 
   return (
-    <div
-      style={{ borderColor: color + '55' }}
-      className="bg-zinc-900 border rounded-xl p-5 col-span-1"
-    >
+    <div style={{ borderColor: color + '55' }} className="bg-zinc-900 border rounded-xl p-5 col-span-1">
       <div className="flex items-start gap-3 mb-3">
         <KeyValue
           value={kvValue}
@@ -76,6 +65,14 @@ export function TagEditCard({ form, onFormChange, onSave, onCancel }: TagEditCar
             </ColorPickerContent>
           </ColorPicker>
         </div>
+      </div>
+
+      <div className="mb-4">
+        <Label className="text-xs text-zinc-500 mb-1.5 block">Categories</Label>
+        <CategoryPicker
+          value={form.categories ?? []}
+          onChange={cats => onFormChange({ ...form, categories: cats })}
+        />
       </div>
 
       <div className="flex gap-2">
