@@ -13,6 +13,8 @@ const NAV = [
   { href: '/sources', label: 'Sources', id: 'nav-sources' },
   { href: '/tags', label: 'Tags', id: 'nav-tags' },
   { href: '/themes', label: 'Themes', id: 'nav-themes' },
+  { href: '/categories', label: 'Categories', id: 'nav-categories' },
+  { href: '/prompts', label: 'Prompts', id: 'nav-prompts' },
   { href: '/selection', label: 'Selection', id: 'nav-selection' },
   { href: '/notes', label: 'Notes', id: 'nav-notes' },
   { href: '/logs', label: 'Logs', id: 'nav-logs' },

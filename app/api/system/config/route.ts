@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
 import { withLog } from '@/lib/with-log'
 
-const ALLOWED_KEYS = ['N8N_BASE_URL', 'N8N_WEBHOOK_PATH', 'RETENTION_DAYS'] as const
+const ALLOWED_KEYS = ['N8N_BASE_URL', 'N8N_WEBHOOK_PATH', 'RETENTION_DAYS', 'THEME'] as const
 type ConfigKey = typeof ALLOWED_KEYS[number]
 
 export const GET = withLog(async (req: NextRequest) => {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
 import { withLog } from '@/lib/with-log'
+import { dispatchWebhook } from '@/lib/webhook'
 
 export const POST = withLog(async (req: NextRequest) =>  {
   const auth = await getAuth(req)
@@ -33,6 +34,7 @@ export const POST = withLog(async (req: NextRequest) =>  {
     console.error('[WF5 trigger] Erreur :', err)
   }
 
+  dispatchWebhook(userId, 'digest.selection', { digestId, selectedSubjectIds }).catch(() => {})
   return NextResponse.json({ ok: true, selected: selectedSubjectIds.length })
 })
 

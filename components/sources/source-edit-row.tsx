@@ -7,50 +7,38 @@ import { UrlField } from './url-field'
 import { TemplatesHelper } from './templates-helper'
 import { TypeSelect } from './type-select'
 import { getMeta, validateUrl, type SourceTypeMeta } from '@/hooks/use-source-types'
+import { CategoryPicker, type CategoryOption } from '@/components/categories/category-picker'
 import type { Source } from '@/types'
 
 type SourceEditRowProps = {
   types: SourceTypeMeta[]
-  form: Partial<Source>
-  onFormChange: (form: Partial<Source>) => void
+  form: Partial<Source> & { categories?: CategoryOption[] }
+  onFormChange: (form: Partial<Source> & { categories?: CategoryOption[] }) => void
   showTemplates: boolean
   onShowTemplatesChange: (v: boolean) => void
   onSave: () => void
   onCancel: () => void
 }
 
-export function SourceEditRow({
-  types, form, onFormChange, showTemplates, onShowTemplatesChange, onSave, onCancel,
-}: SourceEditRowProps) {
+export function SourceEditRow({ types, form, onFormChange, showTemplates, onShowTemplatesChange, onSave, onCancel }: SourceEditRowProps) {
   const meta = getMeta(types, form.type ?? '')
   const urlError = validateUrl(form.url ?? '', meta)
 
   return (
     <div className="bg-zinc-900 border border-indigo-600 rounded-xl px-5 py-4 space-y-3">
       <div className="grid grid-cols-3 gap-3">
-        <Input
-          value={form.name ?? ''}
-          onChange={e => onFormChange({ ...form, name: e.target.value })}
-          placeholder="Name"
-        />
+        <Input value={form.name ?? ''} onChange={e => onFormChange({ ...form, name: e.target.value })} placeholder="Name" />
         <div className="col-span-2">
           <UrlField value={form.url ?? ''} onChange={url => onFormChange({ ...form, url })} meta={meta} />
         </div>
       </div>
       <div className="flex items-center gap-3">
         <TypeSelect
-          types={types}
-          value={form.type ?? ''}
+          types={types} value={form.type ?? ''}
           onChange={type => { onFormChange({ ...form, type, cache: false }); onShowTemplatesChange(false) }}
         />
         {!!meta?.urlTemplates?.length && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onShowTemplatesChange(!showTemplates)}
-            className="text-indigo-400 hover:text-indigo-300"
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={() => onShowTemplatesChange(!showTemplates)} className="text-indigo-400 hover:text-indigo-300">
             {showTemplates ? '▲ Close' : '▼ Templates'}
           </Button>
         )}
@@ -62,11 +50,15 @@ export function SourceEditRow({
         )}
       </div>
       {showTemplates && !!meta?.urlTemplates?.length && (
-        <TemplatesHelper
-          templates={meta.urlTemplates}
-          onSelect={url => { onFormChange({ ...form, url }); onShowTemplatesChange(false) }}
-        />
+        <TemplatesHelper templates={meta.urlTemplates} onSelect={url => { onFormChange({ ...form, url }); onShowTemplatesChange(false) }} />
       )}
+      <div>
+        <Label className="text-xs text-zinc-500 mb-1.5 block">Categories</Label>
+        <CategoryPicker
+          value={form.categories ?? []}
+          onChange={cats => onFormChange({ ...form, categories: cats })}
+        />
+      </div>
       <div className="flex gap-2">
         <Button onClick={onSave} disabled={!!urlError}>Save</Button>
         <Button variant="outline" onClick={onCancel}>Cancel</Button>

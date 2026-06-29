@@ -4,9 +4,10 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import type { Source } from '@/types'
 import type { SourceTypeMeta } from '@/hooks/use-source-types'
+import type { CategoryOption } from '@/components/categories/category-picker'
 
 type SourceRowProps = {
-  source: Source
+  source: Source & { categories?: { category: CategoryOption }[] }
   meta?: SourceTypeMeta
   selected: boolean
   onToggleSelect: () => void
@@ -17,16 +18,23 @@ type SourceRowProps = {
 }
 
 export function SourceRow({ source, meta, selected, onToggleSelect, onToggleActive, onToggleCache, onEdit, onRemove }: SourceRowProps) {
+  const cats = source.categories?.map(c => c.category) ?? []
   return (
     <div className={`bg-zinc-900 border rounded-xl px-5 py-4 flex items-center gap-4 ${source.active ? 'border-zinc-800' : 'border-zinc-900 opacity-60'}`}>
       <Checkbox checked={selected} onCheckedChange={() => onToggleSelect()} />
       <div className="text-base flex-shrink-0">{meta?.icon ?? '📡'}</div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
+        <div className="flex items-center gap-2 mb-0.5 flex-wrap">
           <span className="text-sm font-medium text-zinc-200">{source.name}</span>
           <Badge variant="outline" className={meta?.color ?? 'text-zinc-400 bg-zinc-800'}>
             {meta?.label ?? source.type}
           </Badge>
+          {cats.map(cat => (
+            <span key={cat.id} className="text-[10px] px-1.5 py-0.5 rounded-full border font-medium"
+              style={{ borderColor: cat.color + '55', background: cat.color + '18', color: cat.color }}>
+              {cat.name}
+            </span>
+          ))}
         </div>
         <div className="text-xs text-zinc-600 font-mono truncate">{source.url}</div>
       </div>

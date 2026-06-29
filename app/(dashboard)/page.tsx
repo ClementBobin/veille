@@ -1,31 +1,32 @@
-import { prisma } from '@/lib/prisma'
+'use client'
+
+import { useEffect, useState } from 'react'
 import { StatsGrid } from '@/components/dashboard/stats-grid'
 import { PipelineMonitor } from '@/components/dashboard/pipeline-monitor'
 import { RecentSourcesCard } from '@/components/dashboard/recent-sources-card'
 import { RecentNotesCard } from '@/components/dashboard/recent-notes-card'
+import { Skeleton } from '@/components/ui/skeleton'
 
-export default async function DashboardPage() {
-  const [tags, sources, digests, notes] = await Promise.all([
-    prisma.tag.count(),
-    prisma.source.count({ where: { active: true } }),
-    prisma.digest.count({ where: { status: 'PENDING' } }),
-    prisma.note.count(),
-  ])
+type DashboardData = {
+  tags: number
+  sources: number
+  digests: number
+  notes: number
+  recentNotes: { id: string; title: string; filename: string; createdAt: string }[]
+  recentSources: { id: string; name: string; type: string; active: boolean; lastFetch: string | null }[]
+  pipelineEvents: { workflow: string; event: { id: string; status: string; message?: string; createdAt: string } | null }[]
+}
 
-  const recentNotes = await prisma.note.findMany({ orderBy: { createdAt: 'desc' }, take: 3 })
-  const recentSources = await prisma.source.findMany({ orderBy: { lastFetch: 'desc' }, take: 4 })
+export default function DashboardPage() {
+  const [data, setData] = useState<DashboardData | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  // Pipeline monitoring — latest event per workflow
-  const workflows = ['WF1', 'WF2', 'WF3', 'WF4']
-  const pipelineEvents = await Promise.all(
-    workflows.map(async (wf) => ({
-      workflow: wf,
-      event: await prisma.pipelineEvent.findFirst({
-        where: { workflow: wf },
-        orderBy: { createdAt: 'desc' },
-      }),
-    }))
-  )
+  useEffect(() => {
+    fetch('/api/dashboard')
+      .then(r => r.json())
+      .then(setData)
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <div>
@@ -34,14 +35,34 @@ export default async function DashboardPage() {
         <p className="text-zinc-500 text-sm mt-1">Overview of your tech watch</p>
       </div>
 
-      <StatsGrid sources={sources} tags={tags} digests={digests} notes={notes} />
-
-      <PipelineMonitor entries={pipelineEvents} />
-
-      <div className="grid grid-cols-2 gap-4">
-        <RecentSourcesCard sources={recentSources} />
-        <RecentNotesCard notes={recentNotes} />
-      </div>
+      {loading || !data ? (
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-24 bg-zinc-900 rounded-xl" />
+            ))}
+          </div>
+          <Skeleton className="h-32 bg-zinc-900 rounded-xl" />
+          <div className="grid grid-cols-2 gap-4">
+            <Skeleton className="h-48 bg-zinc-900 rounded-xl" />
+            <Skeleton className="h-48 bg-zinc-900 rounded-xl" />
+          </div>
+        </div>
+      ) : (
+        <>
+          <StatsGrid
+            sources={data.sources}
+            tags={data.tags}
+            digests={data.digests}
+            notes={data.notes}
+          />
+          <PipelineMonitor entries={data.pipelineEvents} />
+          <div className="grid grid-cols-2 gap-4">
+            <RecentSourcesCard sources={data.recentSources} />
+            <RecentNotesCard notes={data.recentNotes} />
+          </div>
+        </>
+      )}
     </div>
   )
 }

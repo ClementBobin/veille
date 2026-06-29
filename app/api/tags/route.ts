@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
 import { withLog } from '@/lib/with-log'
+import { dispatchWebhook } from '@/lib/webhook'
+
+const include = {
+  categories: { include: { category: { select: { id: true, name: true, color: true } } } },
+}
 
 export const GET = withLog(async (req: NextRequest) => {
   const auth = await getAuth(req)
@@ -9,10 +14,27 @@ export const GET = withLog(async (req: NextRequest) => {
   const { userId } = auth
 
   const { searchParams } = new URL(req.url)
-  const actif = searchParams.get('actif') === 'true'
+  const search = searchParams.get('search')?.trim() ?? ''
+  const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10))
+  const limit = Math.min(200, parseInt(searchParams.get('limit') ?? '50', 10))
+  const paginate = searchParams.has('page') || searchParams.has('limit')
 
-  const tags = await prisma.tag.findMany({ where: actif ? { userId, active: true } : { userId }, orderBy: { name: 'asc' } })
-  return NextResponse.json(tags)
+  const where = {
+    userId,
+    ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
+  }
+
+  if (!paginate) {
+    const tags = await prisma.tag.findMany({ where, orderBy: { name: 'asc' }, include })
+    return NextResponse.json(tags)
+  }
+
+  const [total, tags] = await Promise.all([
+    prisma.tag.count({ where }),
+    prisma.tag.findMany({ where, orderBy: { name: 'asc' }, skip: (page - 1) * limit, take: limit, include }),
+  ])
+
+  return NextResponse.json({ tags, total, page, pages: Math.max(1, Math.ceil(total / limit)), limit })
 })
 
 export const POST = withLog(async (req: NextRequest) => {
@@ -21,7 +43,7 @@ export const POST = withLog(async (req: NextRequest) => {
   const { userId } = auth
 
   const body = await req.json()
-  const { name, color, description } = body
+  const { name, color, description, categoryIds } = body
   if (!name) return NextResponse.json({ error: 'name required' }, { status: 400 })
 
   const existing = await prisma.tag.findFirst({
@@ -29,6 +51,17 @@ export const POST = withLog(async (req: NextRequest) => {
   })
   if (existing) return NextResponse.json({ error: 'A tag with this name already exists' }, { status: 409 })
 
-  const tag = await prisma.tag.create({ data: { name, color: color ?? '#6366f1', description, userId } })
+  const tag = await prisma.tag.create({
+    data: {
+      name, color: color ?? '#6366f1', description, userId,
+      ...(categoryIds?.length
+        ? { categories: { create: (categoryIds as string[]).map(categoryId => ({ categoryId })) } }
+        : {}),
+    },
+    include,
+  })
+
+  dispatchWebhook(userId, 'tag.created', tag).catch(() => {})
+
   return NextResponse.json(tag, { status: 201 })
 })

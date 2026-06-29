@@ -131,3 +131,33 @@ export type Log = Prisma.LogModel
  * 
  */
 export type Theme = Prisma.ThemeModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
+ * Model TagCategory
+ * 
+ */
+export type TagCategory = Prisma.TagCategoryModel
+/**
+ * Model SourceCategory
+ * 
+ */
+export type SourceCategory = Prisma.SourceCategoryModel
+/**
+ * Model ThemeCategory
+ * 
+ */
+export type ThemeCategory = Prisma.ThemeCategoryModel
+/**
+ * Model Prompt
+ * 
+ */
+export type Prompt = Prisma.PromptModel
+/**
+ * Model PromptMessage
+ * 
+ */
+export type PromptMessage = Prisma.PromptMessageModel

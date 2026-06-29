@@ -68,7 +68,13 @@ export const ModelName = {
   Webhook: 'Webhook',
   Config: 'Config',
   Log: 'Log',
-  Theme: 'Theme'
+  Theme: 'Theme',
+  Category: 'Category',
+  TagCategory: 'TagCategory',
+  SourceCategory: 'SourceCategory',
+  ThemeCategory: 'ThemeCategory',
+  Prompt: 'Prompt',
+  PromptMessage: 'PromptMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -309,6 +315,67 @@ export const ThemeScalarFieldEnum = {
 } as const
 
 export type ThemeScalarFieldEnum = (typeof ThemeScalarFieldEnum)[keyof typeof ThemeScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  description: 'description',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const TagCategoryScalarFieldEnum = {
+  tagId: 'tagId',
+  categoryId: 'categoryId'
+} as const
+
+export type TagCategoryScalarFieldEnum = (typeof TagCategoryScalarFieldEnum)[keyof typeof TagCategoryScalarFieldEnum]
+
+
+export const SourceCategoryScalarFieldEnum = {
+  sourceId: 'sourceId',
+  categoryId: 'categoryId'
+} as const
+
+export type SourceCategoryScalarFieldEnum = (typeof SourceCategoryScalarFieldEnum)[keyof typeof SourceCategoryScalarFieldEnum]
+
+
+export const ThemeCategoryScalarFieldEnum = {
+  themeId: 'themeId',
+  categoryId: 'categoryId'
+} as const
+
+export type ThemeCategoryScalarFieldEnum = (typeof ThemeCategoryScalarFieldEnum)[keyof typeof ThemeCategoryScalarFieldEnum]
+
+
+export const PromptScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromptScalarFieldEnum = (typeof PromptScalarFieldEnum)[keyof typeof PromptScalarFieldEnum]
+
+
+export const PromptMessageScalarFieldEnum = {
+  id: 'id',
+  promptId: 'promptId',
+  role: 'role',
+  content: 'content',
+  order: 'order',
+  createdAt: 'createdAt'
+} as const
+
+export type PromptMessageScalarFieldEnum = (typeof PromptMessageScalarFieldEnum)[keyof typeof PromptMessageScalarFieldEnum]
 
 
 export const SortOrder = {

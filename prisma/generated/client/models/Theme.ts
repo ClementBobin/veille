@@ -215,6 +215,7 @@ export type ThemeWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Theme"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Theme"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  categories?: Prisma.ThemeCategoryListRelationFilter
 }
 
 export type ThemeOrderByWithRelationInput = {
@@ -228,6 +229,7 @@ export type ThemeOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  categories?: Prisma.ThemeCategoryOrderByRelationAggregateInput
 }
 
 export type ThemeWhereUniqueInput = Prisma.AtLeast<{
@@ -245,6 +247,7 @@ export type ThemeWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Theme"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Theme"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  categories?: Prisma.ThemeCategoryListRelationFilter
 }, "id" | "userId_title">
 
 export type ThemeOrderByWithAggregationInput = {
@@ -287,6 +290,7 @@ export type ThemeCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutThemesInput
+  categories?: Prisma.ThemeCategoryCreateNestedManyWithoutThemeInput
 }
 
 export type ThemeUncheckedCreateInput = {
@@ -299,6 +303,7 @@ export type ThemeUncheckedCreateInput = {
   validationCriteria?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.ThemeCategoryUncheckedCreateNestedManyWithoutThemeInput
 }
 
 export type ThemeUpdateInput = {
@@ -311,6 +316,7 @@ export type ThemeUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutThemesNestedInput
+  categories?: Prisma.ThemeCategoryUpdateManyWithoutThemeNestedInput
 }
 
 export type ThemeUncheckedUpdateInput = {
@@ -323,6 +329,7 @@ export type ThemeUncheckedUpdateInput = {
   validationCriteria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.ThemeCategoryUncheckedUpdateManyWithoutThemeNestedInput
 }
 
 export type ThemeCreateManyInput = {
@@ -411,6 +418,11 @@ export type ThemeMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type ThemeScalarRelationFilter = {
+  is?: Prisma.ThemeWhereInput
+  isNot?: Prisma.ThemeWhereInput
+}
+
 export type ThemeCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.ThemeCreateWithoutUserInput, Prisma.ThemeUncheckedCreateWithoutUserInput> | Prisma.ThemeCreateWithoutUserInput[] | Prisma.ThemeUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.ThemeCreateOrConnectWithoutUserInput | Prisma.ThemeCreateOrConnectWithoutUserInput[]
@@ -453,6 +465,20 @@ export type ThemeUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.ThemeScalarWhereInput | Prisma.ThemeScalarWhereInput[]
 }
 
+export type ThemeCreateNestedOneWithoutCategoriesInput = {
+  create?: Prisma.XOR<Prisma.ThemeCreateWithoutCategoriesInput, Prisma.ThemeUncheckedCreateWithoutCategoriesInput>
+  connectOrCreate?: Prisma.ThemeCreateOrConnectWithoutCategoriesInput
+  connect?: Prisma.ThemeWhereUniqueInput
+}
+
+export type ThemeUpdateOneRequiredWithoutCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.ThemeCreateWithoutCategoriesInput, Prisma.ThemeUncheckedCreateWithoutCategoriesInput>
+  connectOrCreate?: Prisma.ThemeCreateOrConnectWithoutCategoriesInput
+  upsert?: Prisma.ThemeUpsertWithoutCategoriesInput
+  connect?: Prisma.ThemeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ThemeUpdateToOneWithWhereWithoutCategoriesInput, Prisma.ThemeUpdateWithoutCategoriesInput>, Prisma.ThemeUncheckedUpdateWithoutCategoriesInput>
+}
+
 export type ThemeCreateWithoutUserInput = {
   id?: string
   title: string
@@ -462,6 +488,7 @@ export type ThemeCreateWithoutUserInput = {
   validationCriteria?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.ThemeCategoryCreateNestedManyWithoutThemeInput
 }
 
 export type ThemeUncheckedCreateWithoutUserInput = {
@@ -473,6 +500,7 @@ export type ThemeUncheckedCreateWithoutUserInput = {
   validationCriteria?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.ThemeCategoryUncheckedCreateNestedManyWithoutThemeInput
 }
 
 export type ThemeCreateOrConnectWithoutUserInput = {
@@ -516,6 +544,70 @@ export type ThemeScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Theme"> | Date | string
 }
 
+export type ThemeCreateWithoutCategoriesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  tags?: string
+  active?: boolean
+  validationCriteria?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutThemesInput
+}
+
+export type ThemeUncheckedCreateWithoutCategoriesInput = {
+  id?: string
+  userId: string
+  title: string
+  description?: string | null
+  tags?: string
+  active?: boolean
+  validationCriteria?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ThemeCreateOrConnectWithoutCategoriesInput = {
+  where: Prisma.ThemeWhereUniqueInput
+  create: Prisma.XOR<Prisma.ThemeCreateWithoutCategoriesInput, Prisma.ThemeUncheckedCreateWithoutCategoriesInput>
+}
+
+export type ThemeUpsertWithoutCategoriesInput = {
+  update: Prisma.XOR<Prisma.ThemeUpdateWithoutCategoriesInput, Prisma.ThemeUncheckedUpdateWithoutCategoriesInput>
+  create: Prisma.XOR<Prisma.ThemeCreateWithoutCategoriesInput, Prisma.ThemeUncheckedCreateWithoutCategoriesInput>
+  where?: Prisma.ThemeWhereInput
+}
+
+export type ThemeUpdateToOneWithWhereWithoutCategoriesInput = {
+  where?: Prisma.ThemeWhereInput
+  data: Prisma.XOR<Prisma.ThemeUpdateWithoutCategoriesInput, Prisma.ThemeUncheckedUpdateWithoutCategoriesInput>
+}
+
+export type ThemeUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  validationCriteria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutThemesNestedInput
+}
+
+export type ThemeUncheckedUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  validationCriteria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type ThemeCreateManyUserInput = {
   id?: string
   title: string
@@ -536,6 +628,7 @@ export type ThemeUpdateWithoutUserInput = {
   validationCriteria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.ThemeCategoryUpdateManyWithoutThemeNestedInput
 }
 
 export type ThemeUncheckedUpdateWithoutUserInput = {
@@ -547,6 +640,7 @@ export type ThemeUncheckedUpdateWithoutUserInput = {
   validationCriteria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.ThemeCategoryUncheckedUpdateManyWithoutThemeNestedInput
 }
 
 export type ThemeUncheckedUpdateManyWithoutUserInput = {
@@ -561,6 +655,35 @@ export type ThemeUncheckedUpdateManyWithoutUserInput = {
 }
 
 
+/**
+ * Count Type ThemeCountOutputType
+ */
+
+export type ThemeCountOutputType = {
+  categories: number
+}
+
+export type ThemeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  categories?: boolean | ThemeCountOutputTypeCountCategoriesArgs
+}
+
+/**
+ * ThemeCountOutputType without action
+ */
+export type ThemeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ThemeCountOutputType
+   */
+  select?: Prisma.ThemeCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ThemeCountOutputType without action
+ */
+export type ThemeCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ThemeCategoryWhereInput
+}
+
 
 export type ThemeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -573,6 +696,8 @@ export type ThemeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  categories?: boolean | Prisma.Theme$categoriesArgs<ExtArgs>
+  _count?: boolean | Prisma.ThemeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["theme"]>
 
 export type ThemeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -616,6 +741,8 @@ export type ThemeSelectScalar = {
 export type ThemeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "tags" | "active" | "validationCriteria" | "createdAt" | "updatedAt", ExtArgs["result"]["theme"]>
 export type ThemeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  categories?: boolean | Prisma.Theme$categoriesArgs<ExtArgs>
+  _count?: boolean | Prisma.ThemeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ThemeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -628,6 +755,7 @@ export type $ThemePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Theme"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    categories: Prisma.$ThemeCategoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1034,6 +1162,7 @@ readonly fields: ThemeFieldRefs;
 export interface Prisma__ThemeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  categories<T extends Prisma.Theme$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Theme$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ThemeCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1470,6 +1599,30 @@ export type ThemeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Themes to delete.
    */
   limit?: number
+}
+
+/**
+ * Theme.categories
+ */
+export type Theme$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ThemeCategory
+   */
+  select?: Prisma.ThemeCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ThemeCategory
+   */
+  omit?: Prisma.ThemeCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ThemeCategoryInclude<ExtArgs> | null
+  where?: Prisma.ThemeCategoryWhereInput
+  orderBy?: Prisma.ThemeCategoryOrderByWithRelationInput | Prisma.ThemeCategoryOrderByWithRelationInput[]
+  cursor?: Prisma.ThemeCategoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ThemeCategoryScalarFieldEnum | Prisma.ThemeCategoryScalarFieldEnum[]
 }
 
 /**

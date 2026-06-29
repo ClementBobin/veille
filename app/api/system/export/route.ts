@@ -8,17 +8,9 @@ export async function GET(req: NextRequest) {
   const { userId } = auth
 
   const [
-    tags,
-    sources,
-    feedItems,
-    feedItemTags,
-    digests,
-    tocEntries,
-    tocEntryArticles,
-    digestTags,
-    subjects,
-    subjectFeedItems,
-    notes,
+    tags, sources, feedItems, feedItemTags, digests, tocEntries, tocEntryArticles,
+    digestTags, subjects, subjectFeedItems, notes, webhooksRaw, themes,
+    categories, tagCategories, sourceCategories, themeCategories, prompts,
   ] = await Promise.all([
     prisma.tag.findMany({ where: { userId } }),
     prisma.source.findMany({ where: { userId } }),
@@ -31,28 +23,36 @@ export async function GET(req: NextRequest) {
     prisma.subject.findMany({ where: { digest: { userId } } }),
     prisma.subjectFeedItem.findMany({ where: { subject: { digest: { userId } } } }),
     prisma.note.findMany({ where: { userId } }),
+    prisma.webhook.findMany({ where: { userId } }),
+    prisma.theme.findMany({ where: { userId }, orderBy: { createdAt: 'asc' } }),
+    prisma.category.findMany({ where: { userId }, orderBy: { name: 'asc' } }),
+    prisma.tagCategory.findMany({ where: { tag: { userId } } }),
+    prisma.sourceCategory.findMany({ where: { source: { userId } } }),
+    prisma.themeCategory.findMany({ where: { theme: { userId } } }),
+    prisma.prompt.findMany({ where: { userId }, orderBy: { name: 'asc' }, include: { messages: { orderBy: { order: 'asc' } } } }),
   ])
 
-  const payload = {
-    exportedAt: new Date().toISOString(),
-    version: 1,
-    userId,
-    data: {
-      tags,
-      sources,
-      feedItems,
-      feedItemTags,
-      digests,
-      tocEntries,
-      tocEntryArticles,
-      digestTags,
-      subjects,
-      subjectFeedItems,
-      notes,
-    },
+  const webhooks = webhooksRaw.map(({ secret: _s, ...w }: { secret: string | null; [k: string]: unknown }) => w)
+
+  const counts: Record<string, number> = {
+    tags: tags.length, sources: sources.length, feedItems: feedItems.length,
+    feedItemTags: feedItemTags.length, digests: digests.length, tocEntries: tocEntries.length,
+    tocEntryArticles: tocEntryArticles.length, digestTags: digestTags.length,
+    subjects: subjects.length, subjectFeedItems: subjectFeedItems.length,
+    notes: notes.length, webhooks: webhooks.length, themes: themes.length,
+    categories: categories.length, tagCategories: tagCategories.length,
+    sourceCategories: sourceCategories.length, themeCategories: themeCategories.length,
+    prompts: prompts.length,
   }
 
-  return new NextResponse(JSON.stringify(payload, null, 2), {
+  return new NextResponse(JSON.stringify({
+    exportedAt: new Date().toISOString(), version: 1, userId, counts,
+    data: {
+      tags, sources, feedItems, feedItemTags, digests, tocEntries, tocEntryArticles,
+      digestTags, subjects, subjectFeedItems, notes, webhooks, themes,
+      categories, tagCategories, sourceCategories, themeCategories, prompts,
+    },
+  }, null, 2), {
     headers: {
       'Content-Type': 'application/json',
       'Content-Disposition': `attachment; filename="veille-export-${new Date().toISOString().slice(0, 10)}.json"`,

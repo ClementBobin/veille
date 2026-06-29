@@ -241,6 +241,7 @@ export type WebhookOrderByWithRelationInput = {
 
 export type WebhookWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId_name?: Prisma.WebhookUserIdNameCompoundUniqueInput
   AND?: Prisma.WebhookWhereInput | Prisma.WebhookWhereInput[]
   OR?: Prisma.WebhookWhereInput[]
   NOT?: Prisma.WebhookWhereInput | Prisma.WebhookWhereInput[]
@@ -254,7 +255,7 @@ export type WebhookWhereUniqueInput = Prisma.AtLeast<{
   lastStatus?: Prisma.StringNullableFilter<"Webhook"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Webhook"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id">
+}, "id" | "userId_name">
 
 export type WebhookOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -386,6 +387,11 @@ export type WebhookListRelationFilter = {
 
 export type WebhookOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type WebhookUserIdNameCompoundUniqueInput = {
+  userId: string
+  name: string
 }
 
 export type WebhookCountOrderByAggregateInput = {

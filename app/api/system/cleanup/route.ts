@@ -107,7 +107,7 @@ export const DELETE = withLog(async (req: NextRequest) => {
     },
   })
 
-  dispatchWebhook(userId, 'pipeline-event', event).catch(() => {})
+  dispatchWebhook(userId, 'cleanup.run', event).catch(() => {})
 
   return NextResponse.json({
     dryRun: false,

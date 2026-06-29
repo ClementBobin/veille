@@ -40,6 +40,37 @@ export const GET = withLog(async (req: NextRequest) => {
   if (auth instanceof NextResponse) return auth
   const { userId } = auth
 
-  const notes = await prisma.note.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } })
-  return NextResponse.json(notes)
+  const { searchParams } = new URL(req.url)
+  const search = searchParams.get('search')?.trim() ?? ''
+  const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10))
+  const limit = Math.min(100, parseInt(searchParams.get('limit') ?? '20', 10))
+  const paginate = searchParams.has('page') || searchParams.has('limit')
+
+  const where = {
+    userId,
+    ...(search
+      ? { OR: [
+          { title: { contains: search, mode: 'insensitive' as const } },
+          { content: { contains: search, mode: 'insensitive' as const } },
+        ]}
+      : {}),
+  }
+
+  if (!paginate) {
+    const notes = await prisma.note.findMany({ where, orderBy: { createdAt: 'desc' } })
+    return NextResponse.json(notes)
+  }
+
+  const [total, notes] = await Promise.all([
+    prisma.note.count({ where }),
+    prisma.note.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+      select: { id: true, title: true, filename: true, exportedTo: true, createdAt: true, digestId: true },
+    }),
+  ])
+
+  return NextResponse.json({ notes, total, page, pages: Math.max(1, Math.ceil(total / limit)), limit })
 })

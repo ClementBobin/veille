@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
   const method = searchParams.get('method') ?? undefined
   const status = searchParams.get('status') ? parseInt(searchParams.get('status')!, 10) : undefined
   const authType = searchParams.get('authType') ?? undefined
-  const type = searchParams.get('type') ?? undefined
 
   const where = {
     userId,
@@ -22,7 +21,6 @@ export async function GET(req: NextRequest) {
     ...(method ? { method } : {}),
     ...(status ? { status } : {}),
     ...(authType ? { authType } : {}),
-    ...(type ? { type: { contains: type } } : {}),
   }
 
   const [total, logs] = await Promise.all([
