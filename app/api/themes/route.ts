@@ -19,14 +19,52 @@ export const GET = withLog(async (req: NextRequest) => {
   const limit = Math.min(200, parseInt(searchParams.get('limit') ?? '50', 10))
   const paginate = searchParams.has('page') || searchParams.has('limit')
 
-  const where = {
-    userId,
-    ...(search ? { title: { contains: search, mode: 'insensitive' as const } } : {}),
+  // Multi-value filters
+  const categoryIds = searchParams.getAll('categoryId').filter(Boolean)
+  const tagNames = searchParams.getAll('tag').filter(Boolean)
+
+  const where: any = { userId }
+
+  if (search) where.title = { contains: search, mode: 'insensitive' as const }
+
+  // Filter by categories (must have ALL selected categories — use AND)
+  if (categoryIds.length > 0) {
+    where.categories = {
+      some: { categoryId: { in: categoryIds } },
+    }
+  }
+
+  // Filter by tag names — tags is a JSON string; we filter post-query for multi-tag
+  // For single tag we can use string_contains; for multi we filter in JS after fetch
+  if (tagNames.length === 1) {
+    where.tags = { contains: tagNames[0], mode: 'insensitive' as const }
   }
 
   if (!paginate) {
-    const themes = await prisma.theme.findMany({ where, orderBy: { createdAt: 'desc' }, include })
+    let themes = await prisma.theme.findMany({ where, orderBy: { createdAt: 'desc' }, include })
+    if (tagNames.length > 1) {
+      themes = themes.filter(t => {
+        try {
+          const names: string[] = JSON.parse(t.tags)
+          return tagNames.every(tn => names.some(n => n.toLowerCase().includes(tn.toLowerCase())))
+        } catch { return false }
+      })
+    }
     return NextResponse.json(themes)
+  }
+
+  if (tagNames.length > 1) {
+    // Fetch all matching and paginate in JS (multi-tag JSON filtering can't be done in SQL easily)
+    const allThemes = await prisma.theme.findMany({ where, orderBy: { createdAt: 'desc' }, include })
+    const filtered = allThemes.filter(t => {
+      try {
+        const names: string[] = JSON.parse(t.tags)
+        return tagNames.every(tn => names.some(n => n.toLowerCase().includes(tn.toLowerCase())))
+      } catch { return false }
+    })
+    const total = filtered.length
+    const themes = filtered.slice((page - 1) * limit, page * limit)
+    return NextResponse.json({ themes, total, page, pages: Math.max(1, Math.ceil(total / limit)), limit })
   }
 
   const [total, themes] = await Promise.all([

@@ -19,6 +19,7 @@ export const GET = withLog(async (req: NextRequest) => {
   const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10))
   const limit = Math.min(200, parseInt(searchParams.get('limit') ?? '50', 10))
   const paginate = searchParams.has('page') || searchParams.has('limit')
+  const categoryIds = searchParams.getAll('categoryId').filter(Boolean)
 
   if (forN8n) {
     const sources = await prisma.source.findMany({
@@ -30,9 +31,10 @@ export const GET = withLog(async (req: NextRequest) => {
     return NextResponse.json(filtered.map(({ feedItems: _fi, ...s }: any) => s))
   }
 
-  const where = {
-    userId,
-    ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
+  const where: any = { userId }
+  if (search) where.name = { contains: search, mode: 'insensitive' as const }
+  if (categoryIds.length > 0) {
+    where.categories = { some: { categoryId: { in: categoryIds } } }
   }
 
   if (!paginate) {
