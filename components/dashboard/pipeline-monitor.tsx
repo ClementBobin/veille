@@ -2,10 +2,9 @@ import { Card, CardContent } from '@/components/ui/card'
 
 type PipelineEvent = {
   id: string
-  workflow: string
   status: string
-  message: string | null
-  createdAt: Date
+  message?: string | null
+  createdAt: string | Date
 }
 
 type PipelineEntry = { workflow: string; event: PipelineEvent | null }
