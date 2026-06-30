@@ -1,4 +1,18 @@
 export type ApiKey = { id: string; name: string; lastUsed: string | null; createdAt: string }
+
+/** Parses a comma-separated or JSON-array string into a string[].
+ *  Falls back to an empty array for empty/invalid input. */
+export function toArray(value: string | null | undefined): string[] {
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    if (Array.isArray(parsed)) return parsed.map(String)
+  } catch {
+    // not JSON — fall through to comma-split
+  }
+  return value.split(',').map(s => s.trim()).filter(Boolean)
+}
+
 export type Config = {
   N8N_BASE_URL?: string
   N8N_WEBHOOK_PATH?: string

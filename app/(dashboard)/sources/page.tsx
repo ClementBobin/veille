@@ -16,6 +16,7 @@ import { useSourceTypes, getMeta } from '@/hooks/use-source-types'
 import { SourceForm, type SourceFormState } from '@/components/sources/source-form'
 import { SourceRow } from '@/components/sources/source-row'
 import { SourceEditRow } from '@/components/sources/source-edit-row'
+import { FilterBar } from '@/components/ui/filter-bar'
 import { useDebounce } from '@/hooks/use-debouncer'
 import type { Source } from '@/types'
 import type { CategoryOption } from '@/components/categories/category-picker'
@@ -25,6 +26,15 @@ type SourceWithCats = Source & { categories?: { category: CategoryOption }[] }
 const EMPTY_FORM: SourceFormState = { name: '', url: '', type: '', cache: false, categories: [] }
 const PAGE_SIZE = 10
 
+function buildUrl(p: number, q: string, categories: CategoryOption[]) {
+  const params = new URLSearchParams()
+  params.set('page', String(p))
+  params.set('limit', String(PAGE_SIZE))
+  if (q) params.set('search', q)
+  categories.forEach(c => params.append('categoryId', c.id))
+  return `/api/sources?${params.toString()}`
+}
+
 export default function SourcesPage() {
   const types = useSourceTypes()
   const [sources, setSources] = useState<SourceWithCats[]>([])
@@ -33,6 +43,7 @@ export default function SourcesPage() {
   const [pages, setPages] = useState(1)
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 300)
+  const [filterCategories, setFilterCategories] = useState<CategoryOption[]>([])
 
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState<SourceFormState>(EMPTY_FORM)
@@ -49,10 +60,10 @@ export default function SourcesPage() {
     if (types.length && !form.type) setForm(f => ({ ...f, type: types[0].value }))
   }, [types])
 
-  const load = useCallback(async (p: number, q: string) => {
+  const load = useCallback(async (p: number, q: string, cats: CategoryOption[]) => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/sources?page=${p}&limit=${PAGE_SIZE}&search=${encodeURIComponent(q)}`)
+      const res = await fetch(buildUrl(p, q, cats))
       const data = await res.json()
       setSources(data.sources)
       setTotal(data.total)
@@ -61,7 +72,12 @@ export default function SourcesPage() {
     } finally { setLoading(false) }
   }, [])
 
-  useEffect(() => { load(1, debouncedSearch) }, [debouncedSearch, load])
+  useEffect(() => { load(1, debouncedSearch, filterCategories) }, [debouncedSearch, filterCategories, load])
+
+  const handleCategoriesChange = (cats: CategoryOption[]) => {
+    setFilterCategories(cats)
+    setPage(1)
+  }
 
   const save = async () => {
     const formMeta = getMeta(types, form.type)
@@ -82,7 +98,7 @@ export default function SourcesPage() {
       setForm({ ...EMPTY_FORM, type: types[0]?.value ?? '' })
       setShowForm(false); setShowTemplates(false)
       toast.success('Source added')
-      load(1, debouncedSearch)
+      load(1, debouncedSearch, filterCategories)
     } finally { setSaving(false) }
   }
 
@@ -111,7 +127,7 @@ export default function SourcesPage() {
     if (!res.ok) { toast.error(updated.error ?? 'Failed to update source'); return }
     setEditId(null)
     toast.success('Source updated')
-    load(page, debouncedSearch)
+    load(page, debouncedSearch, filterCategories)
   }
 
   const toggleActive = async (s: SourceWithCats) => {
@@ -133,7 +149,7 @@ export default function SourcesPage() {
   const remove = async (id: string) => {
     await fetch(`/api/sources/${id}`, { method: 'DELETE' })
     toast.success('Source deleted')
-    load(page, debouncedSearch)
+    load(page, debouncedSearch, filterCategories)
   }
 
   const toggleSelect = (id: string) => {
@@ -156,7 +172,8 @@ export default function SourcesPage() {
     } finally { setBulkBusy(false) }
   }
 
-  const goPage = (p: number) => load(p, debouncedSearch)
+  const goPage = (p: number) => load(p, debouncedSearch, filterCategories)
+  const hasActiveFilters = filterCategories.length > 0
 
   return (
     <div>
@@ -164,7 +181,7 @@ export default function SourcesPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Sources</h1>
           <p className="text-zinc-500 text-sm mt-1">
-            {total > 0 ? `${total} source${total !== 1 ? 's' : ''}` : 'RSS feeds, social networks, videos and files to monitor'}
+            {total > 0 ? `${total} source${total !== 1 ? 's' : ''}${hasActiveFilters ? ' (filtered)' : ''}` : 'RSS feeds, social networks, videos and files to monitor'}
           </p>
         </div>
         <Button onClick={() => { setShowForm(!showForm); setEditId(null) }} id="add-source">+ Add</Button>
@@ -178,6 +195,11 @@ export default function SourcesPage() {
           className="max-w-xs h-8 text-sm"
         />
       </div>
+
+      <FilterBar
+        selectedCategories={filterCategories}
+        onCategoriesChange={handleCategoriesChange}
+      />
 
       {showForm && (
         <SourceForm
@@ -204,7 +226,7 @@ export default function SourcesPage() {
         <Empty className="py-16">
           <EmptyHeader>
             <EmptyMedia variant="icon" className="bg-transparent text-3xl">📡</EmptyMedia>
-            <EmptyTitle>{search ? 'No sources match your search' : 'No sources yet'}</EmptyTitle>
+            <EmptyTitle>{search || hasActiveFilters ? 'No sources match your filters' : 'No sources yet'}</EmptyTitle>
             <EmptyDescription>Add a feed, account or file to start monitoring.</EmptyDescription>
           </EmptyHeader>
         </Empty>

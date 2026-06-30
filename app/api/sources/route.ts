@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { Prisma } from '@/prisma/generated/client/client'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
 import { withLog } from '@/lib/with-log'
@@ -31,7 +32,7 @@ export const GET = withLog(async (req: NextRequest) => {
     return NextResponse.json(filtered.map(({ feedItems: _fi, ...s }: any) => s))
   }
 
-  const where: any = { userId }
+  const where: Prisma.SourceWhereInput = { userId }
   if (search) where.name = { contains: search, mode: 'insensitive' as const }
   if (categoryIds.length > 0) {
     where.categories = { some: { categoryId: { in: categoryIds } } }

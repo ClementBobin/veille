@@ -14,6 +14,7 @@ import {
 import { TagForm, type TagFormState } from '@/components/tags/tag-form'
 import { TagEditCard } from '@/components/tags/tag-edit-card'
 import { TagCard } from '@/components/tags/tag-card'
+import { FilterBar } from '@/components/ui/filter-bar'
 import { useDebounce } from '@/hooks/use-debouncer'
 import type { Tag } from '@/types'
 import type { CategoryOption } from '@/components/categories/category-picker'
@@ -23,6 +24,15 @@ type TagWithCats = Tag & { categories?: { category: CategoryOption }[] }
 const EMPTY_FORM: TagFormState = { name: '', color: '#6366f1', description: '', categories: [] }
 const PAGE_SIZE = 12
 
+function buildUrl(p: number, q: string, categories: CategoryOption[]) {
+  const params = new URLSearchParams()
+  params.set('page', String(p))
+  params.set('limit', String(PAGE_SIZE))
+  if (q) params.set('search', q)
+  categories.forEach(c => params.append('categoryId', c.id))
+  return `/api/tags?${params.toString()}`
+}
+
 export default function TagsPage() {
   const [tags, setTags] = useState<TagWithCats[]>([])
   const [total, setTotal] = useState(0)
@@ -30,6 +40,7 @@ export default function TagsPage() {
   const [pages, setPages] = useState(1)
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 300)
+  const [filterCategories, setFilterCategories] = useState<CategoryOption[]>([])
 
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState<TagFormState>(EMPTY_FORM)
@@ -39,10 +50,10 @@ export default function TagsPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [bulkBusy, setBulkBusy] = useState(false)
 
-  const load = useCallback(async (p: number, q: string) => {
+  const load = useCallback(async (p: number, q: string, cats: CategoryOption[]) => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/tags?page=${p}&limit=${PAGE_SIZE}&search=${encodeURIComponent(q)}`)
+      const res = await fetch(buildUrl(p, q, cats))
       const data = await res.json()
       setTags(data.tags)
       setTotal(data.total)
@@ -53,7 +64,12 @@ export default function TagsPage() {
     }
   }, [])
 
-  useEffect(() => { load(1, debouncedSearch) }, [debouncedSearch, load])
+  useEffect(() => { load(1, debouncedSearch, filterCategories) }, [debouncedSearch, filterCategories, load])
+
+  const handleCategoriesChange = (cats: CategoryOption[]) => {
+    setFilterCategories(cats)
+    setPage(1)
+  }
 
   const add = async () => {
     if (!form.name) return
@@ -67,7 +83,7 @@ export default function TagsPage() {
     setForm(EMPTY_FORM)
     setShowForm(false)
     toast.success('Tag created')
-    load(1, debouncedSearch)
+    load(1, debouncedSearch, filterCategories)
   }
 
   const startEdit = (t: TagWithCats) => {
@@ -89,7 +105,7 @@ export default function TagsPage() {
     if (!res.ok) { toast.error(updated.error ?? 'Failed to update tag'); return }
     setEditId(null)
     toast.success('Tag updated')
-    load(page, debouncedSearch)
+    load(page, debouncedSearch, filterCategories)
   }
 
   const toggleActive = async (t: TagWithCats) => {
@@ -103,7 +119,7 @@ export default function TagsPage() {
   const remove = async (id: string) => {
     await fetch(`/api/tags/${id}`, { method: 'DELETE' })
     toast.success('Tag deleted')
-    load(page, debouncedSearch)
+    load(page, debouncedSearch, filterCategories)
   }
 
   const toggleSelect = (id: string) => {
@@ -126,7 +142,8 @@ export default function TagsPage() {
     } finally { setBulkBusy(false) }
   }
 
-  const goPage = (p: number) => load(p, debouncedSearch)
+  const goPage = (p: number) => load(p, debouncedSearch, filterCategories)
+  const hasActiveFilters = filterCategories.length > 0
 
   return (
     <div>
@@ -134,7 +151,7 @@ export default function TagsPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Tags</h1>
           <p className="text-zinc-500 text-sm mt-1">
-            {total > 0 ? `${total} tag${total !== 1 ? 's' : ''}` : 'Interests used for LLM categorization'}
+            {total > 0 ? `${total} tag${total !== 1 ? 's' : ''}${hasActiveFilters ? ' (filtered)' : ''}` : 'Interests used for LLM categorization'}
           </p>
         </div>
         <Button onClick={() => { setShowForm(!showForm); setEditId(null) }}>+ Add</Button>
@@ -149,6 +166,11 @@ export default function TagsPage() {
           className="max-w-xs h-8 text-sm"
         />
       </div>
+
+      <FilterBar
+        selectedCategories={filterCategories}
+        onCategoriesChange={handleCategoriesChange}
+      />
 
       {showForm && (
         <TagForm form={form} onFormChange={setForm} onSave={add} onCancel={() => setShowForm(false)} />
@@ -168,7 +190,7 @@ export default function TagsPage() {
         <Empty className="py-16">
           <EmptyHeader>
             <EmptyMedia variant="icon" className="bg-transparent text-3xl">🏷️</EmptyMedia>
-            <EmptyTitle>{search ? 'No tags match your search' : 'No tags yet'}</EmptyTitle>
+            <EmptyTitle>{search || hasActiveFilters ? 'No tags match your filters' : 'No tags yet'}</EmptyTitle>
             <EmptyDescription>Add your interests so the pipeline can categorize articles.</EmptyDescription>
           </EmptyHeader>
         </Empty>

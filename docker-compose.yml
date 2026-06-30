@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: veille
+      POSTGRES_PASSWORD: veille
+      POSTGRES_DB: veille
+    volumes:
+      - veille_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U veille"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Or, once an image has been published by CI:
+    # image: ghcr.io/<owner>/<repo>:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://veille:veille@db:5432/veille?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  veille_db_data:

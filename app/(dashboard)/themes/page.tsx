@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/pagination'
 import { ThemeForm, type ThemeFormState } from '@/components/themes/theme-form'
 import { ThemeCard } from '@/components/themes/theme-card'
+import { FilterBar } from '@/components/ui/filter-bar'
 import { useDebounce } from '@/hooks/use-debouncer'
 import type { Theme } from '@/types'
 import type { CategoryOption } from '@/components/categories/category-picker'
@@ -24,10 +25,6 @@ const EMPTY_FORM: ThemeFormState = {
 }
 const PAGE_SIZE = 8
 
-/** Parse the JSON tags string stored in DB into TagOption objects for the picker.
- *  The DB stores tag names as string[]. We reconstruct TagOption with a stable
- *  synthetic id (the name itself) and no color so the picker can display them.
- *  When the user selects a real Tag from the API, it will have a proper id/color. */
 function parseTagsField(raw: string): TagOption[] {
   try {
     const names: string[] = JSON.parse(raw)
@@ -37,9 +34,18 @@ function parseTagsField(raw: string): TagOption[] {
   }
 }
 
-/** Serialize TagOption[] back to the JSON string the DB/LLM expects (just names). */
 function serializeTags(tags: TagOption[]): string {
   return JSON.stringify(tags.map(t => t.name))
+}
+
+function buildUrl(p: number, q: string, categories: CategoryOption[], tags: TagOption[]) {
+  const params = new URLSearchParams()
+  params.set('page', String(p))
+  params.set('limit', String(PAGE_SIZE))
+  if (q) params.set('search', q)
+  categories.forEach(c => params.append('categoryId', c.id))
+  tags.forEach(t => params.append('tag', t.name))
+  return `/api/themes?${params.toString()}`
 }
 
 export default function ThemesPage() {
@@ -49,6 +55,8 @@ export default function ThemesPage() {
   const [pages, setPages] = useState(1)
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 300)
+  const [filterCategories, setFilterCategories] = useState<CategoryOption[]>([])
+  const [filterTags, setFilterTags] = useState<TagOption[]>([])
 
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState<ThemeFormState>(EMPTY_FORM)
@@ -56,10 +64,10 @@ export default function ThemesPage() {
   const [editForm, setEditForm] = useState<ThemeFormState>(EMPTY_FORM)
   const [loading, setLoading] = useState(true)
 
-  const load = useCallback(async (p: number, q: string) => {
+  const load = useCallback(async (p: number, q: string, cats: CategoryOption[], tags: TagOption[]) => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/themes?page=${p}&limit=${PAGE_SIZE}&search=${encodeURIComponent(q)}`)
+      const res = await fetch(buildUrl(p, q, cats, tags))
       const data = await res.json()
       setThemes(data.themes)
       setTotal(data.total)
@@ -68,7 +76,17 @@ export default function ThemesPage() {
     } finally { setLoading(false) }
   }, [])
 
-  useEffect(() => { load(1, debouncedSearch) }, [debouncedSearch, load])
+  useEffect(() => { load(1, debouncedSearch, filterCategories, filterTags) }, [debouncedSearch, filterCategories, filterTags, load])
+
+  const handleCategoriesChange = (cats: CategoryOption[]) => {
+    setFilterCategories(cats)
+    setPage(1)
+  }
+
+  const handleTagsChange = (tags: TagOption[]) => {
+    setFilterTags(tags)
+    setPage(1)
+  }
 
   const add = async () => {
     if (!form.title.trim()) return
@@ -87,7 +105,7 @@ export default function ThemesPage() {
     if (!res.ok) { toast.error(data.error ?? 'Failed to create theme'); return }
     setForm(EMPTY_FORM); setShowForm(false)
     toast.success('Theme created')
-    load(1, debouncedSearch)
+    load(1, debouncedSearch, filterCategories, filterTags)
   }
 
   const startEdit = (t: ThemeWithCats) => {
@@ -120,7 +138,7 @@ export default function ThemesPage() {
     if (!res.ok) { toast.error(data.error ?? 'Failed to update theme'); return }
     setEditId(null)
     toast.success('Theme updated')
-    load(page, debouncedSearch)
+    load(page, debouncedSearch, filterCategories, filterTags)
   }
 
   const toggleActive = async (t: ThemeWithCats) => {
@@ -134,10 +152,12 @@ export default function ThemesPage() {
   const remove = async (id: string) => {
     await fetch(`/api/themes/${id}`, { method: 'DELETE' })
     toast.success('Theme deleted')
-    load(page, debouncedSearch)
+    load(page, debouncedSearch, filterCategories, filterTags)
   }
 
-  const goPage = (p: number) => load(p, debouncedSearch)
+  const goPage = (p: number) => load(p, debouncedSearch, filterCategories, filterTags)
+
+  const hasActiveFilters = filterCategories.length > 0 || filterTags.length > 0
 
   return (
     <div>
@@ -145,7 +165,7 @@ export default function ThemesPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Themes</h1>
           <p className="text-zinc-500 text-sm mt-1">
-            {total > 0 ? `${total} theme${total !== 1 ? 's' : ''}` : 'Watch topics used by the AI categorization pipeline'}
+            {total > 0 ? `${total} theme${total !== 1 ? 's' : ''}${hasActiveFilters ? ' (filtered)' : ''}` : 'Watch topics used by the AI categorization pipeline'}
           </p>
         </div>
         <Button onClick={() => { setShowForm(v => !v); setEditId(null) }}>+ Add</Button>
@@ -159,6 +179,14 @@ export default function ThemesPage() {
           className="max-w-xs h-8 text-sm"
         />
       </div>
+
+      <FilterBar
+        withTags
+        selectedCategories={filterCategories}
+        onCategoriesChange={handleCategoriesChange}
+        selectedTags={filterTags}
+        onTagsChange={handleTagsChange}
+      />
 
       {showForm && (
         <ThemeForm form={form} onFormChange={setForm} onSave={add} onCancel={() => setShowForm(false)} />
@@ -184,7 +212,7 @@ export default function ThemesPage() {
         <Empty className="py-16">
           <EmptyHeader>
             <EmptyMedia variant="icon" className="bg-transparent text-3xl">🎯</EmptyMedia>
-            <EmptyTitle>{search ? 'No themes match your search' : 'No themes yet'}</EmptyTitle>
+            <EmptyTitle>{search || hasActiveFilters ? 'No themes match your filters' : 'No themes yet'}</EmptyTitle>
             <EmptyDescription>Define watch topics for the AI to use during categorization.</EmptyDescription>
           </EmptyHeader>
         </Empty>

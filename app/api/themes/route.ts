@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { Prisma } from '@/prisma/generated/client/client'
 import { prisma } from '@/lib/prisma'
 import { getAuth } from '@/lib/auth-context'
 import { withLog } from '@/lib/with-log'
@@ -23,7 +24,7 @@ export const GET = withLog(async (req: NextRequest) => {
   const categoryIds = searchParams.getAll('categoryId').filter(Boolean)
   const tagNames = searchParams.getAll('tag').filter(Boolean)
 
-  const where: any = { userId }
+  const where: Prisma.ThemeWhereInput = { userId }
 
   if (search) where.title = { contains: search, mode: 'insensitive' as const }
 
