@@ -45,7 +45,7 @@ export default function TagsPage() {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState<TagFormState>(EMPTY_FORM)
   const [editId, setEditId] = useState<string | null>(null)
-  const [editForm, setEditForm] = useState<Partial<TagWithCats> & { categories?: CategoryOption[] }>({})
+  const [editForm, setEditForm] = useState<Omit<Partial<TagWithCats>, 'categories'> & { categories?: CategoryOption[] }>({})
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [bulkBusy, setBulkBusy] = useState(false)

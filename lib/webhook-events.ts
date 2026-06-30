@@ -82,7 +82,7 @@ export const ALL_WEBHOOK_EVENTS: string[] = WEBHOOK_SCOPES.flatMap(s => [...s.ev
 /** scope → events[] */
 export const SCOPE_EVENTS: Record<WebhookScope, readonly string[]> = Object.fromEntries(
   WEBHOOK_SCOPES.map(s => [s.value, s.events])
-) as Record<WebhookScope, readonly string[]>
+) as unknown as Record<WebhookScope, readonly string[]>
 
 /** event → parent scope */
 export const EVENT_SCOPE: Record<string, WebhookScope> = Object.fromEntries(

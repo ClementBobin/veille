@@ -19,7 +19,7 @@ export const GET = withLog(async (req: NextRequest, { params }: { params: Promis
   let logs: Array<{
     id: string
     path: string
-    status: int
+    status: number
     durationMs: number
     error: string | null
     createdAt: Date

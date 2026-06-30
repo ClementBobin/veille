@@ -10,7 +10,7 @@ export const POST = withLog(async (req: NextRequest) => {
   const { userId } = auth
 
   const { title, summary, toc } = await req.json()
-  const allArticleIds = [...new Set((toc || []).flatMap((s: any) => s.articleIds || []))]
+  const allArticleIds = [...new Set((toc || []).flatMap((s: any) => s.articleIds || []))] as string[]
 
   const tagIds = await prisma.feedItemTag.findMany({
     where: { feedItemId: { in: allArticleIds }, feedItem: { userId } },

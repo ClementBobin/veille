@@ -21,9 +21,11 @@ COPY . .
 
 # A DATABASE_URL must be present at build time only so that `next build`
 # can statically analyze API routes; it is not used to connect to a real
-# database during the build. The real value is supplied at runtime.
-ENV DATABASE_URL="postgresql://user:password@localhost:5432/veille?schema=public"
-ENV SESSION_SECRET="build-time-placeholder"
+# database during the build, and these are dummy placeholder values, not
+# real credentials. Declared as ARG (build-stage only) rather than ENV so
+# they aren't persisted as environment variables in any resulting image.
+ARG DATABASE_URL="postgresql://user:password@localhost:5432/veille?schema=public"
+ARG SESSION_SECRET="build-time-placeholder"
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npx prisma generate --schema=./prisma/schema.prisma

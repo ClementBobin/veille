@@ -96,6 +96,7 @@ export type Log = {
   authType: string | null
   apiKeyName: string | null
   error: string | null
+  type?: string
   createdAt: string
 }
 

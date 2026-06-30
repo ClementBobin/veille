@@ -49,7 +49,7 @@ export default function SourcesPage() {
   const [form, setForm] = useState<SourceFormState>(EMPTY_FORM)
   const [showTemplates, setShowTemplates] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
-  const [editForm, setEditForm] = useState<Partial<SourceWithCats> & { categories?: CategoryOption[] }>({})
+  const [editForm, setEditForm] = useState<Omit<Partial<SourceWithCats>, 'categories'> & { categories?: CategoryOption[] }>({})
   const [editShowTemplates, setEditShowTemplates] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)

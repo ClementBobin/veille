@@ -22,7 +22,7 @@ const STATUS_COLOR: Record<string, string> = {
   error: 'text-red-400 bg-red-400/10',
 }
 
-function timeAgo(date: Date): string {
+function timeAgo(date: string | Date): string {
   const diff = Date.now() - new Date(date).getTime()
   const mins = Math.floor(diff / 60000)
   if (mins < 1) return 'just now'
